@@ -83,6 +83,7 @@ export default async function AdminPage({
     ["Appointment queue", appointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status)).length, CalendarDays]
   ];
   const adminNavItems: Array<[string, string, LucideIcon, string | number | null]> = [
+    ["Overview", "#overview", BarChart3, null],
     ["Appointments", "#appointments", CalendarDays, appointments.length],
     ["Leads", "#leads", Users, leads.length],
     ["Add product", "#add-product", Plus, null],
@@ -150,16 +151,6 @@ export default async function AdminPage({
           </aside>
 
           <div className="min-w-0">
-            <div className="grid gap-4 md:grid-cols-4">
-              {stats.map(([label, value, Icon]) => (
-                <div key={String(label)} className="rounded-lg border border-line bg-white p-5">
-                  <Icon className="h-5 w-5 text-gold" />
-                  <p className="mt-4 text-sm text-neutral-500">{label}</p>
-                  <p className="text-2xl font-black">{value}</p>
-                </div>
-              ))}
-            </div>
-
             <section className="mt-6 rounded-lg border border-line bg-white p-4 lg:hidden">
               <h2 className="text-lg font-black">Admin sections</h2>
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -169,8 +160,41 @@ export default async function AdminPage({
               </div>
             </section>
 
-            <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <section id="appointments" className="scroll-mt-8 rounded-lg border border-line bg-white p-5">
+            <div className="admin-workspace mt-8">
+          <section id="overview" className="admin-panel admin-panel-overview scroll-mt-8 rounded-lg border border-line bg-white p-5">
+            <div>
+              <h2 className="text-xl font-black">Overview</h2>
+              <p className="mt-1 text-sm text-neutral-600">Your daily snapshot for stock, inquiries, and appointment activity.</p>
+            </div>
+            <div className="mt-5 grid gap-4 md:grid-cols-4">
+              {stats.map(([label, value, Icon]) => (
+                <div key={String(label)} className="rounded-lg border border-line bg-snow p-5">
+                  <Icon className="h-5 w-5 text-gold" />
+                  <p className="mt-4 text-sm text-neutral-500">{label}</p>
+                  <p className="text-2xl font-black">{value}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-5 grid gap-4 lg:grid-cols-3">
+              <a className="rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#appointments">
+                <CalendarDays className="h-5 w-5 text-gold" />
+                <p className="mt-3 font-black">Review appointments</p>
+                <p className="mt-1 text-sm leading-6 text-neutral-600">Confirm, postpone, complete, cancel, or mark visits as no-show.</p>
+              </a>
+              <a className="rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#leads">
+                <Users className="h-5 w-5 text-gold" />
+                <p className="mt-3 font-black">Follow up leads</p>
+                <p className="mt-1 text-sm leading-6 text-neutral-600">Call, WhatsApp, email, and update customer inquiry status.</p>
+              </a>
+              <a className="rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#products">
+                <Package className="h-5 w-5 text-gold" />
+                <p className="mt-3 font-black">Manage inventory</p>
+                <p className="mt-1 text-sm leading-6 text-neutral-600">Update product prices, stock status, images, and featured devices.</p>
+              </a>
+            </div>
+          </section>
+
+          <section id="appointments" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 className="text-xl font-black">Appointment queue</h2>
@@ -224,7 +248,7 @@ export default async function AdminPage({
             </div>
           </section>
 
-          <section id="leads" className="scroll-mt-8 rounded-lg border border-line bg-white p-5">
+          <section id="leads" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
             <div>
               <h2 className="text-xl font-black">Recent leads</h2>
               <p className="mt-1 text-sm text-neutral-600">Track every inquiry after you call or message the customer.</p>
@@ -256,21 +280,14 @@ export default async function AdminPage({
               )) : <p className="text-sm text-neutral-600">No leads yet.</p>}
             </div>
           </section>
-        </div>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
-          <section id="products" className="scroll-mt-8 rounded-lg border border-line bg-white p-5">
+          <section id="add-product" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="text-xl font-black">Products</h2>
-                <p className="mt-1 text-sm text-neutral-600">Add products, edit prices, update photos, and change stock status.</p>
+                <h2 className="text-xl font-black">Add product</h2>
+                <p className="mt-1 text-sm text-neutral-600">Create a new iPhone listing with price, payment plan, stock, warranty, and photos.</p>
               </div>
-              <form action={logoutAdmin}>
-                <input type="hidden" name="next" value="/iphones" />
-                <button className="btn-secondary px-4 py-2" type="submit">View catalog</button>
-              </form>
             </div>
-            <form id="add-product" action={saveProduct} className="mt-5 scroll-mt-8 grid gap-3 rounded-md bg-snow p-4">
+            <form action={saveProduct} className="mt-5 grid gap-3 rounded-md bg-snow p-4">
               <div className="grid gap-3 md:grid-cols-3">
                 <input className="field" name="model" placeholder="Model" required />
                 <input className="field" name="slug" placeholder="slug" required />
@@ -290,6 +307,19 @@ export default async function AdminPage({
               <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" /> Featured</label>
               <button className="btn-primary w-full md:w-fit" type="submit">Add product</button>
             </form>
+          </section>
+
+          <section id="products" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-black">Products</h2>
+                <p className="mt-1 text-sm text-neutral-600">Edit prices, update photos, and change stock status.</p>
+              </div>
+              <form action={logoutAdmin}>
+                <input type="hidden" name="next" value="/iphones" />
+                <button className="btn-secondary px-4 py-2" type="submit">View catalog</button>
+              </form>
+            </div>
             <div className="mt-5 space-y-3">
               {products.map((product) => (
                 <details key={product.id} className="rounded-md border border-line bg-snow p-4">
@@ -338,8 +368,7 @@ export default async function AdminPage({
               ))}
             </div>
           </section>
-          <aside className="space-y-6">
-            <section id="settings" className="scroll-mt-8 rounded-lg border border-line bg-white p-5">
+            <section id="settings" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
               <Settings className="h-5 w-5 text-gold" />
               <h2 className="mt-3 text-xl font-black">Site settings</h2>
               <form action={saveSettings} className="mt-4 grid gap-3">
@@ -358,12 +387,11 @@ export default async function AdminPage({
                 <button className="btn-primary" type="submit">Save settings</button>
               </form>
             </section>
-            <section id="testimonials" className="scroll-mt-8 rounded-lg border border-line bg-white p-5">
+            <section id="testimonials" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
               <Star className="h-5 w-5 text-gold" />
               <h2 className="mt-3 text-xl font-black">Testimonials</h2>
               <p className="mt-2 text-sm text-neutral-600">{testimonials.length} featured testimonials</p>
             </section>
-          </aside>
         </div>
           </div>
         </div>
