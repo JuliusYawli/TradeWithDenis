@@ -82,6 +82,14 @@ export default async function AdminPage({
     ["New leads", leads.filter((lead) => lead.status === "new").length, Users],
     ["Appointment queue", appointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status)).length, CalendarDays]
   ];
+  const adminNavItems: Array<[string, string, LucideIcon, string | number | null]> = [
+    ["Appointments", "#appointments", CalendarDays, appointments.length],
+    ["Leads", "#leads", Users, leads.length],
+    ["Add product", "#add-product", Plus, null],
+    ["Products", "#products", Package, products.length],
+    ["Settings", "#settings", Settings, null],
+    ["Testimonials", "#testimonials", Star, testimonials.length]
+  ];
 
   return (
     <main className="min-h-screen bg-snow">
@@ -92,7 +100,7 @@ export default async function AdminPage({
             <h1 className="text-4xl font-black tracking-tight">Admin dashboard</h1>
             <p className="mt-2 text-neutral-600">Manage products, leads, appointments, testimonials, and site settings.</p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 lg:hidden">
             <form action={logoutAdmin}>
               <input type="hidden" name="next" value="/iphones" />
               <button className="btn-secondary px-4 py-2" type="submit"><ExternalLink className="h-4 w-4" /> Catalog</button>
@@ -108,33 +116,60 @@ export default async function AdminPage({
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-4">
-          {stats.map(([label, value, Icon]) => (
-            <div key={String(label)} className="rounded-lg border border-line bg-white p-5">
-              <Icon className="h-5 w-5 text-gold" />
-              <p className="mt-4 text-sm text-neutral-500">{label}</p>
-              <p className="text-2xl font-black">{value}</p>
+        <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
+          <aside className="hidden rounded-xl border border-line bg-white p-3 shadow-sm lg:sticky lg:top-6 lg:block">
+            <div className="border-b border-line px-3 pb-4 pt-2">
+              <p className="text-xs font-black uppercase tracking-wide text-gold">Admin menu</p>
+              <h2 className="mt-1 text-lg font-black text-ink">Workspace</h2>
             </div>
-          ))}
-        </div>
+            <nav className="mt-3 space-y-1">
+              {adminNavItems.map(([label, href, Icon, count]) => (
+                <a key={label} className="flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 text-sm font-bold text-neutral-700 transition hover:bg-snow hover:text-red" href={href}>
+                  <span className="inline-flex items-center gap-3">
+                    <Icon className="h-4 w-4 text-gold" />
+                    {label}
+                  </span>
+                  {count !== null ? <span className="rounded-full bg-snow px-2 py-0.5 text-xs text-neutral-500">{count}</span> : null}
+                </a>
+              ))}
+            </nav>
+            <div className="mt-4 space-y-2 border-t border-line pt-4">
+              <form action={logoutAdmin}>
+                <input type="hidden" name="next" value="/iphones" />
+                <button className="btn-secondary w-full px-4 py-2" type="submit"><ExternalLink className="h-4 w-4" /> Catalog</button>
+              </form>
+              <form action={logoutAdmin}>
+                <input type="hidden" name="next" value="/" />
+                <button className="btn-primary w-full px-4 py-2" type="submit"><ExternalLink className="h-4 w-4" /> View site</button>
+              </form>
+              <form action={logoutAdmin}>
+                <input type="hidden" name="next" value="/admin/login" />
+                <button className="btn-secondary w-full px-4 py-2" type="submit"><LogOut className="h-4 w-4" /> Logout</button>
+              </form>
+            </div>
+          </aside>
 
-        <section className="mt-6 rounded-lg border border-line bg-white p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-black">Quick actions</h2>
-              <p className="mt-1 text-sm text-neutral-600">Jump straight to the parts you will use every day.</p>
+          <div className="min-w-0">
+            <div className="grid gap-4 md:grid-cols-4">
+              {stats.map(([label, value, Icon]) => (
+                <div key={String(label)} className="rounded-lg border border-line bg-white p-5">
+                  <Icon className="h-5 w-5 text-gold" />
+                  <p className="mt-4 text-sm text-neutral-500">{label}</p>
+                  <p className="text-2xl font-black">{value}</p>
+                </div>
+              ))}
             </div>
-            <div className="flex flex-wrap gap-2">
-              <a className="btn-secondary px-4 py-2" href="#appointments"><CalendarDays className="h-4 w-4" /> Appointments</a>
-              <a className="btn-secondary px-4 py-2" href="#leads"><Users className="h-4 w-4" /> Leads</a>
-              <a className="btn-secondary px-4 py-2" href="#add-product"><Plus className="h-4 w-4" /> Add product</a>
-              <a className="btn-secondary px-4 py-2" href="#products"><Package className="h-4 w-4" /> Products</a>
-              <a className="btn-secondary px-4 py-2" href="#settings"><Settings className="h-4 w-4" /> Settings</a>
-            </div>
-          </div>
-        </section>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+            <section className="mt-6 rounded-lg border border-line bg-white p-4 lg:hidden">
+              <h2 className="text-lg font-black">Admin sections</h2>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {adminNavItems.map(([label, href, Icon]) => (
+                  <a key={label} className="btn-secondary justify-start px-4 py-2" href={href}><Icon className="h-4 w-4" /> {label}</a>
+                ))}
+              </div>
+            </section>
+
+            <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <section id="appointments" className="scroll-mt-8 rounded-lg border border-line bg-white p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -323,12 +358,14 @@ export default async function AdminPage({
                 <button className="btn-primary" type="submit">Save settings</button>
               </form>
             </section>
-            <section className="rounded-lg border border-line bg-white p-5">
+            <section id="testimonials" className="scroll-mt-8 rounded-lg border border-line bg-white p-5">
               <Star className="h-5 w-5 text-gold" />
               <h2 className="mt-3 text-xl font-black">Testimonials</h2>
               <p className="mt-2 text-sm text-neutral-600">{testimonials.length} featured testimonials</p>
             </section>
           </aside>
+        </div>
+          </div>
         </div>
       </div>
     </main>

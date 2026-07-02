@@ -5,6 +5,7 @@ import type { SiteSettings } from "@/lib/types";
 
 export function Footer({ settings }: { settings: SiteSettings }) {
   const whatsappUrl = `https://wa.me/${settings.whatsapp?.replace(/\D/g, "")}`;
+  const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-blue-900 bg-ink text-white">
@@ -85,7 +86,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
           </div>
         </div>
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-5 text-xs font-semibold text-white/55">
-          <p>&copy; 2026 {settings.brand_name}. All rights reserved.</p>
+          <p>&copy; {year} {settings.brand_name}. All rights reserved.</p>
           <p>Buy. Sell. Trade. Complete every order in shop.</p>
         </div>
       </div>
