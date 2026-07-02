@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, MapPin, Menu, Phone } from "lucide-react";
+import { Clock, MapPin, Phone } from "lucide-react";
+import { MobileMenu } from "@/components/mobile-menu";
 import type { SiteSettings } from "@/lib/types";
 
 export function Nav({ settings }: { settings: SiteSettings }) {
@@ -35,18 +36,7 @@ export function Nav({ settings }: { settings: SiteSettings }) {
           <Link className="rounded-full px-4 py-2 transition hover:bg-white hover:text-red" href="/contact">Contact</Link>
         </div>
         <div className="flex items-center gap-2">
-          <details className="relative lg:hidden">
-            <summary className="inline-flex cursor-pointer list-none items-center justify-center rounded-md border border-line bg-white px-3 py-2 text-sm font-bold text-ink shadow-sm marker:hidden">
-              <Menu className="h-4 w-4" />
-              <span className="sr-only">Open navigation menu</span>
-            </summary>
-            <div className="absolute right-0 top-12 w-56 rounded-lg border border-line bg-white p-2 text-sm font-bold text-neutral-700 shadow-soft">
-              <Link className="block rounded-md px-3 py-2 hover:bg-snow hover:text-red" href="/iphones">Catalog</Link>
-              <Link className="block rounded-md px-3 py-2 hover:bg-snow hover:text-red" href="/warranty">Warranty</Link>
-              <Link className="block rounded-md px-3 py-2 hover:bg-snow hover:text-red" href="/#faq">FAQ</Link>
-              <Link className="block rounded-md px-3 py-2 hover:bg-snow hover:text-red" href="/contact">Contact</Link>
-            </div>
-          </details>
+          <MobileMenu />
         </div>
       </nav>
     </header>

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
 import { CalendarCheck, Calculator, Smartphone, X } from "lucide-react";
 
 type ModalName = "calculator" | "appointment" | null;
@@ -13,7 +14,15 @@ export function HomeActionModals({
   calculator: ReactNode;
   appointment: ReactNode;
 }) {
+  const searchParams = useSearchParams();
   const [open, setOpen] = useState<ModalName>(null);
+
+  useEffect(() => {
+    const action = searchParams.get("action");
+    if (action === "calculator" || action === "appointment") {
+      setOpen(action);
+    }
+  }, [searchParams]);
 
   return (
     <>

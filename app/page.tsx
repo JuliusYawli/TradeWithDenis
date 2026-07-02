@@ -74,7 +74,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="container-page grid gap-4 py-10 sm:gap-10 sm:py-16 lg:grid-cols-3">
+        <section id="how-it-works" className="container-page grid scroll-mt-28 gap-4 py-10 sm:gap-10 sm:py-16 lg:grid-cols-3">
           {["Choose your device", "Book a shop visit", "Complete order in person"].map((title, index) => (
             <div key={title} className="rounded-lg border border-line bg-white p-6">
               <span className="text-sm font-black text-gold">0{index + 1}</span>
@@ -88,7 +88,7 @@ export default async function Home() {
           ))}
         </section>
 
-        <section className="bg-white py-10 sm:py-16">
+        <section id="why-us" className="scroll-mt-28 bg-white py-10 sm:py-16">
           <div className="container-page grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
               <Sparkles className="mb-4 h-8 w-8 text-gold" />
