@@ -8,24 +8,24 @@ export function Footer({ settings }: { settings: SiteSettings }) {
 
   return (
     <footer className="border-t border-blue-900 bg-ink text-white">
-      <div className="container-page py-12">
+      <div className="container-page py-10 sm:py-12">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_1.4fr_0.75fr]">
           <div>
-            <div className="inline-flex rounded-lg bg-white p-3">
+            <div className="inline-flex max-w-full rounded-lg bg-white p-3">
               <Image
                 src="/logo.svg"
                 alt="TradeWithDenis"
                 width={280}
                 height={67}
-                className="h-16 w-auto object-contain"
+                className="h-14 w-auto max-w-full object-contain sm:h-16"
               />
             </div>
             <p className="mt-4 max-w-md text-sm leading-6 text-white/70">
               Premium Apple devices in Ghana with clear appointment booking, transparent payment discussions, and in-shop order completion.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              <a className="btn-primary px-4 py-2" href={whatsappUrl}><MessageCircle className="h-4 w-4" /> WhatsApp</a>
-              <a className="btn-secondary border-white/20 bg-white/10 px-4 py-2 text-white hover:bg-white hover:text-ink" href={settings.google_maps_url ?? "#"} target="_blank" rel="noreferrer"><MapPin className="h-4 w-4" /> Directions</a>
+            <div className="mt-5 grid gap-2 sm:flex sm:flex-wrap">
+              <a className="btn-primary w-full px-4 py-2 sm:w-auto" href={whatsappUrl}><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+              <a className="btn-secondary w-full border-white/20 bg-white/10 px-4 py-2 text-white hover:bg-white hover:text-ink sm:w-auto" href={settings.google_maps_url ?? "#"} target="_blank" rel="noreferrer"><MapPin className="h-4 w-4" /> Directions</a>
             </div>
           </div>
 

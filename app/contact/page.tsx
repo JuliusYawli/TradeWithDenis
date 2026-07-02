@@ -14,9 +14,9 @@ export default async function ContactPage() {
   return (
     <>
       <Nav settings={settings} />
-      <main className="container-page grid gap-10 py-12 lg:grid-cols-[0.8fr_1.2fr]">
+      <main className="container-page grid gap-8 py-8 sm:gap-10 sm:py-12 lg:grid-cols-[0.8fr_1.2fr]">
         <section>
-          <h1 className="text-4xl font-black tracking-tight">Contact TradeWithDenis</h1>
+          <h1 className="text-3xl font-black tracking-tight sm:text-4xl">Contact TradeWithDenis</h1>
           <p className="mt-3 max-w-xl text-neutral-600">
             Visit the shop, call, message on WhatsApp, or book an appointment for current iPhone stock and payment options.
           </p>
@@ -48,10 +48,10 @@ export default async function ContactPage() {
             </p>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3 text-sm font-bold">
-            <a className="btn-secondary px-4 py-2" href={settings.facebook_url ?? "#"} target="_blank" rel="noreferrer"><Facebook className="h-4 w-4" /> Facebook</a>
-            <a className="btn-secondary px-4 py-2" href={settings.instagram_url ?? "#"} target="_blank" rel="noreferrer"><Instagram className="h-4 w-4" /> Instagram</a>
-            <a className="btn-secondary px-4 py-2" href={settings.tiktok_url ?? "#"} target="_blank" rel="noreferrer">TikTok</a>
+          <div className="mt-6 grid gap-3 text-sm font-bold sm:flex sm:flex-wrap">
+            <a className="btn-secondary w-full px-4 py-2 sm:w-auto" href={settings.facebook_url ?? "#"} target="_blank" rel="noreferrer"><Facebook className="h-4 w-4" /> Facebook</a>
+            <a className="btn-secondary w-full px-4 py-2 sm:w-auto" href={settings.instagram_url ?? "#"} target="_blank" rel="noreferrer"><Instagram className="h-4 w-4" /> Instagram</a>
+            <a className="btn-secondary w-full px-4 py-2 sm:w-auto" href={settings.tiktok_url ?? "#"} target="_blank" rel="noreferrer">TikTok</a>
           </div>
         </section>
         <LeadForm />

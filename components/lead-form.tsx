@@ -5,7 +5,7 @@ import type { Product } from "@/lib/types";
 
 export function LeadForm({ product }: { product?: Product }) {
   return (
-    <form action={submitLead} className="grid gap-3 rounded-lg border border-line bg-white p-5 shadow-sm">
+    <form action={submitLead} className="grid gap-3 rounded-lg border border-line bg-white p-4 shadow-sm sm:p-5">
       <div className="mb-1">
         <div className="mb-2 inline-flex rounded-full bg-snow p-2">
           <CalendarCheck className="h-5 w-5 text-gold" />

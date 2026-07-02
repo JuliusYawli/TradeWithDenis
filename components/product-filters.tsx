@@ -27,7 +27,7 @@ export function ProductFilters({ products }: { products: Product[] }) {
 
   return (
     <div>
-      <div className="mb-8 grid gap-3 rounded-lg border border-line bg-white p-4 md:grid-cols-[1fr_160px_160px_180px]">
+      <div className="mb-6 grid gap-3 rounded-lg border border-line bg-white p-3 sm:p-4 md:mb-8 md:grid-cols-[1fr_160px_160px_180px]">
         <label className="relative">
           <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-neutral-400" />
           <input className="field pl-10" placeholder="Search model or storage" value={query} onChange={(event) => setQuery(event.target.value)} />
@@ -49,7 +49,7 @@ export function ProductFilters({ products }: { products: Product[] }) {
           <option value="weekly">Weekly payment</option>
         </select>
       </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filtered.map((product) => <ProductCard key={product.id} product={product} />)}
       </div>
     </div>

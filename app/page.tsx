@@ -35,17 +35,17 @@ export default async function Home() {
       <main>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }} />
         <section className="border-b border-line bg-white">
-          <div className="container-page grid min-h-[640px] items-center gap-10 py-14 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="container-page grid items-center gap-8 py-8 sm:py-12 lg:min-h-[640px] lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:py-14">
             <div>
-              <p className="mb-4 inline-flex rounded-full border border-line px-3 py-1 text-sm font-semibold text-red">iPhones and Apple financing in Ghana</p>
-              <h1 className="max-w-3xl text-5xl font-black tracking-tight text-ink md:text-7xl">TradeWithDenis</h1>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-600">
+              <p className="mb-4 inline-flex max-w-full rounded-full border border-line px-3 py-1 text-xs font-semibold text-red sm:text-sm">iPhones and Apple financing in Ghana</p>
+              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-ink sm:text-5xl md:text-7xl">TradeWithDenis</h1>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-neutral-600 sm:mt-5 sm:text-lg sm:leading-8">
                 Browse premium iPhones with clear prices and payment plans, then book a shop appointment to inspect the device and complete the order in person.
               </p>
               <HomeActionModals calculator={<PaymentCalculatorPanel />} appointment={<LeadForm />} />
             </div>
-            <div className="rounded-lg border border-line bg-snow p-5 shadow-soft">
-              <div className="aspect-[4/5] rounded-md bg-[url('https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center" />
+            <div className="rounded-lg border border-line bg-snow p-3 shadow-soft sm:p-5">
+              <div className="aspect-[5/4] rounded-md bg-[url('https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center lg:aspect-[4/5]" />
             </div>
           </div>
         </section>
@@ -61,10 +61,10 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="container-page py-16">
-          <div className="mb-8 flex items-end justify-between gap-4">
+        <section className="container-page py-10 sm:py-16">
+          <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
             <div>
-              <h2 className="text-3xl font-black tracking-tight">Featured iPhones</h2>
+              <h2 className="text-2xl font-black tracking-tight sm:text-3xl">Featured iPhones</h2>
               <p className="mt-2 text-neutral-600">Verified stock with transparent deposit details before you book a shop visit.</p>
             </div>
             <Link className="hidden text-sm font-bold text-red md:block" href="/iphones">View all</Link>
@@ -74,7 +74,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="container-page grid gap-10 py-16 lg:grid-cols-3">
+        <section className="container-page grid gap-4 py-10 sm:gap-10 sm:py-16 lg:grid-cols-3">
           {["Choose your device", "Book a shop visit", "Complete order in person"].map((title, index) => (
             <div key={title} className="rounded-lg border border-line bg-white p-6">
               <span className="text-sm font-black text-gold">0{index + 1}</span>
@@ -88,11 +88,11 @@ export default async function Home() {
           ))}
         </section>
 
-        <section className="bg-white py-16">
+        <section className="bg-white py-10 sm:py-16">
           <div className="container-page grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
               <Sparkles className="mb-4 h-8 w-8 text-gold" />
-              <h2 className="text-3xl font-black tracking-tight">Clear enough to trust. Simple enough to manage.</h2>
+              <h2 className="text-2xl font-black tracking-tight sm:text-3xl">Clear enough to trust. Simple enough to manage.</h2>
               <p className="mt-4 text-neutral-600">Business contact details, social links, registration, product stock, testimonials, and lead follow-up are all editable from the admin dashboard.</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -106,8 +106,8 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="faq" className="container-page py-16">
-          <h2 className="text-3xl font-black tracking-tight">FAQ</h2>
+        <section id="faq" className="container-page py-10 sm:py-16">
+          <h2 className="text-2xl font-black tracking-tight sm:text-3xl">FAQ</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {[
               ["Are devices genuine?", "Devices should be inspected and listed with accurate condition, storage, warranty, and stock status."],

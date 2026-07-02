@@ -14,7 +14,7 @@ export function ProductCard({ product }: { product: Product }) {
           <Image src={product.image_urls[0]} alt={`${product.model} ${product.storage}`} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
         </div>
       </Link>
-      <div className="space-y-4 p-5">
+      <div className="space-y-4 p-4 sm:p-5">
         <div>
           <div className="mb-2 flex flex-wrap gap-2 text-xs font-semibold">
             <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-emerald-700">{product.stock_status.replace("_", " ")}</span>
