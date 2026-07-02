@@ -8,7 +8,6 @@ import {
   PackageCheck,
   ShieldCheck,
   Smartphone,
-  Sparkles,
   Store,
   Wallet,
   type LucideIcon
@@ -59,7 +58,6 @@ export default async function Home() {
           <div className="container-page py-12 text-center sm:py-16 lg:py-20">
             <div className="mx-auto flex max-w-4xl flex-col items-center">
               <p className="section-eyebrow">
-                <Sparkles className="h-3.5 w-3.5" />
                 Premium iPhones in Ghana
               </p>
               <h1 className="mt-6 text-balance text-5xl font-black tracking-tight text-ink sm:text-6xl lg:text-7xl">
