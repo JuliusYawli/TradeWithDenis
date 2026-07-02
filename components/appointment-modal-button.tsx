@@ -5,7 +5,17 @@ import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-export function AppointmentModalButton({ children }: { children: ReactNode }) {
+export function AppointmentModalButton({
+  children,
+  className = "hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 lg:inline-flex",
+  label = "Book Appointment",
+  showIcon = true
+}: {
+  children: ReactNode;
+  className?: string;
+  label?: string;
+  showIcon?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -42,12 +52,12 @@ export function AppointmentModalButton({ children }: { children: ReactNode }) {
   return (
     <>
       <button
-        className="hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 lg:inline-flex"
+        className={className}
         type="button"
         onClick={() => setOpen(true)}
       >
-        <CalendarCheck className="h-4 w-4" />
-        Book Appointment
+        {showIcon ? <CalendarCheck className="h-4 w-4" /> : null}
+        {label}
       </button>
 
       {mounted && modal ? createPortal(modal, document.body) : null}

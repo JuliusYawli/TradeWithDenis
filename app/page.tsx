@@ -14,6 +14,7 @@ import {
   type LucideIcon
 } from "lucide-react";
 import { Footer } from "@/components/footer";
+import { AppointmentModalButton } from "@/components/appointment-modal-button";
 import { HomeActionModals } from "@/components/home-action-modals";
 import { LeadForm } from "@/components/lead-form";
 import { Nav } from "@/components/nav";
@@ -219,7 +220,9 @@ export default async function Home() {
               <h2 className="mx-auto mt-4 max-w-3xl text-3xl font-black tracking-tight sm:text-5xl">Book a shop appointment and inspect your iPhone in person.</h2>
               <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/70 sm:text-base">The shop receives your request, prepares for your visit, and follows up through your preferred contact method.</p>
               <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-                <Link className="btn-primary" href="/?action=appointment">Book appointment</Link>
+                <AppointmentModalButton className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/20 px-5 py-3 text-sm font-bold text-white transition hover:bg-white hover:text-ink focus:outline-none focus:ring-2 focus:ring-white/30" label="Book appointment" showIcon={false}>
+                  <LeadForm variant="modal" />
+                </AppointmentModalButton>
                 <Link className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/20 px-5 py-3 text-sm font-bold text-white transition hover:bg-white hover:text-ink" href="/iphones">Browse iPhones</Link>
               </div>
             </div>
