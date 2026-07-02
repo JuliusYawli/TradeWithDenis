@@ -58,3 +58,20 @@ textarea {
 .admin-panel:target {
   display: block;
 }
+
+.admin-workspace:has(.admin-panel-overview:target) .admin-panel-overview {
+  display: block;
+}
+
+.admin-shell:not(:has(.admin-panel:target)) .admin-nav-link[href="#overview"],
+.admin-shell:has(#overview:target) .admin-nav-link[href="#overview"],
+.admin-shell:has(#appointments:target) .admin-nav-link[href="#appointments"],
+.admin-shell:has(#leads:target) .admin-nav-link[href="#leads"],
+.admin-shell:has(#add-product:target) .admin-nav-link[href="#add-product"],
+.admin-shell:has(#products:target) .admin-nav-link[href="#products"],
+.admin-shell:has(#settings:target) .admin-nav-link[href="#settings"],
+.admin-shell:has(#testimonials:target) .admin-nav-link[href="#testimonials"] {
+  border-color: #dbeafe;
+  background: #f7fbff;
+  color: #0f3f9c;
+}

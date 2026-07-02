@@ -24,16 +24,22 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
       </div>
       <input className="field" type="email" name="email" placeholder="Email address" />
       <div className="grid gap-3 sm:grid-cols-2">
-        <select className="field" name="preferred_contact_method" defaultValue="whatsapp">
-          <option value="whatsapp">WhatsApp</option>
-          <option value="phone">Phone call</option>
-          <option value="email">Email</option>
-        </select>
-        <select className="field" name="desired_payment_option" defaultValue="weekly">
-          <option value="weekly">Weekly payments</option>
-          <option value="cash">Pay cash</option>
-          <option value="discuss">Discuss options</option>
-        </select>
+        <label className="text-sm font-semibold text-neutral-700">
+          Preferred contact method
+          <select className="field mt-2" name="preferred_contact_method" defaultValue="whatsapp">
+            <option value="whatsapp">WhatsApp</option>
+            <option value="phone">Phone call</option>
+            <option value="email">Email</option>
+          </select>
+        </label>
+        <label className="text-sm font-semibold text-neutral-700">
+          Payment preference
+          <select className="field mt-2" name="desired_payment_option" defaultValue="weekly">
+            <option value="weekly">Weekly payments</option>
+            <option value="cash">Pay cash</option>
+            <option value="discuss">Discuss options</option>
+          </select>
+        </label>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-semibold text-neutral-700">

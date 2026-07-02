@@ -117,7 +117,7 @@ export default async function AdminPage({
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
+        <div className="admin-shell grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
           <aside className="hidden rounded-xl border border-line bg-white p-3 shadow-sm lg:sticky lg:top-6 lg:block">
             <div className="border-b border-line px-3 pb-4 pt-2">
               <p className="text-xs font-black uppercase tracking-wide text-gold">Admin menu</p>
@@ -125,7 +125,7 @@ export default async function AdminPage({
             </div>
             <nav className="mt-3 space-y-1">
               {adminNavItems.map(([label, href, Icon, count]) => (
-                <a key={label} className="flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 text-sm font-bold text-neutral-700 transition hover:bg-snow hover:text-red" href={href}>
+                <a key={label} className="admin-nav-link flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 text-sm font-bold text-neutral-700 transition hover:bg-snow hover:text-red" href={href}>
                   <span className="inline-flex items-center gap-3">
                     <Icon className="h-4 w-4 text-gold" />
                     {label}
@@ -155,7 +155,7 @@ export default async function AdminPage({
               <h2 className="text-lg font-black">Admin sections</h2>
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 {adminNavItems.map(([label, href, Icon]) => (
-                  <a key={label} className="btn-secondary justify-start px-4 py-2" href={href}><Icon className="h-4 w-4" /> {label}</a>
+                  <a key={label} className="admin-nav-link btn-secondary justify-start px-4 py-2" href={href}><Icon className="h-4 w-4" /> {label}</a>
                 ))}
               </div>
             </section>
