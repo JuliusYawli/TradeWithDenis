@@ -29,6 +29,8 @@ const stockStatuses = [
   ["reserved", "Reserved"],
   ["sold", "Sold"]
 ] as const;
+const adminActionButtonClass = "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-sm font-bold text-ink shadow-sm transition hover:border-gold hover:bg-snow hover:text-red focus:outline-none focus:ring-2 focus:ring-gold/25";
+const adminDangerButtonClass = "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-danger/20 bg-white px-4 py-2 text-sm font-bold text-danger shadow-sm transition hover:border-danger/40 hover:bg-danger/5 focus:outline-none focus:ring-2 focus:ring-danger/20";
 
 function formatDateTime(value: string) {
   return new Intl.DateTimeFormat("en-GH", {
@@ -104,15 +106,15 @@ export default async function AdminPage({
           <div className="flex flex-wrap gap-2 lg:hidden">
             <form action={logoutAdmin}>
               <input type="hidden" name="next" value="/iphones" />
-              <button className="btn-secondary px-4 py-2" type="submit"><ExternalLink className="h-4 w-4" /> Catalog</button>
+              <button className={adminActionButtonClass} type="submit"><ExternalLink className="h-4 w-4" /> Catalog</button>
             </form>
             <form action={logoutAdmin}>
               <input type="hidden" name="next" value="/" />
-              <button className="btn-primary px-4 py-2" type="submit"><ExternalLink className="h-4 w-4" /> Site</button>
+              <button className={adminActionButtonClass} type="submit"><ExternalLink className="h-4 w-4" /> View site</button>
             </form>
             <form action={logoutAdmin}>
               <input type="hidden" name="next" value="/admin/login" />
-              <button className="btn-secondary px-4 py-2" type="submit"><LogOut className="h-4 w-4" /> Logout</button>
+              <button className={adminDangerButtonClass} type="submit"><LogOut className="h-4 w-4" /> Logout</button>
             </form>
           </div>
         </div>
@@ -137,15 +139,15 @@ export default async function AdminPage({
             <div className="mt-4 space-y-2 border-t border-line pt-4">
               <form action={logoutAdmin}>
                 <input type="hidden" name="next" value="/iphones" />
-                <button className="btn-secondary w-full px-4 py-2" type="submit"><ExternalLink className="h-4 w-4" /> Catalog</button>
+                <button className={`${adminActionButtonClass} w-full`} type="submit"><ExternalLink className="h-4 w-4" /> Catalog</button>
               </form>
               <form action={logoutAdmin}>
                 <input type="hidden" name="next" value="/" />
-                <button className="btn-primary w-full px-4 py-2" type="submit"><ExternalLink className="h-4 w-4" /> View site</button>
+                <button className={`${adminActionButtonClass} w-full`} type="submit"><ExternalLink className="h-4 w-4" /> View site</button>
               </form>
               <form action={logoutAdmin}>
                 <input type="hidden" name="next" value="/admin/login" />
-                <button className="btn-secondary w-full px-4 py-2" type="submit"><LogOut className="h-4 w-4" /> Logout</button>
+                <button className={`${adminDangerButtonClass} w-full`} type="submit"><LogOut className="h-4 w-4" /> Logout</button>
               </form>
             </div>
           </aside>
