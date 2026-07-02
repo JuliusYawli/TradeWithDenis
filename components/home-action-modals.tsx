@@ -26,8 +26,8 @@ export function HomeActionModals({
 
   return (
     <>
-      <div className="mt-6 grid gap-3 sm:mt-8 sm:flex sm:flex-wrap">
-        <Link className="btn-primary w-full sm:w-auto" href="/iphones"><Smartphone className="h-4 w-4" /> Browse iPhones</Link>
+      <div className="mt-7 grid w-full gap-3 sm:mt-9 sm:flex sm:flex-wrap sm:justify-center">
+        <Link className="btn-secondary w-full sm:w-auto" href="/iphones"><Smartphone className="h-4 w-4" /> Browse iPhones</Link>
         <button className="btn-secondary w-full sm:w-auto" type="button" onClick={() => setOpen("calculator")}><Calculator className="h-4 w-4" /> Calculate payments</button>
         <button className="btn-secondary w-full sm:w-auto" type="button" onClick={() => setOpen("appointment")}><CalendarCheck className="h-4 w-4" /> Book appointment</button>
       </div>

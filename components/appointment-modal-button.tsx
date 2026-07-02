@@ -42,7 +42,7 @@ export function AppointmentModalButton({ children }: { children: ReactNode }) {
   return (
     <>
       <button
-        className="hidden min-h-11 items-center justify-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-black text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 lg:inline-flex"
+        className="hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 lg:inline-flex"
         type="button"
         onClick={() => setOpen(true)}
       >
