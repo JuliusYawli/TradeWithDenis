@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, MapPin, Phone } from "lucide-react";
+import { CalendarCheck, Clock, MapPin, Phone } from "lucide-react";
 import { MobileMenu } from "@/components/mobile-menu";
 import type { SiteSettings } from "@/lib/types";
 
@@ -36,6 +36,13 @@ export function Nav({ settings }: { settings: SiteSettings }) {
           <Link className="rounded-full px-4 py-2 transition hover:bg-white hover:text-red" href="/contact">Contact</Link>
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            className="hidden min-h-11 items-center justify-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-black text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 lg:inline-flex"
+            href="/?action=appointment"
+          >
+            <CalendarCheck className="h-4 w-4" />
+            Book Appointment
+          </Link>
           <MobileMenu />
         </div>
       </nav>
