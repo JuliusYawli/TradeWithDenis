@@ -39,7 +39,7 @@ export function Nav({ settings }: { settings: SiteSettings }) {
         </div>
         <div className="flex items-center gap-2">
           <AppointmentModalButton>
-            <LeadForm />
+            <LeadForm variant="modal" />
           </AppointmentModalButton>
           <MobileMenu />
         </div>

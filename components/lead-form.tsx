@@ -3,18 +3,20 @@ import { submitLead } from "@/app/actions";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
 import type { Product } from "@/lib/types";
 
-export function LeadForm({ product }: { product?: Product }) {
+export function LeadForm({ product, variant = "card" }: { product?: Product; variant?: "card" | "modal" }) {
   return (
-    <form action={submitLead} className="grid gap-3 rounded-lg border border-line bg-white p-4 shadow-sm sm:p-5">
-      <div className="mb-1">
-        <div className="mb-2 inline-flex rounded-full bg-snow p-2">
-          <CalendarCheck className="h-5 w-5 text-gold" />
+    <form action={submitLead} className={variant === "card" ? "grid gap-3 rounded-lg border border-line bg-white p-4 shadow-sm sm:p-5" : "grid gap-3"}>
+      {variant === "card" ? (
+        <div className="mb-1">
+          <div className="mb-2 inline-flex rounded-full bg-snow p-2">
+            <CalendarCheck className="h-5 w-5 text-gold" />
+          </div>
+          <h3 className="text-xl font-black text-ink">Book a shop appointment</h3>
+          <p className="mt-1 text-sm leading-6 text-neutral-600">
+            Submit your details, then visit the shop to inspect the device, confirm payment terms, and complete the order in person.
+          </p>
         </div>
-        <h3 className="text-xl font-black text-ink">Book a shop appointment</h3>
-        <p className="mt-1 text-sm leading-6 text-neutral-600">
-          Submit your details, then visit the shop to inspect the device, confirm payment terms, and complete the order in person.
-        </p>
-      </div>
+      ) : null}
       <input type="hidden" name="product_id" value={product?.id ?? ""} />
       <div className="grid gap-3 sm:grid-cols-2">
         <input className="field" name="customer_name" placeholder="Full name" required />

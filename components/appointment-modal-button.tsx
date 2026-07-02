@@ -19,19 +19,26 @@ export function AppointmentModalButton({ children }: { children: ReactNode }) {
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-ink/70 px-3 py-4 sm:px-4 sm:py-6" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/70 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6" role="dialog" aria-modal="true">
           <button className="absolute inset-0 cursor-default" type="button" aria-label="Close appointment modal" onClick={() => setOpen(false)} />
-          <div className="relative max-h-[92svh] w-full max-w-3xl overflow-y-auto rounded-lg border border-line bg-white p-4 shadow-soft sm:max-h-[90vh] sm:p-5 md:p-6">
-            <div className="mb-4 flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-black tracking-tight sm:text-2xl">Book appointment</h2>
-                <p className="mt-1 text-sm text-neutral-600">Choose a visit time, then complete the order at the shop after inspection.</p>
+          <div className="relative flex max-h-[92svh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-line bg-white shadow-2xl sm:max-h-[90vh]">
+            <div className="flex items-start justify-between gap-4 border-b border-line bg-snow px-4 py-4 sm:px-5">
+              <div className="flex min-w-0 gap-3">
+                <div className="mt-0.5 hidden rounded-full bg-white p-2 shadow-sm ring-1 ring-line sm:inline-flex">
+                  <CalendarCheck className="h-5 w-5 text-gold" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-black tracking-tight text-ink sm:text-2xl">Book appointment</h2>
+                  <p className="mt-1 text-sm leading-6 text-neutral-600">Choose a visit time, then complete the order at the shop after inspection.</p>
+                </div>
               </div>
-              <button className="rounded-md border border-line p-2 text-ink transition hover:border-gold hover:text-red" type="button" aria-label="Close modal" onClick={() => setOpen(false)}>
+              <button className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line bg-white text-ink transition hover:border-gold hover:text-red" type="button" aria-label="Close modal" onClick={() => setOpen(false)}>
                 <X className="h-5 w-5" />
               </button>
             </div>
-            {children}
+            <div className="overflow-y-auto px-4 py-4 sm:px-5 sm:py-5">
+              {children}
+            </div>
           </div>
         </div>
       ) : null}
