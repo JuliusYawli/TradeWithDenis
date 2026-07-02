@@ -28,9 +28,14 @@ export function ProductFilters({ products }: { products: Product[] }) {
   return (
     <div>
       <div className="mb-6 grid gap-3 rounded-lg border border-line bg-white p-3 sm:p-4 md:mb-8 md:grid-cols-[1fr_160px_160px_180px]">
-        <label className="relative">
-          <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-neutral-400" />
-          <input className="field pl-10" placeholder="Search model or storage" value={query} onChange={(event) => setQuery(event.target.value)} />
+        <label className="relative block">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+          <input
+            className="w-full rounded-md border border-line bg-white py-3 pl-11 pr-3 text-sm text-ink outline-none transition placeholder:text-neutral-400 focus:border-gold focus:ring-2 focus:ring-gold/20"
+            placeholder="Search model or storage"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
         </label>
         <select className="field" value={condition} onChange={(event) => setCondition(event.target.value)}>
           <option value="all">All conditions</option>
