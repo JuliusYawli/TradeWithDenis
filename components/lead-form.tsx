@@ -1,4 +1,4 @@
-import { CalendarCheck, Send } from "lucide-react";
+import { CalendarCheck, LockKeyhole, Send } from "lucide-react";
 import { submitLead } from "@/app/actions";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
 import type { Product } from "@/lib/types";
@@ -17,6 +17,10 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
           </p>
         </div>
       ) : null}
+      <div className="rounded-lg border border-line bg-snow p-3 text-sm leading-6 text-neutral-700">
+        <p className="inline-flex items-center gap-2 font-bold text-ink"><LockKeyhole className="h-4 w-4 text-gold" /> No online payment required</p>
+        <p className="mt-1">Your appointment helps the shop prepare. You inspect the phone and complete the order in person.</p>
+      </div>
       <input type="hidden" name="product_id" value={product?.id ?? ""} />
       <div className="grid gap-3 sm:grid-cols-2">
         <input className="field" name="customer_name" placeholder="Full name" required />

@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --background: #fbfbfa;
-  --foreground: #111111;
+  --background: #f8fbff;
+  --foreground: #0b1220;
+  --surface: #ffffff;
+  --surface-blue: #f1f7ff;
+  --brand: #1553c5;
+  --brand-dark: #0f3f9c;
+  --line-soft: #dbeafe;
 }
 
 * {
@@ -19,6 +24,7 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
+  text-rendering: optimizeLegibility;
 }
 
 input,
@@ -32,15 +38,45 @@ textarea {
 }
 
 .btn-primary {
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-gold px-5 py-3 text-sm font-semibold text-white transition hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2;
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-sm font-bold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 active:translate-y-0;
 }
 
 .btn-secondary {
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-line bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:border-gold hover:text-red;
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-3 text-sm font-bold text-ink transition hover:-translate-y-0.5 hover:border-gold hover:text-red hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 active:translate-y-0;
 }
 
 .field {
-  @apply w-full rounded-md border border-line bg-white px-3 py-3 text-sm outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20;
+  @apply w-full rounded-lg border border-line bg-white px-3 py-3 text-sm outline-none transition placeholder:text-neutral-400 focus:border-gold focus:ring-2 focus:ring-gold/20;
+}
+
+.section-eyebrow {
+  @apply inline-flex max-w-full items-center gap-2 rounded-full border border-line bg-white px-3 py-1 text-xs font-black uppercase tracking-wide text-red shadow-sm;
+}
+
+.premium-card {
+  @apply rounded-xl border border-line bg-white shadow-sm transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-soft;
+}
+
+.soft-panel {
+  @apply rounded-xl border border-line bg-snow shadow-sm;
+}
+
+.badge-soft {
+  @apply inline-flex items-center rounded-full border border-line bg-white px-2.5 py-1 text-xs font-bold text-neutral-700;
+}
+
+.badge-blue {
+  @apply inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-black text-red;
+}
+
+.hero-shell {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(21, 83, 197, 0.12), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #f1f7ff 100%);
+}
+
+.modal-panel {
+  @apply relative max-h-[92svh] w-full overflow-hidden rounded-2xl border border-line bg-white shadow-2xl sm:max-h-[90vh];
 }
 
 .admin-panel {

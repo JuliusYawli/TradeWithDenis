@@ -16,8 +16,11 @@ export default async function IphonesPage() {
     <>
       <Nav settings={settings} />
       <main className="container-page py-8 sm:py-12">
-        <h1 className="text-3xl font-black tracking-tight sm:text-4xl">Available iPhones</h1>
-        <p className="mt-3 max-w-2xl text-neutral-600">Search by model or storage, filter by condition and stock, then sort by the cost that matters most.</p>
+        <div className="rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-8">
+          <p className="section-eyebrow">Available stock</p>
+          <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-5xl">Available iPhones</h1>
+          <p className="mt-3 max-w-2xl text-neutral-600">Search by model or storage, filter by condition and stock, then choose a phone to book a shop visit before purchase.</p>
+        </div>
         <div className="mt-6 sm:mt-8">
           <ProductFilters products={products} />
         </div>

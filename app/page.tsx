@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BadgeCheck, CreditCard, LockKeyhole, PackageCheck, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react";
+import { BadgeCheck, CalendarCheck, CreditCard, LockKeyhole, MapPin, PackageCheck, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { HomeActionModals } from "@/components/home-action-modals";
 import { LeadForm } from "@/components/lead-form";
@@ -34,26 +34,35 @@ export default async function Home() {
       <Nav settings={settings} />
       <main>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }} />
-        <section className="border-b border-line bg-white">
-          <div className="container-page grid items-center gap-8 py-8 sm:py-12 lg:min-h-[640px] lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:py-14">
+        <section className="hero-shell border-b border-line">
+          <div className="container-page grid items-center gap-8 py-8 sm:py-12 lg:min-h-[660px] lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:py-14">
             <div>
-              <p className="mb-4 inline-flex max-w-full rounded-full border border-line px-3 py-1 text-xs font-semibold text-red sm:text-sm">iPhones and Apple financing in Ghana</p>
-              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-ink sm:text-5xl md:text-7xl">TradeWithDenis</h1>
+              <p className="section-eyebrow mb-4">Premium iPhones in Ghana</p>
+              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-ink sm:text-5xl md:text-7xl">Choose your iPhone. Inspect it in shop.</h1>
               <p className="mt-4 max-w-2xl text-base leading-7 text-neutral-600 sm:mt-5 sm:text-lg sm:leading-8">
-                Browse premium iPhones with clear prices and payment plans, then book a shop appointment to inspect the device and complete the order in person.
+                Browse verified iPhones with clear prices, payment options, warranty terms, and a simple appointment flow. No online sale is completed until the customer visits the shop.
               </p>
               <HomeActionModals calculator={<PaymentCalculatorPanel />} appointment={<LeadForm />} />
+              <div className="mt-6 grid gap-3 text-sm font-semibold text-neutral-700 sm:grid-cols-2">
+                <p className="inline-flex items-center gap-2"><CalendarCheck className="h-4 w-4 text-gold" /> Book before visiting</p>
+                <p className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-gold" /> Circle Mall, Block C, Shop 27</p>
+              </div>
             </div>
-            <div className="rounded-lg border border-line bg-snow p-3 shadow-soft sm:p-5">
-              <div className="aspect-[5/4] rounded-md bg-[url('https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center lg:aspect-[4/5]" />
+            <div className="soft-panel p-3 sm:p-5">
+              <div className="relative aspect-[5/4] overflow-hidden rounded-lg bg-[url('https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center lg:aspect-[4/5]">
+                <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/50 bg-white/90 p-4 shadow-soft backdrop-blur">
+                  <p className="text-xs font-black uppercase tracking-wide text-red">In-shop completion</p>
+                  <p className="mt-1 text-sm font-semibold text-ink">Inspect the phone, confirm the terms, then complete payment at TradeWithDenis.</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="border-b border-line bg-snow py-5">
+        <section className="border-b border-line bg-white py-5">
           <div className="container-page grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {trustItems.map(([label, Icon]) => (
-              <div key={String(label)} className="flex items-center gap-3 rounded-md bg-white px-4 py-3 text-sm font-semibold">
+              <div key={String(label)} className="flex items-center gap-3 rounded-lg border border-line bg-snow px-4 py-3 text-sm font-bold">
                 <Icon className="h-5 w-5 text-gold" />
                 {label}
               </div>
@@ -64,6 +73,7 @@ export default async function Home() {
         <section className="container-page py-10 sm:py-16">
           <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
             <div>
+              <p className="section-eyebrow mb-3">Available stock</p>
               <h2 className="text-2xl font-black tracking-tight sm:text-3xl">Featured iPhones</h2>
               <p className="mt-2 text-neutral-600">Verified stock with transparent deposit details before you book a shop visit.</p>
             </div>
@@ -76,8 +86,8 @@ export default async function Home() {
 
         <section id="how-it-works" className="container-page grid scroll-mt-28 gap-4 py-10 sm:gap-10 sm:py-16 lg:grid-cols-3">
           {["Choose your device", "Book a shop visit", "Complete order in person"].map((title, index) => (
-            <div key={title} className="rounded-lg border border-line bg-white p-6">
-              <span className="text-sm font-black text-gold">0{index + 1}</span>
+            <div key={title} className="premium-card p-6">
+              <span className="badge-blue">0{index + 1}</span>
               <h3 className="mt-3 text-xl font-black">{title}</h3>
               <p className="mt-2 text-sm leading-6 text-neutral-600">
                 {index === 0 && "Compare model, storage, condition, warranty, and payment plan before contacting us."}
@@ -93,11 +103,11 @@ export default async function Home() {
             <div>
               <Sparkles className="mb-4 h-8 w-8 text-gold" />
               <h2 className="text-2xl font-black tracking-tight sm:text-3xl">Clear enough to trust. Simple enough to manage.</h2>
-              <p className="mt-4 text-neutral-600">Business contact details, social links, registration, product stock, testimonials, and lead follow-up are all editable from the admin dashboard.</p>
+              <p className="mt-4 text-neutral-600">Business contact details, social links, registration, product stock, testimonials, and customer follow-up are all editable from the admin dashboard.</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {testimonials.map((item) => (
-                <blockquote key={item.id} className="rounded-lg border border-line bg-snow p-5">
+                <blockquote key={item.id} className="premium-card bg-snow p-5">
                   <p className="text-sm leading-6 text-neutral-700">“{item.quote}”</p>
                   <footer className="mt-4 text-sm font-bold">{item.customer_name} · {item.location}</footer>
                 </blockquote>
@@ -115,7 +125,7 @@ export default async function Home() {
               ["How long are installments?", "The default term is 12 weeks unless a product shows a different term."],
               ["Where is the shop?", "TradeWithDenis is at Circle Mall, Block C, Shop 27. Use the Google Maps link on the contact page for directions."]
             ].map(([q, a]) => (
-              <div key={q} className="rounded-lg border border-line bg-white p-5">
+              <div key={q} className="premium-card p-5">
                 <h3 className="font-bold">{q}</h3>
                 <p className="mt-2 text-sm leading-6 text-neutral-600">{a}</p>
               </div>

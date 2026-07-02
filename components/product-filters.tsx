@@ -27,11 +27,17 @@ export function ProductFilters({ products }: { products: Product[] }) {
 
   return (
     <div>
-      <div className="mb-6 grid gap-3 rounded-lg border border-line bg-white p-3 sm:p-4 md:mb-8 md:grid-cols-[1fr_160px_160px_180px]">
-        <label className="relative block">
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="section-eyebrow">Catalog</p>
+          <p className="mt-2 text-sm font-semibold text-neutral-600">{filtered.length} of {products.length} iPhones showing</p>
+        </div>
+      </div>
+      <div className="mb-6 grid gap-3 rounded-xl border border-line bg-white p-3 shadow-sm sm:p-4 md:mb-8 md:grid-cols-[1fr_160px_160px_180px]">
+        <label className="relative block md:col-span-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
           <input
-            className="w-full rounded-md border border-line bg-white py-3 pl-11 pr-3 text-sm text-ink outline-none transition placeholder:text-neutral-400 focus:border-gold focus:ring-2 focus:ring-gold/20"
+            className="w-full rounded-lg border border-line bg-snow py-3 pl-11 pr-3 text-sm font-semibold text-ink outline-none transition placeholder:text-neutral-400 focus:border-gold focus:bg-white focus:ring-2 focus:ring-gold/20"
             placeholder="Search model or storage"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -54,9 +60,16 @@ export function ProductFilters({ products }: { products: Product[] }) {
           <option value="weekly">Weekly payment</option>
         </select>
       </div>
-      <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((product) => <ProductCard key={product.id} product={product} />)}
-      </div>
+      {filtered.length ? (
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((product) => <ProductCard key={product.id} product={product} />)}
+        </div>
+      ) : (
+        <div className="rounded-xl border border-line bg-white p-8 text-center shadow-sm">
+          <p className="text-lg font-black text-ink">No iPhones match those filters.</p>
+          <p className="mt-2 text-sm text-neutral-600">Try clearing the search or choosing a different stock/condition filter.</p>
+        </div>
+      )}
     </div>
   );
 }
