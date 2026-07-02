@@ -67,6 +67,22 @@ Use `npm run verify` before committing or deploying. It stops any running local 
 3. Add the environment variables above.
 4. Deploy.
 
+For customer review, it is fine to use the temporary Vercel URL first. Before public launch with the final business domain, update `NEXT_PUBLIC_SITE_URL` to the real domain.
+
+## Final Domain Launch Checklist
+
+When the project is complete and the final domain is ready:
+
+1. Add the custom domain to Vercel.
+2. Update `NEXT_PUBLIC_SITE_URL` in Vercel to the final domain, for example `https://tradewithdenis.com`.
+3. Verify the same domain in Resend.
+4. Change `EMAIL_FROM` from `TradeWithDenis <onboarding@resend.dev>` to a verified sender on the domain, for example `TradeWithDenis <bookings@tradewithdenis.com>`.
+5. Rotate/regenerate `SUPABASE_SERVICE_ROLE_KEY` before public launch because it was shared during setup.
+6. Rotate/regenerate `RESEND_API_KEY` before public launch because it was shared during setup.
+7. Replace the rotated keys in Vercel environment variables.
+8. Redeploy the Vercel project.
+9. Test public booking, admin login, appointment email notifications, and admin appointment updates on the live domain.
+
 ## Production Notes
 
 - Publish reviewed warranty, privacy, financing, and purchase terms before accepting payments.
