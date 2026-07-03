@@ -77,6 +77,29 @@ function matchesLead(lead: Lead, query: string) {
   ].some((value) => normalize(value).includes(query));
 }
 
+function SearchBox({
+  value,
+  onChange,
+  placeholder
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+}) {
+  return (
+    <label className="field flex items-center gap-3 bg-white px-4 py-3">
+      <Search className="h-4 w-4 shrink-0 text-neutral-400" />
+      <input
+        className="min-w-0 flex-1 bg-transparent p-0 text-sm outline-none placeholder:text-neutral-400"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        type="text"
+      />
+    </label>
+  );
+}
+
 export function AdminAppointmentSearch({ appointments, children }: { appointments: Appointment[]; children?: ReactNode }) {
   const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
@@ -88,20 +111,11 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
   return (
     <>
       <div className="mt-4">
-        <label className="relative block">
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
-          <input
-            className="field bg-white pl-12"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search appointments by name, phone, email, or note"
-            type="text"
-          />
-        </label>
+        <SearchBox value={query} onChange={setQuery} placeholder="Search appointments by name, phone, email, or note" />
         <p className="mt-2 text-xs font-medium text-neutral-500">{filtered.length} of {appointments.length} appointments showing</p>
       </div>
       {children}
-      <div className="mt-4 max-h-[820px] space-y-3 overflow-y-auto pr-2">
+      <div className="mt-4 min-h-[440px] max-h-[820px] space-y-3 overflow-y-scroll pr-2 [scrollbar-gutter:stable] sm:min-h-[620px]">
         {filtered.length ? filtered.map((appointment) => (
           <div key={appointment.id} className="rounded-md bg-snow p-4 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -154,19 +168,10 @@ export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
   return (
     <>
       <div className="mt-4">
-        <label className="relative block">
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
-          <input
-            className="field bg-white pl-12"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search leads by name, phone, email, or message"
-            type="text"
-          />
-        </label>
+        <SearchBox value={query} onChange={setQuery} placeholder="Search leads by name, phone, email, or message" />
         <p className="mt-2 text-xs font-medium text-neutral-500">{filtered.length} of {visibleLeads.length} leads showing</p>
       </div>
-      <div className="mt-4 space-y-3">
+      <div className="mt-4 min-h-[440px] max-h-[820px] space-y-3 overflow-y-scroll pr-2 [scrollbar-gutter:stable] sm:min-h-[620px]">
         {filtered.length ? filtered.map((lead) => (
           <div key={lead.id} className="rounded-md bg-snow p-4 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
