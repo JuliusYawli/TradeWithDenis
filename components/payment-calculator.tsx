@@ -3,12 +3,15 @@
 import { useMemo, useState } from "react";
 import { Calculator } from "lucide-react";
 import { formatCedi } from "@/lib/finance";
+import { iphonePricingTemplates } from "@/lib/iphone-pricing";
 
 export function PaymentCalculatorPanel() {
-  const [price, setPrice] = useState(7000);
+  const defaultTemplate = iphonePricingTemplates.find((template) => template.slug === "iphone-15-pro-max-256gb-used") ?? iphonePricingTemplates[0];
+  const [selectedTemplate, setSelectedTemplate] = useState(defaultTemplate.slug);
+  const [price, setPrice] = useState(defaultTemplate.price);
   const [percent, setPercent] = useState(40);
   const [weeks, setWeeks] = useState(12);
-  const [weekly, setWeekly] = useState(525);
+  const [weekly, setWeekly] = useState(defaultTemplate.weeklyPayment);
 
   const result = useMemo(() => {
     const downPayment = Math.round((price * percent) / 100);
@@ -21,10 +24,32 @@ export function PaymentCalculatorPanel() {
 
   return (
     <div className="grid gap-4 text-ink md:grid-cols-2">
-      <label className="text-sm font-semibold">Device price<input className="field mt-2" type="number" value={price} onChange={(event) => setPrice(Number(event.target.value))} /></label>
-      <label className="text-sm font-semibold">Deposit percent<input className="field mt-2" type="number" value={percent} onChange={(event) => setPercent(Number(event.target.value))} /></label>
-      <label className="text-sm font-semibold">Weekly payment<input className="field mt-2" type="number" value={weekly} onChange={(event) => setWeekly(Number(event.target.value))} /></label>
-      <label className="text-sm font-semibold">Installment weeks<input className="field mt-2" type="number" value={weeks} onChange={(event) => setWeeks(Number(event.target.value))} /></label>
+      <label className="text-sm font-semibold md:col-span-2">Choose iPhone
+        <select
+          className="field mt-2 bg-white"
+          value={selectedTemplate}
+          onChange={(event) => {
+            const template = iphonePricingTemplates.find((item) => item.slug === event.currentTarget.value);
+            setSelectedTemplate(event.currentTarget.value);
+            if (!template) return;
+            setPrice(template.price);
+            setPercent(template.downPaymentPercent);
+            setWeeks(template.installmentWeeks);
+            setWeekly(template.weeklyPayment);
+          }}
+        >
+          {iphonePricingTemplates.map((template) => (
+            <option key={template.slug} value={template.slug}>
+              {template.label} - {formatCedi(template.price)}
+            </option>
+          ))}
+          <option value="custom">Custom amount</option>
+        </select>
+      </label>
+      <label className="text-sm font-semibold">Device price<input className="field mt-2" type="number" value={price} onChange={(event) => { setSelectedTemplate("custom"); setPrice(Number(event.target.value)); }} /></label>
+      <label className="text-sm font-semibold">Deposit percent<input className="field mt-2" type="number" value={percent} onChange={(event) => { setSelectedTemplate("custom"); setPercent(Number(event.target.value)); }} /></label>
+      <label className="text-sm font-semibold">Weekly payment<input className="field mt-2" type="number" value={weekly} onChange={(event) => { setSelectedTemplate("custom"); setWeekly(Number(event.target.value)); }} /></label>
+      <label className="text-sm font-semibold">Installment weeks<input className="field mt-2" type="number" value={weeks} onChange={(event) => { setSelectedTemplate("custom"); setWeeks(Number(event.target.value)); }} /></label>
       {Object.entries({
         "Down payment": result.downPayment,
         "Financed balance": result.financedBalance,

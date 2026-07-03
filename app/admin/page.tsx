@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { BarChart3, CalendarDays, Database, Download, ExternalLink, LogOut, Mail, MessageCircle, Package, Phone, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
 import { AdminToast } from "@/components/admin-toast";
+import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
 import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
@@ -328,22 +329,23 @@ export default async function AdminPage({
               </div>
             </div>
             <form action={saveProduct} className="mt-5 grid gap-3 rounded-md bg-snow p-4">
+              <AdminProductTemplateSelect />
               <div className="grid gap-3 md:grid-cols-3">
-                <input className="field" name="model" placeholder="Model" required />
-                <input className="field" name="slug" placeholder="slug" required />
-                <input className="field" name="storage" placeholder="Storage" required />
-                <select className="field" name="condition" defaultValue="Used"><option>Used</option><option>New</option></select>
-                <input className="field" name="grade" placeholder="Grade" />
-                <select className="field" name="stock_status" defaultValue="in_stock">{stockStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
-                <input className="field" name="price" type="number" placeholder="Price" required />
-                <input className="field" name="weekly_payment" type="number" placeholder="Weekly" required />
-                <input className="field" name="down_payment_percent" type="number" placeholder="Deposit %" defaultValue={40} />
-                <input className="field" name="installment_weeks" type="number" placeholder="Weeks" defaultValue={12} />
-                <input className="field" name="quantity" type="number" placeholder="Qty" defaultValue={1} />
-                <input className="field" name="warranty_months" type="number" placeholder="Warranty months" defaultValue={3} />
+                <label className="text-xs font-bold uppercase text-neutral-500">Model<input className="field mt-1" name="model" placeholder="iPhone 16 Pro Max" required /></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Slug<input className="field mt-1" name="slug" placeholder="iphone-16-pro-max-256gb-used" required /></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Storage<input className="field mt-1" name="storage" placeholder="256GB" required /></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Condition<select className="field mt-1" name="condition" defaultValue="Used"><option>Used</option><option>New</option></select></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Grade<input className="field mt-1" name="grade" placeholder="A+, A, clean, etc." /></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Stock<select className="field mt-1" name="stock_status" defaultValue="in_stock">{stockStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Price<input className="field mt-1" name="price" type="number" placeholder="9000" required /></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Weekly payment<input className="field mt-1" name="weekly_payment" type="number" placeholder="675" required /></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Deposit %<input className="field mt-1" name="down_payment_percent" type="number" placeholder="40" defaultValue={40} /></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Payment weeks<input className="field mt-1" name="installment_weeks" type="number" placeholder="12" defaultValue={12} /></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Quantity<input className="field mt-1" name="quantity" type="number" placeholder="1" defaultValue={1} /></label>
+                <label className="text-xs font-bold uppercase text-neutral-500">Warranty months<input className="field mt-1" name="warranty_months" type="number" placeholder="3" defaultValue={3} /></label>
               </div>
-              <textarea className="field min-h-20" name="image_urls" placeholder="Image URLs, one per line" />
-              <textarea className="field min-h-20" name="description" placeholder="Description" />
+              <label className="text-xs font-bold uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" placeholder="Image URLs, one per line" /></label>
+              <label className="text-xs font-bold uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" placeholder="Description" /></label>
               <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" /> Featured</label>
               <button className="btn-primary w-full md:w-fit" type="submit">Add product</button>
             </form>

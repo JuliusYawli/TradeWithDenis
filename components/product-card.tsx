@@ -2,16 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { BadgeCheck, Eye, ShieldCheck } from "lucide-react";
 import { financingFor, formatCedi } from "@/lib/finance";
+import { stockImageForProduct } from "@/lib/iphone-pricing";
 import type { Product } from "@/lib/types";
 
 export function ProductCard({ product }: { product: Product }) {
   const finance = financingFor(product);
+  const imageUrl = product.image_urls[0] || stockImageForProduct(product.model, product.storage, product.condition);
 
   return (
     <article className="premium-card overflow-hidden">
       <Link href={`/iphones/${product.slug}`} className="block">
         <div className="relative aspect-[4/3] bg-gradient-to-br from-snow to-white">
-          <Image src={product.image_urls[0]} alt={`${product.model} ${product.storage}`} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+          <Image src={imageUrl} alt={`${product.model} ${product.storage}`} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
           <div className="absolute left-3 top-3 flex flex-wrap gap-2">
             <span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-black capitalize text-red shadow-sm backdrop-blur">{product.stock_status.replace("_", " ")}</span>
             <span className="rounded-full bg-ink/85 px-2.5 py-1 text-xs font-black text-white shadow-sm backdrop-blur">{product.condition}</span>

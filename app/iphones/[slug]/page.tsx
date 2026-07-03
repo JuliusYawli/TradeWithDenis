@@ -8,6 +8,7 @@ import { Nav } from "@/components/nav";
 import { ProductCard } from "@/components/product-card";
 import { financingFor, formatCedi } from "@/lib/finance";
 import { getProduct, getProducts, getSiteSettings } from "@/lib/data";
+import { stockImageForProduct } from "@/lib/iphone-pricing";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -22,12 +23,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   const finance = financingFor(product);
   const similar = allProducts.filter((item) => item.slug !== product.slug).slice(0, 3);
+  const imageUrls = product.image_urls.length ? product.image_urls : [stockImageForProduct(product.model, product.storage, product.condition)];
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: `${product.model} ${product.storage}`,
     brand: product.brand,
-    image: product.image_urls,
+    image: imageUrls,
     offers: { "@type": "Offer", price: product.price, priceCurrency: "GHS", availability: "https://schema.org/InStock" }
   };
 
@@ -39,10 +41,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-4">
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-line bg-white">
-              <Image src={product.image_urls[0]} alt={`${product.model} ${product.storage}`} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
+              <Image src={imageUrls[0]} alt={`${product.model} ${product.storage}`} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {product.image_urls.map((src) => (
+              {imageUrls.map((src) => (
                 <div key={src} className="relative aspect-square overflow-hidden rounded-md border border-line bg-white">
                   <Image src={src} alt={product.model} fill className="object-cover" sizes="120px" />
                 </div>
