@@ -32,11 +32,6 @@ function imageUrls(value: FormDataEntryValue | null) {
     .filter(Boolean);
 }
 
-type AdminActionResult = {
-  ok: boolean;
-  message: string;
-};
-
 function adminToast(message: string, section?: string) {
   const target = `/admin?toast=${encodeURIComponent(message)}&type=success`;
   redirect(section ? `${target}#${section}` : target);
@@ -137,7 +132,7 @@ export async function logoutAdmin(formData: FormData) {
   redirect(safePublicPath(formData.get("next")));
 }
 
-async function persistProduct(formData: FormData) {
+export async function saveProduct(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");
   const payload = {
@@ -168,25 +163,7 @@ async function persistProduct(formData: FormData) {
 
   revalidatePath("/admin");
   revalidatePath("/iphones");
-  return { id, message: id ? "Product updated." : "Product added." };
-}
-
-export async function saveProduct(formData: FormData) {
-  const result = await persistProduct(formData);
-  adminToast(result.message, "products");
-}
-
-export async function saveProductInline(formData: FormData): Promise<AdminActionResult> {
-  try {
-    const result = await persistProduct(formData);
-    return { ok: true, message: result.message };
-  } catch (error) {
-    console.error("Product save failed", error);
-    return {
-      ok: false,
-      message: error instanceof Error ? error.message : "Product could not be saved."
-    };
-  }
+  adminToast(id ? "Product updated." : "Product added.", "products");
 }
 
 export async function deleteProduct(formData: FormData) {
