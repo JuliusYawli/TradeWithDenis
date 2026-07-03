@@ -1,14 +1,14 @@
 import { redirect } from "next/navigation";
-import { BarChart3, CalendarDays, Database, Download, ExternalLink, KeyRound, LogOut, Mail, MessageCircle, Package, Phone, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
+import { BarChart3, CalendarDays, Database, Download, ExternalLink, KeyRound, LogOut, Package, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
+import { AdminAppointmentSearch, AdminLeadSearch } from "@/components/admin-customer-search";
 import { AdminToast } from "@/components/admin-toast";
 import { AdminPasswordForm } from "@/components/admin-password-form";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
 import { isAllowedAdminEmail } from "@/lib/admin";
-import { appointmentTimeSlots } from "@/lib/appointment-times";
 import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
-import { deleteProduct, logoutAdmin, saveProduct, saveSettings, updateAppointmentStatus, updateLeadStatus, updateTestimonialStatus } from "./actions";
+import { deleteProduct, logoutAdmin, saveProduct, saveSettings, updateTestimonialStatus } from "./actions";
 
 const appointmentStatuses = [
   ["pending", "Pending"],
@@ -17,14 +17,6 @@ const appointmentStatuses = [
   ["completed", "Completed"],
   ["cancelled", "Cancelled"],
   ["no_show", "No-show"]
-] as const;
-const leadStatuses = [
-  ["new", "New"],
-  ["contacted", "Contacted"],
-  ["follow_up", "Follow up"],
-  ["qualified", "Qualified"],
-  ["converted", "Converted"],
-  ["lost", "Lost"]
 ] as const;
 const stockStatuses = [
   ["in_stock", "In stock"],
@@ -48,15 +40,6 @@ function formatDateTime(value: string) {
 
 function statusLabel<T extends readonly (readonly [string, string])[]>(options: T, value: string) {
   return options.find(([status]) => status === value)?.[1] ?? value;
-}
-
-function phoneHref(phone?: string | null) {
-  return phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : "#";
-}
-
-function whatsappHref(phone?: string | null) {
-  const digits = phone?.replace(/\D/g, "");
-  return digits ? `https://wa.me/${digits}` : "#";
 }
 
 function supabaseProjectInfo() {
@@ -252,43 +235,7 @@ export default async function AdminPage({
                 </div>
               ))}
             </div>
-            <div className="mt-4 max-h-[820px] space-y-3 overflow-y-auto pr-2">
-              {appointments.length ? appointments.map((appointment) => (
-                <div key={appointment.id} className="rounded-md bg-snow p-4 text-sm">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="font-medium">{appointment.leads?.customer_name ?? "Customer"} · {appointment.appointment_date ?? "Date not chosen"} · {appointment.appointment_time ?? "Time not chosen"}</p>
-                    <span className="rounded-full bg-white px-2 py-1 text-xs font-medium text-neutral-600">{statusLabel(appointmentStatuses, appointment.status)}</span>
-                  </div>
-                  <p className="mt-2 text-neutral-700">{appointment.leads?.phone} · {appointment.leads?.email ?? "No email"} · {appointment.leads?.preferred_contact_method}</p>
-                  <p className="mt-1 text-neutral-600">Payment: {appointment.leads?.desired_payment_option ?? "Not selected"}</p>
-                  <p className="mt-1 text-neutral-600">{appointment.leads?.message ?? appointment.notes}</p>
-                  <p className="mt-1 text-xs font-semibold text-neutral-500">Booked {formatDateTime(appointment.created_at)}</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <a className="btn-secondary px-3 py-2" href={phoneHref(appointment.leads?.phone)}><Phone className="h-4 w-4" /> Call</a>
-                    <a className="btn-secondary px-3 py-2" href={whatsappHref(appointment.leads?.phone)} target="_blank" rel="noreferrer"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
-                    {appointment.leads?.email ? <a className="btn-secondary px-3 py-2" href={`mailto:${appointment.leads.email}`}><Mail className="h-4 w-4" /> Email</a> : null}
-                  </div>
-                  <form action={updateAppointmentStatus} className="mt-3 grid gap-2 rounded-md border border-line bg-white p-3">
-                    <input type="hidden" name="id" value={appointment.id} />
-                    <div className="grid gap-2 md:grid-cols-3">
-                      <label className="text-xs font-medium uppercase text-neutral-500">Status<select className="field mt-1 bg-white" name="status" defaultValue={appointment.status}>
-                        {appointmentStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                      </select></label>
-                      <label className="text-xs font-medium uppercase text-neutral-500">Visit date<input className="field mt-1" name="appointment_date" type="date" defaultValue={appointment.appointment_date ?? ""} /></label>
-                      <label className="text-xs font-medium uppercase text-neutral-500">Visit time<select className="field mt-1" name="appointment_time" defaultValue={appointment.appointment_time ?? ""}>
-                        <option value="">Choose time</option>
-                        {appointment.appointment_time && !appointmentTimeSlots.includes(appointment.appointment_time as (typeof appointmentTimeSlots)[number]) ? (
-                          <option value={appointment.appointment_time}>{appointment.appointment_time}</option>
-                        ) : null}
-                        {appointmentTimeSlots.map((slot) => <option key={slot} value={slot}>{slot}</option>)}
-                      </select></label>
-                    </div>
-                    <label className="text-xs font-medium uppercase text-neutral-500">Internal note<textarea className="field mt-1 min-h-20" name="notes" defaultValue={appointment.notes ?? ""} placeholder="Example: customer asked to postpone to Friday, confirmed by WhatsApp" /></label>
-                    <button className="btn-primary w-full px-4 py-2 md:w-fit" type="submit">Save appointment</button>
-                  </form>
-                </div>
-              )) : <p className="text-sm text-neutral-600">No appointment bookings yet.</p>}
-            </div>
+            <AdminAppointmentSearch appointments={appointments} />
           </section>
 
           <section id="leads" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
@@ -296,32 +243,7 @@ export default async function AdminPage({
               <h2 className="text-xl font-semibold">Recent leads</h2>
               <p className="mt-1 text-sm text-neutral-600">Track every inquiry after you call or message the customer.</p>
             </div>
-            <div className="mt-4 space-y-3">
-              {leads.length ? leads.slice(0, 6).map((lead) => (
-                <div key={lead.id} className="rounded-md bg-snow p-4 text-sm">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="font-medium">{lead.customer_name}</p>
-                    <span className="rounded-full bg-white px-2 py-1 text-xs font-medium text-neutral-600">{statusLabel(leadStatuses, lead.status)}</span>
-                  </div>
-                  <p className="mt-1 text-neutral-700">{lead.phone} · {lead.email ?? "No email"} · {lead.preferred_contact_method}</p>
-                  <p className="mt-1 text-neutral-600">Payment: {lead.desired_payment_option ?? "Not selected"}</p>
-                  <p className="mt-2 text-neutral-600">{lead.message}</p>
-                  <p className="mt-1 text-xs font-semibold text-neutral-500">Created {formatDateTime(lead.created_at)}</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <a className="btn-secondary px-3 py-2" href={phoneHref(lead.phone)}><Phone className="h-4 w-4" /> Call</a>
-                    <a className="btn-secondary px-3 py-2" href={whatsappHref(lead.phone)} target="_blank" rel="noreferrer"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
-                    {lead.email ? <a className="btn-secondary px-3 py-2" href={`mailto:${lead.email}`}><Mail className="h-4 w-4" /> Email</a> : null}
-                  </div>
-                  <form action={updateLeadStatus} className="mt-3 flex flex-wrap gap-2">
-                    <input type="hidden" name="id" value={lead.id} />
-                    <select className="field max-w-44 bg-white" name="status" defaultValue={lead.status}>
-                      {leadStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                    </select>
-                    <button className="btn-secondary px-4 py-2" type="submit">Update</button>
-                  </form>
-                </div>
-              )) : <p className="text-sm text-neutral-600">No leads yet.</p>}
-            </div>
+            <AdminLeadSearch leads={leads} />
           </section>
           <section id="add-product" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
