@@ -40,7 +40,7 @@ export function MobileMenu({
         <div className="shrink-0 border-b border-line bg-white px-4 py-4 sm:px-5">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-xl font-black tracking-tight text-ink sm:text-2xl">
+              <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
                 {activeModal === "calculator" ? "Calculate payments" : "Book appointment"}
               </h2>
               <p className="mt-1 text-sm leading-6 text-neutral-600">
@@ -118,7 +118,7 @@ export function MobileMenu({
               </div>
 
               <button
-                className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-center text-base font-bold text-white shadow-soft transition hover:bg-red active:scale-[0.99]"
+                className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-center text-base font-medium text-white shadow-soft transition hover:bg-red active:scale-[0.99]"
                 type="button"
                 onClick={() => openActionModal("appointment")}
               >
@@ -127,7 +127,7 @@ export function MobileMenu({
               </button>
 
               <div className="mt-4 rounded-xl bg-snow p-4 text-sm leading-6 text-neutral-700">
-                <p className="font-bold text-ink">TradeWithDenis</p>
+                <p className="font-medium text-ink">TradeWithDenis</p>
                 <p>Circle Mall, Block C, Shop 27</p>
                 <p>8:00 AM - 7:00 PM</p>
               </div>

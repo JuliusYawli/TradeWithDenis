@@ -15,7 +15,7 @@ export function Nav(_props: { settings: SiteSettings }) {
         <Link href="/" className="flex min-w-0 shrink-0 items-center" aria-label="TradeWithDenis home">
           <Image src="/logo.svg" alt="TradeWithDenis" width={190} height={68} className="h-9 w-auto max-w-[138px] object-contain sm:h-10 sm:max-w-[158px] md:h-11 md:max-w-[178px]" priority />
         </Link>
-        <div className="hidden items-center gap-1 rounded-full border border-line bg-snow p-0.5 text-sm font-bold text-neutral-700 lg:flex">
+        <div className="hidden items-center gap-1 rounded-full border border-line bg-snow p-0.5 text-sm font-medium text-neutral-700 lg:flex">
           <Link className="rounded-full px-3.5 py-1.5 transition hover:bg-white hover:text-red" href="/iphones">Catalog</Link>
           <Link className="rounded-full px-3.5 py-1.5 transition hover:bg-white hover:text-red" href="/warranty">Warranty</Link>
           <Link className="rounded-full px-3.5 py-1.5 transition hover:bg-white hover:text-red" href="/#faq">FAQ</Link>

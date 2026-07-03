@@ -14,7 +14,7 @@ function setField(form: HTMLFormElement, name: string, value: string | number) {
 
 export function AdminProductTemplateSelect() {
   return (
-    <label className="block rounded-lg border border-line bg-white p-4 text-xs font-bold uppercase text-neutral-500">
+    <label className="block rounded-lg border border-line bg-white p-4 text-xs font-medium uppercase text-neutral-500">
       Pricing template
       <select
         className="field mt-2 bg-white"

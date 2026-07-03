@@ -66,7 +66,7 @@ export function ProductFilters({ products }: { products: Product[] }) {
         </div>
       ) : (
         <div className="rounded-xl border border-line bg-white p-8 text-center shadow-sm">
-          <p className="text-lg font-black text-ink">No iPhones match those filters.</p>
+          <p className="text-lg font-semibold text-ink">No iPhones match those filters.</p>
           <p className="mt-2 text-sm text-neutral-600">Try clearing the search or choosing a different stock/condition filter.</p>
         </div>
       )}

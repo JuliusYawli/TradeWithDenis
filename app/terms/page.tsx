@@ -11,7 +11,7 @@ export default async function TermsPage() {
     <>
       <Nav settings={settings} />
       <main className="container-page py-12">
-        <h1 className="text-4xl font-black tracking-tight">Terms</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Terms</h1>
         <p className="mt-8 max-w-3xl text-neutral-700">Prices, stock, financing approvals, warranty coverage, and appointment times should be confirmed by TradeWithDenis before payment. Replace this placeholder with reviewed commercial terms before launch.</p>
       </main>
       <Footer settings={settings} />

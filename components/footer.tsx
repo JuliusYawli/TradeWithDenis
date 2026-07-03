@@ -25,13 +25,13 @@ export function Footer({ settings }: { settings: SiteSettings }) {
               Premium Apple devices in Ghana with clear appointment booking, transparent payment discussions, and in-shop order completion.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <a className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-bold text-white transition hover:bg-red" href={whatsappUrl}><MessageCircle className="h-4 w-4" /> WhatsApp</a>
-              <a className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white hover:text-ink" href={settings.google_maps_url ?? "#"} target="_blank" rel="noreferrer"><MapPin className="h-4 w-4" /> Directions</a>
+              <a className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-medium text-white transition hover:bg-red" href={whatsappUrl}><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+              <a className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white hover:text-ink" href={settings.google_maps_url ?? "#"} target="_blank" rel="noreferrer"><MapPin className="h-4 w-4" /> Directions</a>
             </div>
           </div>
 
           <div>
-            <p className="text-xs font-black uppercase tracking-wide text-blue-200">Shop details</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-blue-200">Shop details</p>
             <div className="mt-3 space-y-2 text-sm text-white/75">
               <a className="flex items-start gap-2 transition hover:text-white" href={`tel:${settings.phone ?? ""}`}>
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-blue-300" />
@@ -58,7 +58,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
 
           <div className="space-y-5">
             <div>
-              <p className="text-xs font-black uppercase tracking-wide text-blue-200">Policies</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-blue-200">Policies</p>
               <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-white/75 md:grid-cols-1">
                 <Link className="block hover:text-white" href="/warranty">Warranty</Link>
                 <Link className="block hover:text-white" href="/financing-terms">Financing terms</Link>
@@ -67,14 +67,14 @@ export function Footer({ settings }: { settings: SiteSettings }) {
               </div>
             </div>
             <div>
-              <p className="text-xs font-black uppercase tracking-wide text-blue-200">Social</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-blue-200">Social</p>
               <div className="mt-3 flex flex-wrap gap-3 text-sm font-semibold text-white/75">
                 <a className="inline-flex items-center gap-1 hover:text-white" href={settings.facebook_url ?? "#"} target="_blank" rel="noreferrer"><Facebook className="h-4 w-4" /> Facebook</a>
                 <a className="inline-flex items-center gap-1 hover:text-white" href={settings.instagram_url ?? "#"} target="_blank" rel="noreferrer"><Instagram className="h-4 w-4" /> Instagram</a>
                 <a className="hover:text-white" href={settings.tiktok_url ?? "#"} target="_blank" rel="noreferrer">TikTok</a>
               </div>
             </div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-white/75">
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/75">
               <ShieldCheck className="h-4 w-4 text-blue-300" />
               Registration: {settings.business_registration}
             </p>

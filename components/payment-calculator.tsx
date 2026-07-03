@@ -59,7 +59,7 @@ export function PaymentCalculatorPanel() {
       }).map(([label, value]) => (
         <div key={label} className="rounded-md bg-snow p-4">
           <p className="text-sm text-neutral-500">{label}</p>
-          <p className="text-xl font-black">{formatCedi(value)}</p>
+          <p className="text-xl font-semibold">{formatCedi(value)}</p>
         </div>
       ))}
     </div>
@@ -74,7 +74,7 @@ export function PaymentCalculator() {
           <div className="mb-4 inline-flex rounded-full bg-white/10 p-3">
             <Calculator className="h-6 w-6 text-gold" />
           </div>
-          <h2 className="text-3xl font-black tracking-tight">Transparent payment calculator</h2>
+          <h2 className="text-3xl font-semibold tracking-tight">Transparent payment calculator</h2>
           <p className="mt-3 max-w-xl text-white/70">
             Every device shows the deposit, weekly commitment, total paid, financed balance, and finance cost before you reserve.
           </p>

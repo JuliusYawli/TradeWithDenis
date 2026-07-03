@@ -11,7 +11,7 @@ export default async function PrivacyPage() {
     <>
       <Nav settings={settings} />
       <main className="container-page py-12">
-        <h1 className="text-4xl font-black tracking-tight">Privacy Policy</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Privacy Policy</h1>
         <p className="mt-8 max-w-3xl text-neutral-700">Lead details are collected so TradeWithDenis can respond to product inquiries, reservations, appointments, and financing requests. Replace this placeholder with a reviewed privacy policy before launch.</p>
       </main>
       <Footer settings={settings} />

@@ -40,7 +40,7 @@ export function HomeActionModals({
         <div className="shrink-0 border-b border-line bg-white px-4 py-4 sm:px-5">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-xl font-black tracking-tight sm:text-2xl">
+              <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
                 {open === "calculator" ? "Calculate payments" : "Book appointment"}
               </h2>
               <p className="mt-1 text-sm leading-6 text-neutral-600">

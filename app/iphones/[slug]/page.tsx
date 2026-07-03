@@ -52,10 +52,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </div>
           </div>
           <section>
-            <p className="text-sm font-bold uppercase tracking-wide text-red">{product.stock_status.replace("_", " ")}</p>
-            <h1 className="mt-2 text-4xl font-black tracking-tight">{product.model} {product.storage}</h1>
+            <p className="text-sm font-medium uppercase tracking-wide text-red">{product.stock_status.replace("_", " ")}</p>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight">{product.model} {product.storage}</h1>
             <p className="mt-3 text-neutral-600">{product.condition}{product.grade ? ` · Grade ${product.grade}` : ""} · {product.warranty_months} month warranty</p>
-            <p className="mt-6 text-4xl font-black">{formatCedi(product.price)}</p>
+            <p className="mt-6 text-3xl font-semibold">{formatCedi(product.price)}</p>
 
             <div className="mt-6 grid gap-3 rounded-lg border border-line bg-white p-5 sm:grid-cols-2">
               {[
@@ -68,7 +68,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               ].map(([label, value]) => (
                 <div key={String(label)} className="rounded-md bg-snow p-4">
                   <p className="text-sm text-neutral-500">{label}</p>
-                  <p className="text-xl font-black">{formatCedi(Number(value))}</p>
+                  <p className="text-xl font-semibold">{formatCedi(Number(value))}</p>
                 </div>
               ))}
             </div>
@@ -85,14 +85,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
         <section id="reserve" className="mt-14 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
-            <h2 className="text-2xl font-black">Book a shop visit</h2>
+            <h2 className="text-2xl font-semibold">Book a shop visit</h2>
             <p className="mt-2 text-neutral-600">This does not complete a sale online. The customer visits the shop to inspect the device, confirm terms, and complete the order.</p>
           </div>
           <LeadForm product={product} />
         </section>
 
         <section className="mt-16">
-          <h2 className="text-2xl font-black">Similar products</h2>
+          <h2 className="text-2xl font-semibold">Similar products</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             {similar.map((item) => <ProductCard key={item.id} product={item} />)}
           </div>

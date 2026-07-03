@@ -11,7 +11,7 @@ export default async function WarrantyPage() {
     <>
       <Nav settings={settings} />
       <main className="container-page py-12">
-        <h1 className="text-4xl font-black tracking-tight">Warranty Policy</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Warranty Policy</h1>
         <div className="mt-8 max-w-3xl space-y-5 text-neutral-700">
           <p>Each product lists its warranty period. Final warranty coverage should be confirmed on the invoice or receipt at purchase.</p>
           <p>Use this page to publish exact coverage for battery health, screen, Face ID, water damage exclusions, software locks, and return windows.</p>

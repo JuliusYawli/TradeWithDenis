@@ -11,14 +11,14 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
           <div className="mb-2 inline-flex rounded-full bg-snow p-2">
             <CalendarCheck className="h-5 w-5 text-gold" />
           </div>
-          <h3 className="text-xl font-black text-ink">Book a shop appointment</h3>
+          <h3 className="text-xl font-semibold text-ink">Book a shop appointment</h3>
           <p className="mt-1 text-sm leading-6 text-neutral-600">
             Submit your details, then visit the shop to inspect the device, confirm payment terms, and complete the order in person.
           </p>
         </div>
       ) : null}
       <div className="rounded-lg border border-line bg-snow p-3 text-sm leading-6 text-neutral-700">
-        <p className="inline-flex items-center gap-2 font-bold text-ink"><LockKeyhole className="h-4 w-4 text-gold" /> No online payment required</p>
+        <p className="inline-flex items-center gap-2 font-medium text-ink"><LockKeyhole className="h-4 w-4 text-gold" /> No online payment required</p>
         <p className="mt-1">Your appointment helps the shop prepare. You inspect the phone and complete the order in person.</p>
       </div>
       <input type="hidden" name="product_id" value={product?.id ?? ""} />

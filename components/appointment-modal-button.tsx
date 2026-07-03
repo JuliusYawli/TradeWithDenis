@@ -8,7 +8,7 @@ import { useLockBodyScroll } from "@/components/use-lock-body-scroll";
 
 export function AppointmentModalButton({
   children,
-  className = "hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 lg:inline-flex",
+  className = "hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 lg:inline-flex",
   label = "Book Appointment",
   showIcon = true
 }: {
@@ -37,9 +37,9 @@ export function AppointmentModalButton({
               <CalendarCheck className="h-5 w-5 text-gold" />
             </div>
             <div>
-              <h2 className="text-xl font-black tracking-tight text-ink sm:text-2xl">Book appointment</h2>
+              <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">Book appointment</h2>
               <p className="mt-1 text-sm leading-6 text-neutral-600">Choose a visit time, then complete the order at the shop after inspection.</p>
-              <p className="mt-2 inline-flex rounded-full bg-white px-3 py-1 text-xs font-black text-red">No online payment required</p>
+              <p className="mt-2 inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold text-red">No online payment required</p>
             </div>
           </div>
           <button className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line bg-white text-ink transition hover:border-gold hover:text-red" type="button" aria-label="Close modal" onClick={() => setOpen(false)}>

@@ -22,7 +22,7 @@ export default async function AppointmentConfirmedPage() {
           <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-full bg-emerald-50">
             <CalendarCheck className="h-7 w-7 text-emerald-700" />
           </div>
-          <h1 className="text-4xl font-black tracking-tight">Appointment request received</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">Appointment request received</h1>
           <p className="mx-auto mt-4 max-w-2xl leading-7 text-neutral-600">
             Thank you. TradeWithDenis has received your shop visit request. The team will contact you to confirm availability before you come in.
           </p>

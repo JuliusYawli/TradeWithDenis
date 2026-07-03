@@ -33,7 +33,7 @@ function MessageCard({
   return (
     <div className="mx-auto max-w-2xl rounded-2xl border border-line bg-white p-6 text-center shadow-soft sm:p-8">
       <CheckCircle2 className="mx-auto h-10 w-10 text-gold" />
-      <h1 className="mt-5 text-3xl font-black tracking-tight text-ink sm:text-4xl">{title}</h1>
+      <h1 className="mt-5 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{title}</h1>
       <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-neutral-600 sm:text-base">{copy}</p>
     </div>
   );
@@ -69,7 +69,7 @@ export default async function ReviewPage({
             <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
               <div className="rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8">
                 <p className="section-eyebrow">Customer review</p>
-                <h1 className="mt-5 text-3xl font-black tracking-tight text-ink sm:text-5xl">Share your TradeWithDenis experience.</h1>
+                <h1 className="mt-5 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">Share your TradeWithDenis experience.</h1>
                 <p className="mt-4 text-sm leading-6 text-neutral-600 sm:text-base">
                   Hi {request.customer_name}, thank you for completing your shop visit. Your review helps future customers feel confident before booking.
                 </p>
@@ -91,16 +91,16 @@ export default async function ReviewPage({
                   </p>
                 ) : null}
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="text-xs font-bold uppercase text-neutral-500">
+                  <label className="text-xs font-medium uppercase text-neutral-500">
                     Name
                     <input className="field mt-1" name="customer_name" defaultValue={request.customer_name} required />
                   </label>
-                  <label className="text-xs font-bold uppercase text-neutral-500">
+                  <label className="text-xs font-medium uppercase text-neutral-500">
                     Location
                     <input className="field mt-1" name="location" placeholder="Example: Accra" />
                   </label>
                 </div>
-                <label className="mt-4 block text-xs font-bold uppercase text-neutral-500">
+                <label className="mt-4 block text-xs font-medium uppercase text-neutral-500">
                   Rating
                   <select className="field mt-1 bg-white" name="rating" defaultValue="5">
                     {[5, 4, 3, 2, 1].map((rating) => (
@@ -108,7 +108,7 @@ export default async function ReviewPage({
                     ))}
                   </select>
                 </label>
-                <label className="mt-4 block text-xs font-bold uppercase text-neutral-500">
+                <label className="mt-4 block text-xs font-medium uppercase text-neutral-500">
                   Testimonial
                   <textarea className="field mt-1 min-h-36" name="quote" placeholder="Tell people about your shop visit, the service, and the phone you inspected or bought." required />
                 </label>
