@@ -64,5 +64,25 @@ export const testimonials: Testimonial[] = [
     image_url: null,
     is_featured: true,
     created_at: new Date().toISOString()
+  },
+  {
+    id: "3",
+    customer_name: "Esi M.",
+    location: "East Legon",
+    rating: 5,
+    quote: "I liked that I could check the price and book first, then test the iPhone properly at the shop before paying.",
+    image_url: null,
+    is_featured: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "4",
+    customer_name: "Nana K.",
+    location: "Kasoa",
+    rating: 5,
+    quote: "They explained the warranty and payment plan clearly. The phone was ready when I arrived, so the whole process felt easy.",
+    image_url: null,
+    is_featured: true,
+    created_at: new Date().toISOString()
   }
 ];

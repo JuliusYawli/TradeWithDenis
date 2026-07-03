@@ -2,7 +2,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { hasSupabaseEnv } from "./supabase-env";
 import { createServerSupabaseClient } from "./supabase-server";
 import { products as seedProducts, siteSettings as seedSettings, testimonials as seedTestimonials } from "./seed";
-import type { Appointment, Lead, Product } from "./types";
+import type { Appointment, Lead, Product, Testimonial } from "./types";
 
 export async function getProducts() {
   noStore();
@@ -32,7 +32,14 @@ export async function getTestimonials() {
     .eq("status", "approved")
     .eq("is_featured", true)
     .order("created_at", { ascending: false });
-  return data ?? seedTestimonials;
+  const approvedTestimonials = (data as Testimonial[] | null) ?? [];
+  if (approvedTestimonials.length >= 4) return approvedTestimonials;
+
+  const supplementalTestimonials = seedTestimonials.filter((seed) => (
+    !approvedTestimonials.some((testimonial) => testimonial.customer_name === seed.customer_name && testimonial.quote === seed.quote)
+  ));
+
+  return [...approvedTestimonials, ...supplementalTestimonials].slice(0, 4);
 }
 
 export async function getAdminTestimonials() {
