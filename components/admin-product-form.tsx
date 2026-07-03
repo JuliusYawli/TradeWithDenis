@@ -3,29 +3,37 @@
 import { useRef, useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
-import { saveProductInline } from "@/app/admin/actions";
 
-type ProductFormNotice = {
+type AdminFormResult = {
+  ok: boolean;
+  message: string;
+};
+
+type AdminFormNotice = {
   type: "success" | "error";
   message: string;
 } | null;
 
-export function AdminProductForm({
+export function AdminActionForm({
+  action,
   children,
   submitLabel,
   pendingLabel,
   resetOnSuccess = false,
-  className
+  className,
+  buttonClassName = "btn-primary w-full px-4 py-2 disabled:cursor-not-allowed disabled:opacity-70 md:w-fit"
 }: {
+  action: (formData: FormData) => Promise<AdminFormResult>;
   children: ReactNode;
   submitLabel: string;
   pendingLabel: string;
   resetOnSuccess?: boolean;
   className: string;
+  buttonClassName?: string;
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
-  const [notice, setNotice] = useState<ProductFormNotice>(null);
+  const [notice, setNotice] = useState<AdminFormNotice>(null);
   const [isPending, startTransition] = useTransition();
 
   return (
@@ -40,7 +48,7 @@ export function AdminProductForm({
         const formData = new FormData(form);
 
         startTransition(async () => {
-          const result = await saveProductInline(formData);
+          const result = await action(formData);
           setNotice({ type: result.ok ? "success" : "error", message: result.message });
           if (result.ok) {
             if (resetOnSuccess) form.reset();
@@ -63,7 +71,7 @@ export function AdminProductForm({
           <span>{notice.message}</span>
         </div>
       ) : null}
-      <button className="btn-primary w-full px-4 py-2 disabled:cursor-not-allowed disabled:opacity-70 md:w-fit" type="submit" disabled={isPending}>
+      <button className={buttonClassName} type="submit" disabled={isPending}>
         {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
         {isPending ? pendingLabel : submitLabel}
       </button>

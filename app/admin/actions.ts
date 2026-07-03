@@ -190,32 +190,65 @@ export async function saveProductInline(formData: FormData): Promise<AdminAction
 }
 
 export async function deleteProduct(formData: FormData) {
+  await persistDeleteProduct(formData);
+  adminToast("Product deleted.", "products");
+}
+
+async function persistDeleteProduct(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");
-  if (!id) return;
+  if (!id) throw new Error("Product id is required.");
   const { error } = await supabase.from("products").delete().eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/admin");
   revalidatePath("/iphones");
-  adminToast("Product deleted.", "products");
+}
+
+export async function deleteProductInline(formData: FormData): Promise<AdminActionResult> {
+  try {
+    await persistDeleteProduct(formData);
+    return { ok: true, message: "Product deleted." };
+  } catch (error) {
+    console.error("Product delete failed", error);
+    return { ok: false, message: error instanceof Error ? error.message : "Product could not be deleted." };
+  }
 }
 
 export async function updateLeadStatus(formData: FormData) {
-  const supabase = await adminClient();
-  const id = String(formData.get("id") || "");
-  const status = String(formData.get("status") || "new");
-  if (!id) return;
-  const { error } = await supabase.from("leads").update({ status }).eq("id", id);
-  if (error) throw new Error(error.message);
-  revalidatePath("/admin");
+  await persistLeadStatus(formData);
   adminToast("Lead status updated.", "leads");
 }
 
+async function persistLeadStatus(formData: FormData) {
+  const supabase = await adminClient();
+  const id = String(formData.get("id") || "");
+  const status = String(formData.get("status") || "new");
+  if (!id) throw new Error("Lead id is required.");
+  const { error } = await supabase.from("leads").update({ status }).eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin");
+}
+
+export async function updateLeadStatusInline(formData: FormData): Promise<AdminActionResult> {
+  try {
+    await persistLeadStatus(formData);
+    return { ok: true, message: "Lead status updated." };
+  } catch (error) {
+    console.error("Lead status update failed", error);
+    return { ok: false, message: error instanceof Error ? error.message : "Lead status could not be updated." };
+  }
+}
+
 export async function updateAppointmentStatus(formData: FormData) {
+  const message = await persistAppointmentStatus(formData);
+  adminToast(message, "appointments");
+}
+
+async function persistAppointmentStatus(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");
   const status = String(formData.get("status") || "pending");
-  if (!id) return;
+  if (!id) throw new Error("Appointment id is required.");
   const appointmentTime = String(formData.get("appointment_time") || "");
   const payload = {
     status,
@@ -255,21 +288,36 @@ export async function updateAppointmentStatus(formData: FormData) {
 
   revalidatePath("/admin");
   if (reviewResult === "sent") {
-    adminToast("Appointment completed. Review request sent to the customer.", "appointments");
+    return "Appointment completed. Review request sent to the customer.";
   }
   if (reviewResult === "already_sent") {
-    adminToast("Appointment updated. Review request had already been sent.", "appointments");
+    return "Appointment updated. Review request had already been sent.";
   }
   if (reviewResult === "no_email") {
-    adminToast("Appointment updated. No customer email was available for a review request.", "appointments");
+    return "Appointment updated. No customer email was available for a review request.";
   }
   if (reviewResult === "failed") {
-    adminToast("Appointment updated, but the review request could not be sent.", "appointments");
+    return "Appointment updated, but the review request could not be sent.";
   }
-  adminToast("Appointment updated. Customer notification was attempted if an email exists.", "appointments");
+  return "Appointment updated. Customer notification was attempted if an email exists.";
+}
+
+export async function updateAppointmentStatusInline(formData: FormData): Promise<AdminActionResult> {
+  try {
+    const message = await persistAppointmentStatus(formData);
+    return { ok: true, message };
+  } catch (error) {
+    console.error("Appointment update failed", error);
+    return { ok: false, message: error instanceof Error ? error.message : "Appointment could not be updated." };
+  }
 }
 
 export async function saveSettings(formData: FormData) {
+  await persistSettings(formData);
+  adminToast("Site settings saved.", "settings");
+}
+
+async function persistSettings(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");
   const payload = {
@@ -293,14 +341,28 @@ export async function saveSettings(formData: FormData) {
   if (error) throw new Error(error.message);
   revalidatePath("/");
   revalidatePath("/admin");
-  adminToast("Site settings saved.", "settings");
+}
+
+export async function saveSettingsInline(formData: FormData): Promise<AdminActionResult> {
+  try {
+    await persistSettings(formData);
+    return { ok: true, message: "Site settings saved." };
+  } catch (error) {
+    console.error("Site settings save failed", error);
+    return { ok: false, message: error instanceof Error ? error.message : "Site settings could not be saved." };
+  }
 }
 
 export async function updateTestimonialStatus(formData: FormData) {
+  const message = await persistTestimonialStatus(formData);
+  adminToast(message, "testimonials");
+}
+
+async function persistTestimonialStatus(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");
   const status = String(formData.get("status") || "");
-  if (!id || !["approved", "declined"].includes(status)) return;
+  if (!id || !["approved", "declined"].includes(status)) throw new Error("A valid testimonial status is required.");
 
   const isApproved = status === "approved";
   const payload = {
@@ -329,5 +391,15 @@ export async function updateTestimonialStatus(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/admin");
-  adminToast(isApproved ? "Testimonial approved." : "Testimonial declined.", "testimonials");
+  return isApproved ? "Testimonial approved." : "Testimonial declined.";
+}
+
+export async function updateTestimonialStatusInline(formData: FormData): Promise<AdminActionResult> {
+  try {
+    const message = await persistTestimonialStatus(formData);
+    return { ok: true, message };
+  } catch (error) {
+    console.error("Testimonial update failed", error);
+    return { ok: false, message: error instanceof Error ? error.message : "Testimonial could not be updated." };
+  }
 }
