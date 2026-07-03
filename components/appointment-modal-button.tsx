@@ -4,6 +4,7 @@ import { CalendarCheck, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useLockBodyScroll } from "@/components/use-lock-body-scroll";
 
 export function AppointmentModalButton({
   children,
@@ -23,11 +24,14 @@ export function AppointmentModalButton({
     setMounted(true);
   }, []);
 
+  useLockBodyScroll(open);
+
   const modal = open ? (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/75 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-hidden bg-ink/75 px-3 py-3 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6" role="dialog" aria-modal="true">
       <button className="absolute inset-0 cursor-default" type="button" aria-label="Close appointment modal" onClick={() => setOpen(false)} />
-      <div className="modal-panel flex max-w-2xl flex-col">
-        <div className="flex items-start justify-between gap-4 border-b border-line bg-snow px-4 py-4 sm:px-5">
+      <div className="modal-panel z-10 flex max-h-[calc(100svh-1.5rem)] max-w-2xl flex-col sm:max-h-[min(90vh,760px)]">
+        <div className="shrink-0 border-b border-line bg-snow px-4 py-4 sm:px-5">
+          <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 gap-3">
             <div className="mt-0.5 hidden rounded-full bg-white p-2 shadow-sm ring-1 ring-line sm:inline-flex">
               <CalendarCheck className="h-5 w-5 text-gold" />
@@ -41,8 +45,9 @@ export function AppointmentModalButton({
           <button className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line bg-white text-ink transition hover:border-gold hover:text-red" type="button" aria-label="Close modal" onClick={() => setOpen(false)}>
             <X className="h-5 w-5" />
           </button>
+          </div>
         </div>
-        <div className="overflow-y-auto px-4 py-4 sm:px-5 sm:py-5">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5 sm:py-5">
           {children}
         </div>
       </div>

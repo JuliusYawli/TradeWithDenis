@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AppointmentModalButton } from "@/components/appointment-modal-button";
 import { LeadForm } from "@/components/lead-form";
 import { MobileMenu } from "@/components/mobile-menu";
+import { PaymentCalculatorPanel } from "@/components/payment-calculator";
 import type { SiteSettings } from "@/lib/types";
 
 export function Nav(_props: { settings: SiteSettings }) {
@@ -24,7 +25,7 @@ export function Nav(_props: { settings: SiteSettings }) {
           <AppointmentModalButton>
             <LeadForm variant="modal" />
           </AppointmentModalButton>
-          <MobileMenu />
+          <MobileMenu calculator={<PaymentCalculatorPanel />} appointment={<LeadForm variant="modal" />} />
         </div>
       </nav>
     </header>

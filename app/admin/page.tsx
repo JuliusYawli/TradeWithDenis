@@ -472,20 +472,39 @@ export default async function AdminPage({
             <section id="settings" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
               <Settings className="h-5 w-5 text-gold" />
               <h2 className="mt-3 text-xl font-black">Site settings</h2>
-              <form action={saveSettings} className="mt-4 grid gap-3">
+              <p className="mt-1 text-sm leading-6 text-neutral-600">These details appear across the public website, footer, contact page, appointment emails, and business schema.</p>
+              <form action={saveSettings} className="mt-5 grid gap-5">
                 {"id" in settings ? <input type="hidden" name="id" value={String(settings.id)} /> : null}
-                <input className="field" name="brand_name" defaultValue={settings.brand_name} placeholder="Brand name" />
-                <input className="field" name="phone" defaultValue={settings.phone ?? ""} placeholder="Phone" />
-                <input className="field" name="whatsapp" defaultValue={settings.whatsapp ?? ""} placeholder="WhatsApp" />
-                <input className="field" name="email" defaultValue={settings.email ?? ""} placeholder="Email" />
-                <textarea className="field" name="address" defaultValue={settings.address ?? ""} placeholder="Address" />
-                <input className="field" name="opening_hours" defaultValue={settings.opening_hours ?? ""} placeholder="Opening hours" />
-                <input className="field" name="instagram_url" defaultValue={settings.instagram_url ?? ""} placeholder="Instagram URL" />
-                <input className="field" name="facebook_url" defaultValue={settings.facebook_url ?? ""} placeholder="Facebook URL" />
-                <input className="field" name="tiktok_url" defaultValue={settings.tiktok_url ?? ""} placeholder="TikTok URL" />
-                <input className="field" name="google_maps_url" defaultValue={settings.google_maps_url ?? ""} placeholder="Google Maps URL" />
-                <input className="field" name="business_registration" defaultValue={settings.business_registration ?? ""} placeholder="Business registration" />
-                <button className="btn-primary" type="submit">Save settings</button>
+                <div className="rounded-lg border border-line bg-snow p-4">
+                  <h3 className="font-black text-ink">Business identity</h3>
+                  <p className="mt-1 text-sm leading-6 text-neutral-600">Controls the public brand name and legal/business reference shown on the site.</p>
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    <label className="text-xs font-bold uppercase text-neutral-500">Brand name<input className="field mt-1" name="brand_name" defaultValue={settings.brand_name} placeholder="TradeWithDenis" /></label>
+                    <label className="text-xs font-bold uppercase text-neutral-500">Business registration number<input className="field mt-1" name="business_registration" defaultValue={settings.business_registration ?? ""} placeholder="BN..." /></label>
+                  </div>
+                </div>
+                <div className="rounded-lg border border-line bg-snow p-4">
+                  <h3 className="font-black text-ink">Contact and location</h3>
+                  <p className="mt-1 text-sm leading-6 text-neutral-600">Used in the header/footer, contact page, booking emails, WhatsApp links, and Google directions.</p>
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    <label className="text-xs font-bold uppercase text-neutral-500">Phone number<input className="field mt-1" name="phone" defaultValue={settings.phone ?? ""} placeholder="+233 ..." /></label>
+                    <label className="text-xs font-bold uppercase text-neutral-500">WhatsApp number<input className="field mt-1" name="whatsapp" defaultValue={settings.whatsapp ?? ""} placeholder="+233 ..." /></label>
+                    <label className="text-xs font-bold uppercase text-neutral-500">Business email<input className="field mt-1" name="email" type="email" defaultValue={settings.email ?? ""} placeholder="shop@example.com" /></label>
+                    <label className="text-xs font-bold uppercase text-neutral-500">Opening hours<input className="field mt-1" name="opening_hours" defaultValue={settings.opening_hours ?? ""} placeholder="8:00 AM - 7:00 PM" /></label>
+                    <label className="text-xs font-bold uppercase text-neutral-500 md:col-span-2">Shop address<textarea className="field mt-1 min-h-24" name="address" defaultValue={settings.address ?? ""} placeholder="Circle Mall, Block C, Shop 27" /></label>
+                    <label className="text-xs font-bold uppercase text-neutral-500 md:col-span-2">Google Maps link<input className="field mt-1" name="google_maps_url" defaultValue={settings.google_maps_url ?? ""} placeholder="https://maps.app.goo.gl/..." /></label>
+                  </div>
+                </div>
+                <div className="rounded-lg border border-line bg-snow p-4">
+                  <h3 className="font-black text-ink">Social links</h3>
+                  <p className="mt-1 text-sm leading-6 text-neutral-600">Used wherever the website links customers to TradeWithDenis social pages.</p>
+                  <div className="mt-4 grid gap-3 md:grid-cols-3">
+                    <label className="text-xs font-bold uppercase text-neutral-500">Instagram URL<input className="field mt-1" name="instagram_url" defaultValue={settings.instagram_url ?? ""} placeholder="https://instagram.com/..." /></label>
+                    <label className="text-xs font-bold uppercase text-neutral-500">Facebook URL<input className="field mt-1" name="facebook_url" defaultValue={settings.facebook_url ?? ""} placeholder="https://facebook.com/..." /></label>
+                    <label className="text-xs font-bold uppercase text-neutral-500">TikTok URL<input className="field mt-1" name="tiktok_url" defaultValue={settings.tiktok_url ?? ""} placeholder="https://tiktok.com/..." /></label>
+                  </div>
+                </div>
+                <button className="btn-primary w-full sm:w-fit" type="submit">Save settings</button>
               </form>
             </section>
             <section id="testimonials" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">

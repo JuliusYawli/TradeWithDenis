@@ -2,19 +2,62 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarCheck, ChevronRight, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { CalendarCheck, Calculator, ChevronRight, Menu, X } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import { useLockBodyScroll } from "@/components/use-lock-body-scroll";
 
 const links = [
   ["How It Works", "/#how-it-works"],
   ["iPhones", "/iphones"],
-  ["Calculator", "/?action=calculator"],
   ["Why Us", "/#why-us"],
   ["FAQ", "/#faq"]
 ] as const;
 
-export function MobileMenu() {
+type MobileModalName = "calculator" | "appointment" | null;
+
+export function MobileMenu({
+  calculator,
+  appointment
+}: {
+  calculator: ReactNode;
+  appointment: ReactNode;
+}) {
   const [open, setOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState<MobileModalName>(null);
+
+  useLockBodyScroll(open || Boolean(activeModal));
+
+  function openActionModal(modal: Exclude<MobileModalName, null>) {
+    setOpen(false);
+    setActiveModal(modal);
+  }
+
+  const actionModal = activeModal ? (
+    <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-hidden bg-ink/75 px-3 py-3 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6 lg:hidden" role="dialog" aria-modal="true">
+      <button className="absolute inset-0 cursor-default" type="button" aria-label="Close modal" onClick={() => setActiveModal(null)} />
+      <div className="modal-panel z-10 flex max-h-[calc(100svh-1.5rem)] max-w-3xl flex-col sm:max-h-[min(90vh,760px)]">
+        <div className="shrink-0 border-b border-line bg-white px-4 py-4 sm:px-5">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-black tracking-tight text-ink sm:text-2xl">
+                {activeModal === "calculator" ? "Calculate payments" : "Book appointment"}
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-neutral-600">
+                {activeModal === "calculator" ? "Estimate deposit, weekly payment, and total cost before you choose a phone." : "Choose a visit time, then complete the order at the shop after inspection."}
+              </p>
+            </div>
+            <button className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line bg-white text-ink transition hover:border-gold hover:text-red" type="button" aria-label="Close modal" onClick={() => setActiveModal(null)}>
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5 sm:py-5">
+          {activeModal === "calculator" ? calculator : appointment}
+        </div>
+      </div>
+    </div>
+  ) : null;
 
   return (
     <>
@@ -51,7 +94,7 @@ export function MobileMenu() {
               </button>
             </div>
 
-            <nav className="flex flex-col p-3">
+            <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-3">
               <div className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-white">
                 {links.map(([label, href]) => (
                   <Link
@@ -64,16 +107,24 @@ export function MobileMenu() {
                     <ChevronRight className="h-4 w-4 text-gold" />
                   </Link>
                 ))}
+                <button
+                  className="flex min-h-14 w-full items-center justify-between gap-3 px-4 text-left text-base font-semibold text-ink transition hover:bg-snow active:bg-snow"
+                  type="button"
+                  onClick={() => openActionModal("calculator")}
+                >
+                  <span>Calculator</span>
+                  <Calculator className="h-4 w-4 text-gold" />
+                </button>
               </div>
 
-              <Link
+              <button
                 className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-center text-base font-bold text-white shadow-soft transition hover:bg-red active:scale-[0.99]"
-                href="/?action=appointment"
-                onClick={() => setOpen(false)}
+                type="button"
+                onClick={() => openActionModal("appointment")}
               >
                 <CalendarCheck className="h-5 w-5" />
                 Book Appointment
-              </Link>
+              </button>
 
               <div className="mt-4 rounded-xl bg-snow p-4 text-sm leading-6 text-neutral-700">
                 <p className="font-bold text-ink">TradeWithDenis</p>
@@ -84,6 +135,8 @@ export function MobileMenu() {
           </aside>
         </div>
       ) : null}
+
+      {actionModal ? createPortal(actionModal, document.body) : null}
     </>
   );
 }
