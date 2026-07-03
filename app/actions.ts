@@ -23,33 +23,38 @@ export async function submitLead(formData: FormData) {
     throw new Error("Name and phone are required.");
   }
 
-  if (hasSupabaseEnv()) {
-    const supabase = createAdminSupabaseClient();
-    const { data: lead, error } = await supabase.from("leads").insert(payload).select("id").single();
-    if (error) throw new Error(error.message);
+  try {
+    if (hasSupabaseEnv()) {
+      const supabase = createAdminSupabaseClient();
+      const { data: lead, error } = await supabase.from("leads").insert(payload).select("id").single();
+      if (error) throw new Error(error.message);
 
-    const { error: appointmentError } = await supabase.from("appointments").insert({
-      lead_id: lead.id,
-      appointment_date: appointmentDate,
-      appointment_time: appointmentTime,
-      notes: "Customer requested an in-shop appointment from the website. No sale is completed online."
-    });
-    if (appointmentError) throw new Error(appointmentError.message);
+      const { error: appointmentError } = await supabase.from("appointments").insert({
+        lead_id: lead.id,
+        appointment_date: appointmentDate,
+        appointment_time: appointmentTime,
+        notes: "Customer requested an in-shop appointment from the website. No sale is completed online."
+      });
+      if (appointmentError) throw new Error(appointmentError.message);
 
-    const { data: product } = payload.product_id
-      ? await supabase
-          .from("products")
-          .select("brand, model, storage, price, weekly_payment")
-          .eq("id", payload.product_id)
-          .maybeSingle()
-      : { data: null };
+      const { data: product } = payload.product_id
+        ? await supabase
+            .from("products")
+            .select("brand, model, storage, price, weekly_payment")
+            .eq("id", payload.product_id)
+            .maybeSingle()
+        : { data: null };
 
-    await sendAppointmentNotifications({
-      lead: payload,
-      appointmentDate,
-      appointmentTime,
-      product
-    });
+      await sendAppointmentNotifications({
+        lead: payload,
+        appointmentDate,
+        appointmentTime,
+        product
+      });
+    }
+  } catch (error) {
+    console.error("Appointment booking failed", error);
+    redirect("/appointment-confirmed?status=manual-follow-up");
   }
 
   revalidatePath("/");

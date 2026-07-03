@@ -10,9 +10,19 @@ export const metadata: Metadata = {
   description: "Your TradeWithDenis shop appointment request has been received."
 };
 
-export default async function AppointmentConfirmedPage() {
+export default async function AppointmentConfirmedPage({
+  searchParams
+}: {
+  searchParams?: Promise<{ status?: string }>;
+}) {
   const settings = await getSiteSettings();
+  const params = await searchParams;
+  const needsManualFollowUp = params?.status === "manual-follow-up";
   const whatsappUrl = `https://wa.me/${settings.whatsapp?.replace(/\D/g, "")}`;
+  const title = needsManualFollowUp ? "Please contact the shop to confirm" : "Appointment request received";
+  const message = needsManualFollowUp
+    ? "The online booking system could not save your request just now. Please call or WhatsApp TradeWithDenis so the team can confirm your visit directly."
+    : "Thank you. TradeWithDenis has received your shop visit request. The team will contact you to confirm availability before you come in.";
 
   return (
     <>
@@ -22,9 +32,9 @@ export default async function AppointmentConfirmedPage() {
           <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-full bg-emerald-50">
             <CalendarCheck className="h-7 w-7 text-emerald-700" />
           </div>
-          <h1 className="text-3xl font-semibold tracking-tight">Appointment request received</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
           <p className="mx-auto mt-4 max-w-2xl leading-7 text-neutral-600">
-            Thank you. TradeWithDenis has received your shop visit request. The team will contact you to confirm availability before you come in.
+            {message}
           </p>
           <p className="mx-auto mt-4 max-w-2xl rounded-md bg-snow p-4 text-sm font-semibold leading-6 text-neutral-700">
             No sale is completed online. You will inspect the device and complete payment or financing at the shop.
