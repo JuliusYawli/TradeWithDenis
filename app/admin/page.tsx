@@ -227,15 +227,16 @@ export default async function AdminPage({
                 <p className="mt-1 text-sm text-neutral-600">Showing the latest {appointments.length} bookings. New bookings start as pending, then you move them through confirmed, postponed, completed, cancelled, or no-show.</p>
               </div>
             </div>
-            <div className="mt-4 grid gap-2 sm:grid-cols-3">
-              {appointmentStatusCounts.map(([label, count]) => (
-                <div key={label} className="rounded-md border border-line bg-snow px-3 py-2">
-                  <p className="text-xs font-medium uppercase text-neutral-500">{label}</p>
-                  <p className="text-xl font-semibold">{count}</p>
-                </div>
-              ))}
-            </div>
-            <AdminAppointmentSearch appointments={appointments} />
+            <AdminAppointmentSearch appointments={appointments}>
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                {appointmentStatusCounts.map(([label, count]) => (
+                  <div key={label} className="rounded-md border border-line bg-snow px-3 py-2">
+                    <p className="text-xs font-medium uppercase text-neutral-500">{label}</p>
+                    <p className="text-xl font-semibold">{count}</p>
+                  </div>
+                ))}
+              </div>
+            </AdminAppointmentSearch>
           </section>
 
           <section id="leads" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">

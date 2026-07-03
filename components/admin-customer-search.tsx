@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import { Mail, MessageCircle, Phone, Search } from "lucide-react";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
 import type { Appointment, Lead } from "@/lib/types";
@@ -76,7 +77,7 @@ function matchesLead(lead: Lead, query: string) {
   ].some((value) => normalize(value).includes(query));
 }
 
-export function AdminAppointmentSearch({ appointments }: { appointments: Appointment[] }) {
+export function AdminAppointmentSearch({ appointments, children }: { appointments: Appointment[]; children?: ReactNode }) {
   const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
   const filtered = useMemo(
@@ -88,17 +89,18 @@ export function AdminAppointmentSearch({ appointments }: { appointments: Appoint
     <>
       <div className="mt-4">
         <label className="relative block">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
           <input
-            className="field bg-white pl-10"
+            className="field bg-white pl-12"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search appointments by name, phone, email, or note"
-            type="search"
+            type="text"
           />
         </label>
         <p className="mt-2 text-xs font-medium text-neutral-500">{filtered.length} of {appointments.length} appointments showing</p>
       </div>
+      {children}
       <div className="mt-4 max-h-[820px] space-y-3 overflow-y-auto pr-2">
         {filtered.length ? filtered.map((appointment) => (
           <div key={appointment.id} className="rounded-md bg-snow p-4 text-sm">
@@ -153,13 +155,13 @@ export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
     <>
       <div className="mt-4">
         <label className="relative block">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
           <input
-            className="field bg-white pl-10"
+            className="field bg-white pl-12"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search leads by name, phone, email, or message"
-            type="search"
+            type="text"
           />
         </label>
         <p className="mt-2 text-xs font-medium text-neutral-500">{filtered.length} of {visibleLeads.length} leads showing</p>
