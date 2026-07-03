@@ -54,6 +54,16 @@ export async function submitLead(formData: FormData) {
     }
   } catch (error) {
     console.error("Appointment booking failed", error);
+    try {
+      await sendAppointmentNotifications({
+        lead: payload,
+        appointmentDate,
+        appointmentTime,
+        product: null
+      });
+    } catch (notificationError) {
+      console.error("Fallback appointment notification failed", notificationError);
+    }
     redirect("/appointment-confirmed?status=manual-follow-up");
   }
 
