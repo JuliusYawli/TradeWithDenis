@@ -22,13 +22,34 @@ export type Product = {
 
 export type Testimonial = {
   id: string;
+  testimonial_request_id?: string | null;
+  appointment_id?: string | null;
   customer_name: string;
   location: string | null;
   rating: number;
   quote: string;
   image_url: string | null;
   is_featured: boolean;
+  status?: "pending" | "approved" | "declined";
+  product_model?: string | null;
+  reviewed_at?: string | null;
   created_at: string;
+  updated_at?: string | null;
+};
+
+export type TestimonialRequest = {
+  id: string;
+  appointment_id: string | null;
+  lead_id: string | null;
+  token: string;
+  customer_name: string;
+  customer_email: string | null;
+  status: "created" | "sent" | "submitted" | "approved" | "declined";
+  sent_at: string | null;
+  submitted_at: string | null;
+  reviewed_at: string | null;
+  created_at: string;
+  updated_at?: string | null;
 };
 
 export type Lead = {

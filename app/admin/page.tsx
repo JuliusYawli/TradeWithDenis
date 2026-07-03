@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
-import { BarChart3, CalendarDays, ExternalLink, LogOut, Mail, MessageCircle, Package, Phone, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
+import { BarChart3, CalendarDays, Database, Download, ExternalLink, LogOut, Mail, MessageCircle, Package, Phone, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
 import { AdminToast } from "@/components/admin-toast";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
-import { getAppointments, getLeads, getProducts, getSiteSettings, getTestimonials } from "@/lib/data";
+import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
-import { deleteProduct, logoutAdmin, saveProduct, saveSettings, updateAppointmentStatus, updateLeadStatus } from "./actions";
+import { deleteProduct, logoutAdmin, saveProduct, saveSettings, updateAppointmentStatus, updateLeadStatus, updateTestimonialStatus } from "./actions";
 
 const appointmentStatuses = [
   ["pending", "Pending"],
@@ -28,6 +28,11 @@ const stockStatuses = [
   ["in_stock", "In stock"],
   ["reserved", "Reserved"],
   ["sold", "Sold"]
+] as const;
+const testimonialStatuses = [
+  ["pending", "Pending"],
+  ["approved", "Approved"],
+  ["declined", "Declined"]
 ] as const;
 const adminActionButtonClass = "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-sm font-bold text-ink shadow-sm transition hover:border-gold hover:bg-snow hover:text-red focus:outline-none focus:ring-2 focus:ring-gold/25";
 const adminDangerButtonClass = "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-danger/20 bg-white px-4 py-2 text-sm font-bold text-danger shadow-sm transition hover:border-danger/40 hover:bg-danger/5 focus:outline-none focus:ring-2 focus:ring-danger/20";
@@ -52,6 +57,20 @@ function whatsappHref(phone?: string | null) {
   return digits ? `https://wa.me/${digits}` : "#";
 }
 
+function supabaseProjectInfo() {
+  const fallback = "https://supabase.com/dashboard/projects";
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!supabaseUrl) return { ref: null, url: fallback };
+
+  try {
+    const hostname = new URL(supabaseUrl).hostname;
+    const ref = hostname.endsWith(".supabase.co") ? hostname.split(".")[0] : null;
+    return { ref, url: ref ? `https://supabase.com/dashboard/project/${ref}` : fallback };
+  } catch {
+    return { ref: null, url: fallback };
+  }
+}
+
 export default async function AdminPage({
   searchParams
 }: {
@@ -69,7 +88,7 @@ export default async function AdminPage({
   const [products, settings, testimonials, leads, appointments] = await Promise.all([
     getProducts(),
     getSiteSettings(),
-    getTestimonials(),
+    getAdminTestimonials(),
     getLeads(),
     getAppointments()
   ]);
@@ -77,6 +96,10 @@ export default async function AdminPage({
   const appointmentStatusCounts = appointmentStatuses.map(([status, label]) => [
     label,
     appointments.filter((appointment) => appointment.status === status).length
+  ] as const);
+  const testimonialStatusCounts = testimonialStatuses.map(([status, label]) => [
+    label,
+    testimonials.filter((testimonial) => (testimonial.status ?? "approved") === status).length
   ] as const);
   const stats: Array<[string, string | number, LucideIcon]> = [
     ["Total products", products.length, Package],
@@ -90,9 +113,19 @@ export default async function AdminPage({
     ["Leads", "#leads", Users, leads.length],
     ["Add product", "#add-product", Plus, null],
     ["Products", "#products", Package, products.length],
+    ["Backups", "#backups", Database, null],
     ["Settings", "#settings", Settings, null],
     ["Testimonials", "#testimonials", Star, testimonials.length]
   ];
+  const backupExports: Array<[string, string, string, number | string]> = [
+    ["Appointments", "Customer visit bookings with status, dates, notes, and contact details.", "/admin/exports/appointments", "Full CSV"],
+    ["Customer leads", "All inquiries collected from appointment and contact forms.", "/admin/exports/leads", "Full CSV"],
+    ["Products", "Inventory, prices, payment terms, stock status, warranty, and image URLs.", "/admin/exports/products", "Full CSV"],
+    ["Site settings", "Business contact details, address, social links, and registration number.", "/admin/exports/settings", "Full CSV"],
+    ["Testimonials", "Customer testimonials and approval status.", "/admin/exports/testimonials", "Full CSV"],
+    ["Review requests", "Review email requests linked to completed appointments.", "/admin/exports/testimonial-requests", "Full CSV"]
+  ];
+  const supabaseBackupInfo = supabaseProjectInfo();
 
   return (
     <main className="min-h-screen bg-snow">
@@ -177,7 +210,7 @@ export default async function AdminPage({
                 </div>
               ))}
             </div>
-            <div className="mt-5 grid gap-4 lg:grid-cols-3">
+            <div className="mt-5 grid gap-4 lg:grid-cols-4">
               <a className="rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#appointments">
                 <CalendarDays className="h-5 w-5 text-gold" />
                 <p className="mt-3 font-black">Review appointments</p>
@@ -192,6 +225,11 @@ export default async function AdminPage({
                 <Package className="h-5 w-5 text-gold" />
                 <p className="mt-3 font-black">Manage inventory</p>
                 <p className="mt-1 text-sm leading-6 text-neutral-600">Update product prices, stock status, images, and featured devices.</p>
+              </a>
+              <a className="rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#backups">
+                <Database className="h-5 w-5 text-gold" />
+                <p className="mt-3 font-black">Back up records</p>
+                <p className="mt-1 text-sm leading-6 text-neutral-600">Open Supabase backup settings and export business records as CSV files.</p>
               </a>
             </div>
           </section>
@@ -370,6 +408,67 @@ export default async function AdminPage({
               ))}
             </div>
           </section>
+          <section id="backups" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <Database className="h-5 w-5 text-gold" />
+                <h2 className="mt-3 text-xl font-black">Backups</h2>
+                <p className="mt-1 max-w-3xl text-sm leading-6 text-neutral-600">
+                  Keep two backup layers: Supabase for database restore, and CSV exports for day-to-day business copies.
+                </p>
+              </div>
+              <span className="rounded-full bg-snow px-3 py-1 text-xs font-black text-neutral-600">
+                {hasSupabaseEnv() ? "Supabase connected" : "Supabase env not detected"}
+              </span>
+            </div>
+
+            <div className="mt-5 grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+              <div className="rounded-lg border border-line bg-snow p-5">
+                <div className="flex items-start gap-3">
+                  <Database className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+                  <div>
+                    <h3 className="font-black text-ink">Supabase database backup</h3>
+                    <p className="mt-2 text-sm leading-6 text-neutral-600">
+                      This is the recovery backup for the real database. Keep automatic backups enabled in Supabase before production launch.
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 space-y-2 rounded-md border border-line bg-white p-4 text-sm text-neutral-700">
+                  <p><span className="font-bold">Project:</span> {supabaseBackupInfo.ref ?? "Open from Supabase dashboard"}</p>
+                  <p><span className="font-bold">What to check:</span> automatic backups, recovery settings, and restore access.</p>
+                  <p><span className="font-bold">Important:</span> CSV exports are useful copies, but they do not replace database restore backups.</p>
+                </div>
+                <a className={`${adminActionButtonClass} mt-4`} href={supabaseBackupInfo.url} target="_blank" rel="noreferrer">
+                  <ExternalLink className="h-4 w-4" /> Open Supabase dashboard
+                </a>
+              </div>
+
+              <div className="rounded-lg border border-line bg-white p-5">
+                <div className="flex items-start gap-3">
+                  <Download className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+                  <div>
+                    <h3 className="font-black text-ink">Admin CSV exports</h3>
+                    <p className="mt-2 text-sm leading-6 text-neutral-600">
+                      Download snapshots of business records for Google Drive, email, or local storage.
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 grid gap-3">
+                  {backupExports.map(([label, description, href, count]) => (
+                    <div key={href} className="flex flex-col gap-3 rounded-md border border-line bg-snow p-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="font-black text-ink">{label} <span className="text-sm font-bold text-neutral-500">({count})</span></p>
+                        <p className="mt-1 text-sm leading-6 text-neutral-600">{description}</p>
+                      </div>
+                      <a className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-sm font-bold text-ink shadow-sm transition hover:border-gold hover:text-red" href={href}>
+                        <Download className="h-4 w-4" /> CSV
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
             <section id="settings" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
               <Settings className="h-5 w-5 text-gold" />
               <h2 className="mt-3 text-xl font-black">Site settings</h2>
@@ -390,9 +489,59 @@ export default async function AdminPage({
               </form>
             </section>
             <section id="testimonials" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
-              <Star className="h-5 w-5 text-gold" />
-              <h2 className="mt-3 text-xl font-black">Testimonials</h2>
-              <p className="mt-2 text-sm text-neutral-600">{testimonials.length} featured testimonials</p>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <Star className="h-5 w-5 text-gold" />
+                  <h2 className="mt-3 text-xl font-black">Testimonials</h2>
+                  <p className="mt-1 text-sm text-neutral-600">Approve real customer reviews before they appear on the homepage.</p>
+                </div>
+              </div>
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                {testimonialStatusCounts.map(([label, count]) => (
+                  <div key={label} className="rounded-md border border-line bg-snow px-3 py-2">
+                    <p className="text-xs font-bold uppercase text-neutral-500">{label}</p>
+                    <p className="text-xl font-black">{count}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 space-y-3">
+                {testimonials.length ? testimonials.map((testimonial) => {
+                  const testimonialStatus = testimonial.status ?? "approved";
+                  return (
+                    <div key={testimonial.id} className="rounded-md border border-line bg-snow p-4 text-sm">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <p className="font-black text-ink">{testimonial.customer_name} {testimonial.location ? `· ${testimonial.location}` : ""}</p>
+                          <p className="mt-1 text-xs font-bold uppercase text-neutral-500">{testimonial.rating}/5 rating · Submitted {formatDateTime(testimonial.created_at)}</p>
+                        </div>
+                        <span className="rounded-full bg-white px-2 py-1 text-xs font-bold text-neutral-600">{statusLabel(testimonialStatuses, testimonialStatus)}</span>
+                      </div>
+                      <p className="mt-3 rounded-md bg-white p-3 leading-6 text-neutral-700">&quot;{testimonial.quote}&quot;</p>
+                      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                        <p className="text-xs font-semibold text-neutral-500">
+                          {testimonialStatus === "approved" && testimonial.is_featured ? "Shown on homepage" : testimonialStatus === "approved" ? "Approved but hidden from homepage" : "Not shown on homepage"}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          <form action={updateTestimonialStatus} className="flex flex-wrap items-center gap-2">
+                            <input type="hidden" name="id" value={testimonial.id} />
+                            <input type="hidden" name="status" value="approved" />
+                            <label className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-line bg-white px-3 text-xs font-bold text-neutral-700">
+                              <input name="is_featured" type="checkbox" defaultChecked={testimonial.is_featured || testimonialStatus === "pending"} />
+                              Show on homepage
+                            </label>
+                            <button className="btn-primary px-4 py-2" type="submit">{testimonialStatus === "approved" ? "Save" : "Approve"}</button>
+                          </form>
+                          <form action={updateTestimonialStatus}>
+                            <input type="hidden" name="id" value={testimonial.id} />
+                            <input type="hidden" name="status" value="declined" />
+                            <button className="btn-secondary px-4 py-2" type="submit">Decline</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }) : <p className="text-sm text-neutral-600">No testimonials submitted yet.</p>}
+              </div>
             </section>
         </div>
           </div>

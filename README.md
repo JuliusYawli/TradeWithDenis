@@ -8,7 +8,8 @@ Premium iPhone sales and transparent financing website for Ghana, built with Nex
 - iPhone catalog with search, condition filter, stock filter, and sorting by newest, price, or weekly payment.
 - Product detail pages with transparent financing breakdown.
 - Contact, warranty, financing terms, privacy, and terms pages.
-- Admin dashboard scaffold for products, settings, testimonials, leads, and appointments.
+- Admin dashboard for products, settings, testimonials, leads, appointments, backups, and CSV exports.
+- Post-visit testimonial flow: completed appointments can send a secure review link, then admins approve or decline submissions before they appear on the homepage.
 - Supabase migrations with RLS policies and seed data.
 - Vercel-ready metadata, Open Graph image, robots, sitemap, and JSON-LD.
 
@@ -46,6 +47,8 @@ insert into public.admin_users (email)
 values ('new-admin@example.com')
 on conflict (email) do nothing;
 ```
+
+The `004_testimonial_review_flow.sql` migration adds secure testimonial review links, pending/approved/declined testimonial moderation, and review-request records for completed appointments.
 
 ## Development
 

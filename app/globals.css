@@ -111,6 +111,7 @@ textarea {
 .admin-shell:has(#leads:target) .admin-nav-link[href="#leads"],
 .admin-shell:has(#add-product:target) .admin-nav-link[href="#add-product"],
 .admin-shell:has(#products:target) .admin-nav-link[href="#products"],
+.admin-shell:has(#backups:target) .admin-nav-link[href="#backups"],
 .admin-shell:has(#settings:target) .admin-nav-link[href="#settings"],
 .admin-shell:has(#testimonials:target) .admin-nav-link[href="#testimonials"] {
   border-color: #dbeafe;

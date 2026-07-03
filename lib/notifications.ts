@@ -24,6 +24,14 @@ type AppointmentUpdateNotificationInput = {
   appointmentTime: string | null;
 };
 
+type TestimonialRequestNotificationInput = {
+  lead: {
+    customer_name: string;
+    email: string | null;
+  };
+  reviewUrl: string;
+};
+
 const resendApiKey = process.env.RESEND_API_KEY;
 const shopNotificationEmail = process.env.SHOP_NOTIFICATION_EMAIL || process.env.ADMIN_EMAILS?.split(",")[0]?.trim();
 const emailFrom = process.env.EMAIL_FROM || "TradeWithDenis <onboarding@resend.dev>";
@@ -188,5 +196,36 @@ export async function sendAppointmentUpdateNotification({
     await sendEmail(lead.email, `TradeWithDenis appointment ${statusLabel(status)}`, html);
   } catch (error) {
     console.error(error);
+  }
+}
+
+export async function sendTestimonialRequestNotification({
+  lead,
+  reviewUrl
+}: TestimonialRequestNotificationInput) {
+  if (!lead.email) return;
+
+  const customerName = escapeHtml(lead.customer_name);
+  const safeReviewUrl = escapeHtml(reviewUrl);
+
+  const html = `
+    <h2>How was your TradeWithDenis visit?</h2>
+    <p>Hi ${customerName},</p>
+    <p>Thank you for completing your shop visit with TradeWithDenis. If everything went well, please share a short review about your experience.</p>
+    <p>Your review will be checked by the shop before it appears on the website.</p>
+    <p>
+      <a href="${safeReviewUrl}" style="display:inline-block;background:#1553c5;color:#ffffff;padding:12px 18px;border-radius:999px;text-decoration:none;font-weight:700;">
+        Leave a review
+      </a>
+    </p>
+    <p>If the button does not work, copy and paste this link into your browser:</p>
+    <p>${safeReviewUrl}</p>
+  `;
+
+  try {
+    await sendEmail(lead.email, "Share your TradeWithDenis experience", html);
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }

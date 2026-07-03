@@ -8,6 +8,7 @@ import {
   PackageCheck,
   ShieldCheck,
   Smartphone,
+  Star,
   Store,
   Wallet,
   type LucideIcon
@@ -181,8 +182,13 @@ export default async function Home() {
             <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {testimonials.map((item) => (
                 <blockquote key={item.id} className="premium-card p-5">
-                  <p className="text-sm leading-6 text-neutral-700">&quot;{item.quote}&quot;</p>
-                  <footer className="mt-4 text-sm font-black">{item.customer_name} · {item.location}</footer>
+                  <div className="flex gap-1 text-gold" aria-label={`${item.rating} out of 5 stars`}>
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <Star key={index} className={`h-4 w-4 ${index < item.rating ? "fill-current" : "text-neutral-200"}`} />
+                    ))}
+                  </div>
+                  <p className="mt-4 text-sm leading-6 text-neutral-700">&quot;{item.quote}&quot;</p>
+                  <footer className="mt-4 text-sm font-black">{item.customer_name}{item.location ? ` · ${item.location}` : ""}</footer>
                 </blockquote>
               ))}
             </div>

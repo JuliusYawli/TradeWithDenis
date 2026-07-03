@@ -26,8 +26,21 @@ export async function getTestimonials() {
   noStore();
   if (!hasSupabaseEnv()) return seedTestimonials;
   const supabase = await createServerSupabaseClient();
-  const { data } = await supabase.from("testimonials").select("*").eq("is_featured", true).order("created_at", { ascending: false });
+  const { data } = await supabase
+    .from("testimonials")
+    .select("*")
+    .eq("status", "approved")
+    .eq("is_featured", true)
+    .order("created_at", { ascending: false });
   return data ?? seedTestimonials;
+}
+
+export async function getAdminTestimonials() {
+  noStore();
+  if (!hasSupabaseEnv()) return seedTestimonials.map((testimonial) => ({ ...testimonial, status: "approved" as const }));
+  const supabase = await createServerSupabaseClient();
+  const { data } = await supabase.from("testimonials").select("*").order("created_at", { ascending: false }).limit(100);
+  return data ?? [];
 }
 
 export async function getSiteSettings() {

@@ -1,10 +1,11 @@
 "use server";
 
+import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { isAppointmentTimeSlot } from "@/lib/appointment-times";
-import { sendAppointmentUpdateNotification } from "@/lib/notifications";
+import { sendAppointmentUpdateNotification, sendTestimonialRequestNotification } from "@/lib/notifications";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
@@ -34,6 +35,93 @@ function imageUrls(value: FormDataEntryValue | null) {
 function adminToast(message: string, section?: string) {
   const target = `/admin?toast=${encodeURIComponent(message)}&type=success`;
   redirect(section ? `${target}#${section}` : target);
+}
+
+function siteUrl() {
+  const value = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://127.0.0.1:3000");
+  return value.replace(/\/$/, "");
+}
+
+function reviewToken() {
+  return randomBytes(32).toString("hex");
+}
+
+type AdminSupabase = Awaited<ReturnType<typeof adminClient>>;
+type ReviewRequestResult = "sent" | "already_sent" | "no_email" | "failed";
+
+async function sendCompletedVisitReviewRequest({
+  supabase,
+  appointmentId,
+  leadId,
+  lead
+}: {
+  supabase: AdminSupabase;
+  appointmentId: string;
+  leadId: string | null;
+  lead: { customer_name: string; email: string | null };
+}): Promise<ReviewRequestResult> {
+  if (!lead.email) return "no_email";
+
+  const { data: existing, error: existingError } = await supabase
+    .from("testimonial_requests")
+    .select("id, token, status, sent_at")
+    .eq("appointment_id", appointmentId)
+    .maybeSingle();
+
+  if (existingError) {
+    console.error(existingError);
+    return "failed";
+  }
+
+  if (existing?.sent_at || ["submitted", "approved", "declined"].includes(String(existing?.status))) {
+    return "already_sent";
+  }
+
+  const token = existing?.token ?? reviewToken();
+  let requestId = existing?.id as string | undefined;
+
+  if (!requestId) {
+    const { data: inserted, error: insertError } = await supabase
+      .from("testimonial_requests")
+      .insert({
+        appointment_id: appointmentId,
+        lead_id: leadId,
+        token,
+        customer_name: lead.customer_name,
+        customer_email: lead.email,
+        status: "created"
+      })
+      .select("id")
+      .single();
+
+    if (insertError) {
+      console.error(insertError);
+      return "failed";
+    }
+
+    requestId = inserted.id;
+  }
+
+  try {
+    await sendTestimonialRequestNotification({
+      lead,
+      reviewUrl: `${siteUrl()}/review/${token}`
+    });
+  } catch {
+    return "failed";
+  }
+
+  const { error: updateError } = await supabase
+    .from("testimonial_requests")
+    .update({ status: "sent", sent_at: new Date().toISOString() })
+    .eq("id", requestId);
+
+  if (updateError) {
+    console.error(updateError);
+    return "failed";
+  }
+
+  return "sent";
 }
 
 export async function logoutAdmin(formData: FormData) {
@@ -117,21 +205,44 @@ export async function updateAppointmentStatus(formData: FormData) {
 
   const { data: appointment } = await supabase
     .from("appointments")
-    .select("appointment_date, appointment_time, status, leads(customer_name, email)")
+    .select("id, lead_id, appointment_date, appointment_time, status, leads(customer_name, email)")
     .eq("id", id)
     .maybeSingle();
 
   const lead = Array.isArray(appointment?.leads) ? appointment.leads[0] : appointment?.leads;
+  let reviewResult: ReviewRequestResult | null = null;
+
   if (lead) {
-    await sendAppointmentUpdateNotification({
-      lead,
-      status: appointment?.status ?? status,
-      appointmentDate: appointment?.appointment_date ?? payload.appointment_date,
-      appointmentTime: appointment?.appointment_time ?? payload.appointment_time
-    });
+    if ((appointment?.status ?? status) === "completed") {
+      reviewResult = await sendCompletedVisitReviewRequest({
+        supabase,
+        appointmentId: appointment?.id ?? id,
+        leadId: appointment?.lead_id ?? null,
+        lead
+      });
+    } else {
+      await sendAppointmentUpdateNotification({
+        lead,
+        status: appointment?.status ?? status,
+        appointmentDate: appointment?.appointment_date ?? payload.appointment_date,
+        appointmentTime: appointment?.appointment_time ?? payload.appointment_time
+      });
+    }
   }
 
   revalidatePath("/admin");
+  if (reviewResult === "sent") {
+    adminToast("Appointment completed. Review request sent to the customer.", "appointments");
+  }
+  if (reviewResult === "already_sent") {
+    adminToast("Appointment updated. Review request had already been sent.", "appointments");
+  }
+  if (reviewResult === "no_email") {
+    adminToast("Appointment updated. No customer email was available for a review request.", "appointments");
+  }
+  if (reviewResult === "failed") {
+    adminToast("Appointment updated, but the review request could not be sent.", "appointments");
+  }
   adminToast("Appointment updated. Customer notification was attempted if an email exists.", "appointments");
 }
 
@@ -160,4 +271,40 @@ export async function saveSettings(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/admin");
   adminToast("Site settings saved.", "settings");
+}
+
+export async function updateTestimonialStatus(formData: FormData) {
+  const supabase = await adminClient();
+  const id = String(formData.get("id") || "");
+  const status = String(formData.get("status") || "");
+  if (!id || !["approved", "declined"].includes(status)) return;
+
+  const isApproved = status === "approved";
+  const payload = {
+    status,
+    is_featured: isApproved && formData.get("is_featured") === "on",
+    reviewed_at: new Date().toISOString()
+  };
+
+  const { data: testimonial, error } = await supabase
+    .from("testimonials")
+    .update(payload)
+    .eq("id", id)
+    .select("testimonial_request_id")
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+
+  if (testimonial?.testimonial_request_id) {
+    const { error: requestError } = await supabase
+      .from("testimonial_requests")
+      .update({ status, reviewed_at: new Date().toISOString() })
+      .eq("id", testimonial.testimonial_request_id);
+
+    if (requestError) throw new Error(requestError.message);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+  adminToast(isApproved ? "Testimonial approved." : "Testimonial declined.", "testimonials");
 }
