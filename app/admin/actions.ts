@@ -250,7 +250,7 @@ export async function saveSettings(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");
   const payload = {
-    brand_name: String(formData.get("brand_name") || "TradeWithDenis"),
+    brand_name: String(formData.get("brand_name") || "TradeWithDennis"),
     phone: String(formData.get("phone") || "") || null,
     whatsapp: String(formData.get("whatsapp") || "") || null,
     email: String(formData.get("email") || "") || null,

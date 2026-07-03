@@ -64,12 +64,12 @@ export default async function ReviewPage({
           {!request ? (
             <MessageCard title="Review link unavailable" copy={errorCopy[query?.error ?? "invalid"] ?? errorCopy.invalid} />
           ) : isSubmitted ? (
-            <MessageCard title="Thank you for your review" copy="Your testimonial has been sent to TradeWithDenis for review. If approved, it can appear on the homepage." />
+            <MessageCard title="Thank you for your review" copy="Your testimonial has been sent to TradeWithDennis for review. If approved, it can appear on the homepage." />
           ) : (
             <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
               <div className="rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8">
                 <p className="section-eyebrow">Customer review</p>
-                <h1 className="mt-5 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">Share your TradeWithDenis experience.</h1>
+                <h1 className="mt-5 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">Share your TradeWithDennis experience.</h1>
                 <p className="mt-4 text-sm leading-6 text-neutral-600 sm:text-base">
                   Hi {request.customer_name}, thank you for completing your shop visit. Your review helps future customers feel confident before booking.
                 </p>
@@ -114,7 +114,7 @@ export default async function ReviewPage({
                 </label>
                 <label className="mt-4 flex items-start gap-3 rounded-lg border border-line bg-snow p-4 text-sm leading-6 text-neutral-700">
                   <input className="mt-1" name="permission" type="checkbox" required />
-                  I give TradeWithDenis permission to publish my name, location, rating, and testimonial on the website if approved.
+                  I give TradeWithDennis permission to publish my name, location, rating, and testimonial on the website if approved.
                 </label>
                 <button className="btn-primary mt-5 w-full" type="submit">
                   <Star className="h-4 w-4" /> Submit review

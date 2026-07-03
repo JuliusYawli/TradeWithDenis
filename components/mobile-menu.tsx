@@ -81,8 +81,8 @@ export function MobileMenu({
 
           <aside className="absolute right-3 top-3 flex max-h-[calc(100dvh-1.5rem)] w-[min(360px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-2xl">
             <div className="flex items-center justify-between gap-4 border-b border-line bg-snow px-4 py-3">
-              <Link href="/" className="min-w-0" aria-label="TradeWithDenis home" onClick={() => setOpen(false)}>
-                <Image src="/logo.svg" alt="TradeWithDenis" width={150} height={54} className="h-10 w-auto object-contain" />
+              <Link href="/" className="min-w-0" aria-label="TradeWithDennis home" onClick={() => setOpen(false)}>
+                <Image src="/logo.svg" alt="TradeWithDennis" width={150} height={54} className="h-10 w-auto object-contain" />
               </Link>
               <button
                 className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-ink shadow-sm ring-1 ring-line transition active:scale-95"
@@ -127,7 +127,7 @@ export function MobileMenu({
               </button>
 
               <div className="mt-4 rounded-xl bg-snow p-4 text-sm leading-6 text-neutral-700">
-                <p className="font-medium text-ink">TradeWithDenis</p>
+                <p className="font-medium text-ink">TradeWithDennis</p>
                 <p>Circle Mall, Block C, Shop 27</p>
                 <p>8:00 AM - 7:00 PM</p>
               </div>

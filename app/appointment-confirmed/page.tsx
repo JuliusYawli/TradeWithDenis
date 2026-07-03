@@ -7,7 +7,7 @@ import { getSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Appointment Requested",
-  description: "Your TradeWithDenis shop appointment request has been received."
+  description: "Your TradeWithDennis shop appointment request has been received."
 };
 
 export default async function AppointmentConfirmedPage({
@@ -21,8 +21,8 @@ export default async function AppointmentConfirmedPage({
   const whatsappUrl = `https://wa.me/${settings.whatsapp?.replace(/\D/g, "")}`;
   const title = needsManualFollowUp ? "Please contact the shop to confirm" : "Appointment request received";
   const message = needsManualFollowUp
-    ? "The online booking system could not save your request just now. Please call or WhatsApp TradeWithDenis so the team can confirm your visit directly."
-    : "Thank you. TradeWithDenis has received your shop visit request. The team will contact you to confirm availability before you come in.";
+    ? "The online booking system could not save your request just now. Please call or WhatsApp TradeWithDennis so the team can confirm your visit directly."
+    : "Thank you. TradeWithDennis has received your shop visit request. The team will contact you to confirm availability before you come in.";
 
   return (
     <>

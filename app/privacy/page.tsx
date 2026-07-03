@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { getSiteSettings } from "@/lib/data";
 
-export const metadata: Metadata = { title: "Privacy Policy", description: "How TradeWithDenis handles lead and customer information." };
+export const metadata: Metadata = { title: "Privacy Policy", description: "How TradeWithDennis handles lead and customer information." };
 
 export default async function PrivacyPage() {
   const settings = await getSiteSettings();
@@ -12,7 +12,7 @@ export default async function PrivacyPage() {
       <Nav settings={settings} />
       <main className="container-page py-12">
         <h1 className="text-3xl font-semibold tracking-tight">Privacy Policy</h1>
-        <p className="mt-8 max-w-3xl text-neutral-700">Lead details are collected so TradeWithDenis can respond to product inquiries, reservations, appointments, and financing requests. Replace this placeholder with a reviewed privacy policy before launch.</p>
+        <p className="mt-8 max-w-3xl text-neutral-700">Lead details are collected so TradeWithDennis can respond to product inquiries, reservations, appointments, and financing requests. Replace this placeholder with a reviewed privacy policy before launch.</p>
       </main>
       <Footer settings={settings} />
     </>

@@ -338,7 +338,7 @@ export async function GET(request: Request, context: { params: Promise<{ type: s
       "testimonial-requests": exportTestimonialRequests
     }[type](supabase);
 
-    return csvResponse(`tradewithdenis-${type}-${todayStamp()}.csv`, csv);
+    return csvResponse(`tradewithdennis-${type}-${todayStamp()}.csv`, csv);
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Export failed." }, { status: 500 });
   }

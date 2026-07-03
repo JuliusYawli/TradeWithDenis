@@ -46,7 +46,7 @@ export default async function Home() {
     address: settings.address,
     telephone: settings.phone,
     email: settings.email,
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://tradewithdenis.com"
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://tradewithdennis.com"
   };
 
   return (
@@ -155,7 +155,7 @@ export default async function Home() {
             <div>
               <p className="section-eyebrow">Why customers trust it</p>
               <h2 className="mt-5 text-3xl font-semibold tracking-tight sm:text-4xl">Clear before visit. Confident before payment.</h2>
-              <p className="mt-5 text-base leading-7 text-neutral-600">TradeWithDenis keeps the online experience focused on discovery and appointment booking, while the final purchase remains personal and inspectable in shop.</p>
+              <p className="mt-5 text-base leading-7 text-neutral-600">TradeWithDennis keeps the online experience focused on discovery and appointment booking, while the final purchase remains personal and inspectable in shop.</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {[
@@ -206,7 +206,7 @@ export default async function Home() {
                 ["Are devices genuine?", "Devices should be inspected and listed with accurate condition, storage, warranty, and stock status."],
                 ["What is the default deposit?", "The default down payment is 40%, but the admin can set this per product."],
                 ["How long are installments?", "The default term is 12 weeks unless a product shows a different term."],
-                ["Where is the shop?", "TradeWithDenis is at Circle Mall, Block C, Shop 27. Use the Google Maps link on the contact page for directions."]
+                ["Where is the shop?", "TradeWithDennis is at Circle Mall, Block C, Shop 27. Use the Google Maps link on the contact page for directions."]
               ].map(([q, a]) => (
                 <div key={q} className="premium-card p-5">
                   <h3 className="font-semibold">{q}</h3>

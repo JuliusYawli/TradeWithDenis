@@ -1,4 +1,4 @@
-# TradeWithDenis
+# TradeWithDennis
 
 Premium iPhone sales and transparent financing website for Ghana, built with Next.js 15, TypeScript, Tailwind CSS, lucide-react, and Supabase.
 
@@ -25,7 +25,7 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ADMIN_EMAILS=your-admin-email@example.com
 RESEND_API_KEY=your-resend-api-key
 SHOP_NOTIFICATION_EMAIL=shop-notifications@example.com
-EMAIL_FROM=TradeWithDenis <onboarding@resend.dev>
+EMAIL_FROM=TradeWithDennis <onboarding@resend.dev>
 ```
 
 The public site renders from local seed data when Supabase variables are missing, which makes development easy before the database is connected.
@@ -59,7 +59,7 @@ npm run dev:clean
 
 Open `http://localhost:3000`.
 
-Use `npm run dev:clean` during local development. It clears stale Next.js servers on ports `3000` and `3001`, removes the generated `.next` cache, then starts TradeWithDenis on `http://localhost:3000`.
+Use `npm run dev:clean` during local development. It clears stale Next.js servers on ports `3000` and `3001`, removes the generated `.next` cache, then starts TradeWithDennis on `http://localhost:3000`.
 
 Use `npm run verify` before committing or deploying. It stops any running local dev server before building so the generated `.next` cache does not get corrupted.
 
@@ -77,9 +77,9 @@ For customer review, it is fine to use the temporary Vercel URL first. Before pu
 When the project is complete and the final domain is ready:
 
 1. Add the custom domain to Vercel.
-2. Update `NEXT_PUBLIC_SITE_URL` in Vercel to the final domain, for example `https://tradewithdenis.com`.
+2. Update `NEXT_PUBLIC_SITE_URL` in Vercel to the final domain, for example `https://tradewithdennis.com`.
 3. Verify the same domain in Resend.
-4. Change `EMAIL_FROM` from `TradeWithDenis <onboarding@resend.dev>` to a verified sender on the domain, for example `TradeWithDenis <bookings@tradewithdenis.com>`.
+4. Change `EMAIL_FROM` from `TradeWithDennis <onboarding@resend.dev>` to a verified sender on the domain, for example `TradeWithDennis <bookings@tradewithdennis.com>`.
 5. Rotate/regenerate `SUPABASE_SERVICE_ROLE_KEY` before public launch because it was shared during setup.
 6. Rotate/regenerate `RESEND_API_KEY` before public launch because it was shared during setup.
 7. Replace the rotated keys in Vercel environment variables.

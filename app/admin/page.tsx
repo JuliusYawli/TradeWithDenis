@@ -483,7 +483,7 @@ export default async function AdminPage({
                   <h3 className="font-semibold text-ink">Business identity</h3>
                   <p className="mt-1 text-sm leading-6 text-neutral-600">Controls the public brand name and legal/business reference shown on the site.</p>
                   <div className="mt-4 grid gap-3 md:grid-cols-2">
-                    <label className="text-xs font-medium uppercase text-neutral-500">Brand name<input className="field mt-1" name="brand_name" defaultValue={settings.brand_name} placeholder="TradeWithDenis" /></label>
+                    <label className="text-xs font-medium uppercase text-neutral-500">Brand name<input className="field mt-1" name="brand_name" defaultValue={settings.brand_name} placeholder="TradeWithDennis" /></label>
                     <label className="text-xs font-medium uppercase text-neutral-500">Business registration number<input className="field mt-1" name="business_registration" defaultValue={settings.business_registration ?? ""} placeholder="BN..." /></label>
                   </div>
                 </div>
@@ -501,7 +501,7 @@ export default async function AdminPage({
                 </div>
                 <div className="rounded-lg border border-line bg-snow p-4">
                   <h3 className="font-semibold text-ink">Social links</h3>
-                  <p className="mt-1 text-sm leading-6 text-neutral-600">Used wherever the website links customers to TradeWithDenis social pages.</p>
+                  <p className="mt-1 text-sm leading-6 text-neutral-600">Used wherever the website links customers to TradeWithDennis social pages.</p>
                   <div className="mt-4 grid gap-3 md:grid-cols-3">
                     <label className="text-xs font-medium uppercase text-neutral-500">Instagram URL<input className="field mt-1" name="instagram_url" defaultValue={settings.instagram_url ?? ""} placeholder="https://instagram.com/..." /></label>
                     <label className="text-xs font-medium uppercase text-neutral-500">Facebook URL<input className="field mt-1" name="facebook_url" defaultValue={settings.facebook_url ?? ""} placeholder="https://facebook.com/..." /></label>

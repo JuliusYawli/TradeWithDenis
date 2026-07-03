@@ -58,7 +58,7 @@ create table if not exists public.testimonials (
 
 create table if not exists public.site_settings (
   id uuid primary key default gen_random_uuid(),
-  brand_name text default 'TradeWithDenis',
+  brand_name text default 'TradeWithDennis',
   phone text,
   whatsapp text,
   email text,

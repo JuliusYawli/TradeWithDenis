@@ -3,7 +3,7 @@ import type { Product, SiteSettings, Testimonial } from "./types";
 const image = "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1200&q=80";
 
 export const siteSettings: SiteSettings = {
-  brand_name: "TradeWithDenis",
+  brand_name: "TradeWithDennis",
   phone: "+233 54 370 9361",
   whatsapp: "+233 54 370 9361",
   email: "ampiawdennis5@gmail.com",

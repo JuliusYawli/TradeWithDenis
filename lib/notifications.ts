@@ -34,7 +34,7 @@ type TestimonialRequestNotificationInput = {
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const shopNotificationEmail = process.env.SHOP_NOTIFICATION_EMAIL || process.env.ADMIN_EMAILS?.split(",")[0]?.trim();
-const emailFrom = process.env.EMAIL_FROM || "TradeWithDenis <onboarding@resend.dev>";
+const emailFrom = process.env.EMAIL_FROM || "TradeWithDennis <onboarding@resend.dev>";
 
 function formatMoney(amount: number) {
   return new Intl.NumberFormat("en-GH", {
@@ -68,7 +68,7 @@ function statusMessage(status: string) {
     pending: "Your appointment request is still pending. The shop will contact you to confirm the details.",
     confirmed: "Your shop visit has been confirmed. Please come at the agreed date and time.",
     postponed: "Your appointment has been postponed. Please check the updated visit date and time below.",
-    completed: "Your appointment has been marked as completed. Thank you for visiting TradeWithDenis.",
+    completed: "Your appointment has been marked as completed. Thank you for visiting TradeWithDennis.",
     cancelled: "Your appointment has been cancelled. You can contact the shop if you want to book another visit.",
     no_show: "Your appointment has been marked as missed. Contact the shop if you want to arrange another visit."
   };
@@ -142,9 +142,9 @@ export async function sendAppointmentNotifications({
   `;
 
   const customerHtml = `
-    <h2>Your TradeWithDenis visit request is received</h2>
+    <h2>Your TradeWithDennis visit request is received</h2>
     <p>Hi ${customerName},</p>
-    <p>Thank you for booking a shop visit with TradeWithDenis. Your request has been received, and the team will contact you to confirm the details.</p>
+    <p>Thank you for booking a shop visit with TradeWithDennis. Your request has been received, and the team will contact you to confirm the details.</p>
     <p><strong>Requested appointment:</strong> ${escapeHtml(appointment)}</p>
     <p><strong>Product:</strong> ${escapeHtml(productLine)}</p>
     <p>Please remember that no sale is completed online. You will need to visit the shop to inspect the phone, confirm financing terms, and complete the order.</p>
@@ -153,11 +153,11 @@ export async function sendAppointmentNotifications({
   const tasks: Promise<void>[] = [];
 
   if (shopNotificationEmail) {
-    tasks.push(sendEmail(shopNotificationEmail, "New TradeWithDenis shop visit booking", shopHtml));
+    tasks.push(sendEmail(shopNotificationEmail, "New TradeWithDennis shop visit booking", shopHtml));
   }
 
   if (lead.email) {
-    tasks.push(sendEmail(lead.email, "Your TradeWithDenis visit request", customerHtml));
+    tasks.push(sendEmail(lead.email, "Your TradeWithDennis visit request", customerHtml));
   }
 
   if (!tasks.length) return;
@@ -184,7 +184,7 @@ export async function sendAppointmentUpdateNotification({
   const safeMessage = escapeHtml(statusMessage(status));
 
   const html = `
-    <h2>Your TradeWithDenis appointment was updated</h2>
+    <h2>Your TradeWithDennis appointment was updated</h2>
     <p>Hi ${customerName},</p>
     <p>${safeMessage}</p>
     <p><strong>Status:</strong> ${safeStatus}</p>
@@ -193,7 +193,7 @@ export async function sendAppointmentUpdateNotification({
   `;
 
   try {
-    await sendEmail(lead.email, `TradeWithDenis appointment ${statusLabel(status)}`, html);
+    await sendEmail(lead.email, `TradeWithDennis appointment ${statusLabel(status)}`, html);
   } catch (error) {
     console.error(error);
   }
@@ -209,9 +209,9 @@ export async function sendTestimonialRequestNotification({
   const safeReviewUrl = escapeHtml(reviewUrl);
 
   const html = `
-    <h2>How was your TradeWithDenis visit?</h2>
+    <h2>How was your TradeWithDennis visit?</h2>
     <p>Hi ${customerName},</p>
-    <p>Thank you for completing your shop visit with TradeWithDenis. If everything went well, please share a short review about your experience.</p>
+    <p>Thank you for completing your shop visit with TradeWithDennis. If everything went well, please share a short review about your experience.</p>
     <p>Your review will be checked by the shop before it appears on the website.</p>
     <p>
       <a href="${safeReviewUrl}" style="display:inline-block;background:#1553c5;color:#ffffff;padding:12px 18px;border-radius:999px;text-decoration:none;font-weight:700;">
@@ -223,7 +223,7 @@ export async function sendTestimonialRequestNotification({
   `;
 
   try {
-    await sendEmail(lead.email, "Share your TradeWithDenis experience", html);
+    await sendEmail(lead.email, "Share your TradeWithDennis experience", html);
   } catch (error) {
     console.error(error);
     throw error;

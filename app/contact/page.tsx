@@ -5,7 +5,7 @@ import { LeadForm } from "@/components/lead-form";
 import { Nav } from "@/components/nav";
 import { getSiteSettings } from "@/lib/data";
 
-export const metadata: Metadata = { title: "Contact", description: "Contact TradeWithDenis for iPhone sales and financing in Ghana." };
+export const metadata: Metadata = { title: "Contact", description: "Contact TradeWithDennis for iPhone sales and financing in Ghana." };
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();
@@ -16,7 +16,7 @@ export default async function ContactPage() {
       <Nav settings={settings} />
       <main className="container-page grid gap-8 py-8 sm:gap-10 sm:py-12 lg:grid-cols-[0.8fr_1.2fr]">
         <section>
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Contact TradeWithDenis</h1>
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Contact TradeWithDennis</h1>
           <p className="mt-3 max-w-xl text-neutral-600">
             Visit the shop, call, message on WhatsApp, or book an appointment for current iPhone stock and payment options.
           </p>

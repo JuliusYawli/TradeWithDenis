@@ -15,4 +15,4 @@ values
 on conflict do nothing;
 
 insert into public.site_settings (brand_name, phone, whatsapp, email, address, opening_hours, instagram_url, facebook_url, tiktok_url, google_maps_url, business_registration)
-values ('TradeWithDenis', '+233 54 370 9361', '+233 54 370 9361', 'ampiawdennis5@gmail.com', 'Circle Mall, Block C, Shop 27', '8:00 AM - 7:00 PM', 'https://www.instagram.com/tradewithdennis1?utm_source=qr', 'https://www.facebook.com/share/1F1FB8s6x3/?mibextid=wwXIfr', 'https://www.tiktok.com/@tradewithdennis?_r=1&_t=ZS-97gO9Qd1Q5A', 'https://maps.app.goo.gl/ey1DeFiVvcrZf6Lw8', 'BN120850225');
+values ('TradeWithDennis', '+233 54 370 9361', '+233 54 370 9361', 'ampiawdennis5@gmail.com', 'Circle Mall, Block C, Shop 27', '8:00 AM - 7:00 PM', 'https://www.instagram.com/tradewithdennis1?utm_source=qr', 'https://www.facebook.com/share/1F1FB8s6x3/?mibextid=wwXIfr', 'https://www.tiktok.com/@tradewithdennis?_r=1&_t=ZS-97gO9Qd1Q5A', 'https://maps.app.goo.gl/ey1DeFiVvcrZf6Lw8', 'BN120850225');

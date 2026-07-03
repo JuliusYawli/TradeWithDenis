@@ -15,7 +15,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
             <div className="inline-flex max-w-full rounded-md bg-white px-2.5 py-2">
               <Image
                 src="/logo.svg"
-                alt="TradeWithDenis"
+                alt="TradeWithDennis"
                 width={210}
                 height={58}
                 className="h-10 w-auto max-w-full object-contain"

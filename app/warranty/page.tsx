@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { getSiteSettings } from "@/lib/data";
 
-export const metadata: Metadata = { title: "Warranty", description: "TradeWithDenis warranty policy placeholders and device support terms." };
+export const metadata: Metadata = { title: "Warranty", description: "TradeWithDennis warranty policy placeholders and device support terms." };
 
 export default async function WarrantyPage() {
   const settings = await getSiteSettings();

@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://tradewithdenis.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://tradewithdennis.com"),
   title: {
-    default: "TradeWithDenis | iPhones & Apple Device Financing in Ghana",
-    template: "%s | TradeWithDenis"
+    default: "TradeWithDennis | iPhones & Apple Device Financing in Ghana",
+    template: "%s | TradeWithDennis"
   },
   description: "Premium iPhone sales and transparent weekly payment plans in Ghana.",
   openGraph: {
-    title: "TradeWithDenis",
+    title: "TradeWithDennis",
     description: "Clean, transparent Apple device sales and financing in Ghana.",
     images: ["/og.svg"]
   }
