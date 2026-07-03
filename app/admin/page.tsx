@@ -1,13 +1,14 @@
 import { redirect } from "next/navigation";
 import { BarChart3, CalendarDays, Database, Download, ExternalLink, LogOut, Mail, MessageCircle, Package, Phone, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
 import { AdminToast } from "@/components/admin-toast";
+import { AdminProductForm } from "@/components/admin-product-form";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
 import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
-import { deleteProduct, logoutAdmin, saveProduct, saveSettings, updateAppointmentStatus, updateLeadStatus, updateTestimonialStatus } from "./actions";
+import { deleteProduct, logoutAdmin, saveSettings, updateAppointmentStatus, updateLeadStatus, updateTestimonialStatus } from "./actions";
 
 const appointmentStatuses = [
   ["pending", "Pending"],
@@ -328,7 +329,7 @@ export default async function AdminPage({
                 <p className="mt-1 text-sm text-neutral-600">Create a new iPhone listing with price, payment plan, stock, warranty, and photos.</p>
               </div>
             </div>
-            <form action={saveProduct} className="mt-5 grid gap-3 rounded-md bg-snow p-4">
+            <AdminProductForm className="mt-5 grid gap-3 rounded-md bg-snow p-4" submitLabel="Add product" pendingLabel="Adding product..." resetOnSuccess>
               <AdminProductTemplateSelect />
               <div className="grid gap-3 md:grid-cols-3">
                 <label className="text-xs font-medium uppercase text-neutral-500">Model<input className="field mt-1" name="model" placeholder="iPhone 16 Pro Max" required /></label>
@@ -347,8 +348,7 @@ export default async function AdminPage({
               <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" placeholder="Image URLs, one per line" /></label>
               <label className="text-xs font-medium uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" placeholder="Description" /></label>
               <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" /> Featured</label>
-              <button className="btn-primary w-full md:w-fit" type="submit">Add product</button>
-            </form>
+            </AdminProductForm>
           </section>
 
           <section id="products" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
@@ -377,7 +377,7 @@ export default async function AdminPage({
                       </div>
                     </div>
                   </summary>
-                  <form action={saveProduct} className="mt-4 grid gap-3 border-t border-line pt-4">
+                  <AdminProductForm className="mt-4 grid gap-3 border-t border-line pt-4" submitLabel="Save product" pendingLabel="Saving product...">
                     <input type="hidden" name="id" value={product.id} />
                     <div className="grid gap-3 md:grid-cols-3">
                       <label className="text-xs font-medium uppercase text-neutral-500">Model<input className="field mt-1" name="model" defaultValue={product.model} required /></label>
@@ -397,11 +397,8 @@ export default async function AdminPage({
                     <label className="text-xs font-medium uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" defaultValue={product.description ?? ""} /></label>
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" defaultChecked={product.is_featured} /> Featured</label>
-                      <div className="flex flex-wrap gap-2">
-                        <button className="btn-primary px-4 py-2" type="submit">Save product</button>
-                      </div>
                     </div>
-                  </form>
+                  </AdminProductForm>
                   <form action={deleteProduct} className="mt-3">
                     <input type="hidden" name="id" value={product.id} />
                     <button className="text-sm font-medium text-danger" type="submit">Delete product</button>
