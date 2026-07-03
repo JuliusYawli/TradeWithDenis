@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { BarChart3, CalendarDays, Database, Download, ExternalLink, LogOut, Mail, MessageCircle, Package, Phone, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
+import { BarChart3, CalendarDays, Database, Download, ExternalLink, KeyRound, LogOut, Mail, MessageCircle, Package, Phone, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
 import { AdminToast } from "@/components/admin-toast";
+import { AdminPasswordForm } from "@/components/admin-password-form";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
@@ -116,6 +117,7 @@ export default async function AdminPage({
     ["Products", "#products", Package, products.length],
     ["Backups", "#backups", Database, null],
     ["Settings", "#settings", Settings, null],
+    ["Password", "#password", KeyRound, null],
     ["Testimonials", "#testimonials", Star, testimonials.length]
   ];
   const backupExports: Array<[string, string, string, number | string]> = [
@@ -508,6 +510,12 @@ export default async function AdminPage({
                 </div>
                 <button className="btn-primary w-full sm:w-fit" type="submit">Save settings</button>
               </form>
+            </section>
+            <section id="password" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
+              <KeyRound className="h-5 w-5 text-gold" />
+              <h2 className="mt-3 text-xl font-semibold">Password</h2>
+              <p className="mt-1 text-sm leading-6 text-neutral-600">Change the password for the admin account currently signed in on this device.</p>
+              <AdminPasswordForm />
             </section>
             <section id="testimonials" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">

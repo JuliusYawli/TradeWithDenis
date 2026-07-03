@@ -128,6 +128,7 @@ textarea {
 .admin-shell:has(#products:target) .admin-nav-link[href="#products"],
 .admin-shell:has(#backups:target) .admin-nav-link[href="#backups"],
 .admin-shell:has(#settings:target) .admin-nav-link[href="#settings"],
+.admin-shell:has(#password:target) .admin-nav-link[href="#password"],
 .admin-shell:has(#testimonials:target) .admin-nav-link[href="#testimonials"] {
   border-color: #dbeafe;
   background: #f7fbff;

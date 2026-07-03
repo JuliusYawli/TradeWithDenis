@@ -30,7 +30,6 @@ export function LoginForm() {
   return (
     <form action={onSubmit} className="w-full max-w-md rounded-lg border border-line bg-white p-6 shadow-soft">
       <h1 className="text-2xl font-semibold">Admin login</h1>
-      <p className="mt-2 text-sm text-neutral-600">Sign in with a Supabase Auth admin user.</p>
       <input className="field mt-6" name="email" type="email" placeholder="Email" required />
       <input className="field mt-3" name="password" type="password" placeholder="Password" required />
       {error ? <p className="mt-3 rounded-md bg-danger/10 px-3 py-2 text-sm text-danger">{error}</p> : null}
