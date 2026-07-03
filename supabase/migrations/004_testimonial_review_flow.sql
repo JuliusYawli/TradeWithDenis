@@ -52,8 +52,8 @@ create policy "Public can read approved featured testimonials"
 drop policy if exists "Approved admins manage testimonial requests" on public.testimonial_requests;
 create policy "Approved admins manage testimonial requests"
   on public.testimonial_requests for all
-  using (public.is_admin_email(auth.email()))
-  with check (public.is_admin_email(auth.email()));
+  using (public.is_admin())
+  with check (public.is_admin());
 
 drop trigger if exists set_testimonials_updated_at on public.testimonials;
 create trigger set_testimonials_updated_at
