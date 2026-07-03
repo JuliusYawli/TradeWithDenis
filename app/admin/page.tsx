@@ -1,22 +1,14 @@
 import { redirect } from "next/navigation";
 import { BarChart3, CalendarDays, Database, Download, ExternalLink, LogOut, Mail, MessageCircle, Package, Phone, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
 import { AdminToast } from "@/components/admin-toast";
-import { AdminActionForm } from "@/components/admin-product-form";
+import { AdminProductForm } from "@/components/admin-product-form";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
 import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
-import {
-  deleteProductInline,
-  logoutAdmin,
-  saveProductInline,
-  saveSettingsInline,
-  updateAppointmentStatusInline,
-  updateLeadStatusInline,
-  updateTestimonialStatusInline
-} from "./actions";
+import { deleteProduct, logoutAdmin, saveSettings, updateAppointmentStatus, updateLeadStatus, updateTestimonialStatus } from "./actions";
 
 const appointmentStatuses = [
   ["pending", "Pending"],
@@ -275,7 +267,7 @@ export default async function AdminPage({
                     <a className="btn-secondary px-3 py-2" href={whatsappHref(appointment.leads?.phone)} target="_blank" rel="noreferrer"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
                     {appointment.leads?.email ? <a className="btn-secondary px-3 py-2" href={`mailto:${appointment.leads.email}`}><Mail className="h-4 w-4" /> Email</a> : null}
                   </div>
-                  <AdminActionForm action={updateAppointmentStatusInline} className="mt-3 grid gap-2 rounded-md border border-line bg-white p-3" submitLabel="Save appointment" pendingLabel="Saving appointment...">
+                  <form action={updateAppointmentStatus} className="mt-3 grid gap-2 rounded-md border border-line bg-white p-3">
                     <input type="hidden" name="id" value={appointment.id} />
                     <div className="grid gap-2 md:grid-cols-3">
                       <label className="text-xs font-medium uppercase text-neutral-500">Status<select className="field mt-1 bg-white" name="status" defaultValue={appointment.status}>
@@ -291,7 +283,8 @@ export default async function AdminPage({
                       </select></label>
                     </div>
                     <label className="text-xs font-medium uppercase text-neutral-500">Internal note<textarea className="field mt-1 min-h-20" name="notes" defaultValue={appointment.notes ?? ""} placeholder="Example: customer asked to postpone to Friday, confirmed by WhatsApp" /></label>
-                  </AdminActionForm>
+                    <button className="btn-primary w-full px-4 py-2 md:w-fit" type="submit">Save appointment</button>
+                  </form>
                 </div>
               )) : <p className="text-sm text-neutral-600">No appointment bookings yet.</p>}
             </div>
@@ -318,12 +311,13 @@ export default async function AdminPage({
                     <a className="btn-secondary px-3 py-2" href={whatsappHref(lead.phone)} target="_blank" rel="noreferrer"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
                     {lead.email ? <a className="btn-secondary px-3 py-2" href={`mailto:${lead.email}`}><Mail className="h-4 w-4" /> Email</a> : null}
                   </div>
-                  <AdminActionForm action={updateLeadStatusInline} className="mt-3 flex flex-wrap items-start gap-2" submitLabel="Update" pendingLabel="Updating..." buttonClassName="btn-secondary px-4 py-2 disabled:cursor-not-allowed disabled:opacity-70">
+                  <form action={updateLeadStatus} className="mt-3 flex flex-wrap gap-2">
                     <input type="hidden" name="id" value={lead.id} />
                     <select className="field max-w-44 bg-white" name="status" defaultValue={lead.status}>
                       {leadStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
                     </select>
-                  </AdminActionForm>
+                    <button className="btn-secondary px-4 py-2" type="submit">Update</button>
+                  </form>
                 </div>
               )) : <p className="text-sm text-neutral-600">No leads yet.</p>}
             </div>
@@ -335,7 +329,7 @@ export default async function AdminPage({
                 <p className="mt-1 text-sm text-neutral-600">Create a new iPhone listing with price, payment plan, stock, warranty, and photos.</p>
               </div>
             </div>
-            <AdminActionForm action={saveProductInline} className="mt-5 grid gap-3 rounded-md bg-snow p-4" submitLabel="Add product" pendingLabel="Adding product..." resetOnSuccess>
+            <AdminProductForm className="mt-5 grid gap-3 rounded-md bg-snow p-4" submitLabel="Add product" pendingLabel="Adding product..." resetOnSuccess>
               <AdminProductTemplateSelect />
               <div className="grid gap-3 md:grid-cols-3">
                 <label className="text-xs font-medium uppercase text-neutral-500">Model<input className="field mt-1" name="model" placeholder="iPhone 16 Pro Max" required /></label>
@@ -354,7 +348,7 @@ export default async function AdminPage({
               <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" placeholder="Image URLs, one per line" /></label>
               <label className="text-xs font-medium uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" placeholder="Description" /></label>
               <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" /> Featured</label>
-            </AdminActionForm>
+            </AdminProductForm>
           </section>
 
           <section id="products" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
@@ -383,7 +377,7 @@ export default async function AdminPage({
                       </div>
                     </div>
                   </summary>
-                  <AdminActionForm action={saveProductInline} className="mt-4 grid gap-3 border-t border-line pt-4" submitLabel="Save product" pendingLabel="Saving product...">
+                  <AdminProductForm className="mt-4 grid gap-3 border-t border-line pt-4" submitLabel="Save product" pendingLabel="Saving product...">
                     <input type="hidden" name="id" value={product.id} />
                     <div className="grid gap-3 md:grid-cols-3">
                       <label className="text-xs font-medium uppercase text-neutral-500">Model<input className="field mt-1" name="model" defaultValue={product.model} required /></label>
@@ -404,10 +398,11 @@ export default async function AdminPage({
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" defaultChecked={product.is_featured} /> Featured</label>
                     </div>
-                  </AdminActionForm>
-                  <AdminActionForm action={deleteProductInline} className="mt-3 flex flex-wrap items-start gap-2" submitLabel="Delete product" pendingLabel="Deleting..." buttonClassName="text-sm font-medium text-danger disabled:cursor-not-allowed disabled:opacity-70">
+                  </AdminProductForm>
+                  <form action={deleteProduct} className="mt-3">
                     <input type="hidden" name="id" value={product.id} />
-                  </AdminActionForm>
+                    <button className="text-sm font-medium text-danger" type="submit">Delete product</button>
+                  </form>
                 </details>
               ))}
             </div>
@@ -477,7 +472,7 @@ export default async function AdminPage({
               <Settings className="h-5 w-5 text-gold" />
               <h2 className="mt-3 text-xl font-semibold">Site settings</h2>
               <p className="mt-1 text-sm leading-6 text-neutral-600">These details appear across the public website, footer, contact page, appointment emails, and business schema.</p>
-              <AdminActionForm action={saveSettingsInline} className="mt-5 grid gap-5" submitLabel="Save settings" pendingLabel="Saving settings...">
+              <form action={saveSettings} className="mt-5 grid gap-5">
                 {"id" in settings ? <input type="hidden" name="id" value={String(settings.id)} /> : null}
                 <div className="rounded-lg border border-line bg-snow p-4">
                   <h3 className="font-semibold text-ink">Business identity</h3>
@@ -508,7 +503,8 @@ export default async function AdminPage({
                     <label className="text-xs font-medium uppercase text-neutral-500">TikTok URL<input className="field mt-1" name="tiktok_url" defaultValue={settings.tiktok_url ?? ""} placeholder="https://tiktok.com/..." /></label>
                   </div>
                 </div>
-              </AdminActionForm>
+                <button className="btn-primary w-full sm:w-fit" type="submit">Save settings</button>
+              </form>
             </section>
             <section id="testimonials" className="admin-panel scroll-mt-8 rounded-lg border border-line bg-white p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
@@ -544,18 +540,20 @@ export default async function AdminPage({
                           {testimonialStatus === "approved" && testimonial.is_featured ? "Shown on homepage" : testimonialStatus === "approved" ? "Approved but hidden from homepage" : "Not shown on homepage"}
                         </p>
                         <div className="flex flex-wrap gap-2">
-                          <AdminActionForm action={updateTestimonialStatusInline} className="flex flex-wrap items-center gap-2" submitLabel={testimonialStatus === "approved" ? "Save" : "Approve"} pendingLabel="Saving..." buttonClassName="btn-primary px-4 py-2 disabled:cursor-not-allowed disabled:opacity-70">
+                          <form action={updateTestimonialStatus} className="flex flex-wrap items-center gap-2">
                             <input type="hidden" name="id" value={testimonial.id} />
                             <input type="hidden" name="status" value="approved" />
                             <label className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-line bg-white px-3 text-xs font-medium text-neutral-700">
                               <input name="is_featured" type="checkbox" defaultChecked={testimonial.is_featured || testimonialStatus === "pending"} />
                               Show on homepage
                             </label>
-                          </AdminActionForm>
-                          <AdminActionForm action={updateTestimonialStatusInline} className="flex flex-wrap items-center gap-2" submitLabel="Decline" pendingLabel="Declining..." buttonClassName="btn-secondary px-4 py-2 disabled:cursor-not-allowed disabled:opacity-70">
+                            <button className="btn-primary px-4 py-2" type="submit">{testimonialStatus === "approved" ? "Save" : "Approve"}</button>
+                          </form>
+                          <form action={updateTestimonialStatus}>
                             <input type="hidden" name="id" value={testimonial.id} />
                             <input type="hidden" name="status" value="declined" />
-                          </AdminActionForm>
+                            <button className="btn-secondary px-4 py-2" type="submit">Decline</button>
+                          </form>
                         </div>
                       </div>
                     </div>
