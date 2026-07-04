@@ -132,6 +132,21 @@ export default async function Home() {
                 </div>
               ))}
             </div>
+            <div className="mt-8 rounded-xl border border-line bg-white p-5 shadow-sm sm:mt-10 sm:p-6">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                <div className="max-w-2xl">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red">Ready to visit?</p>
+                  <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">Book a shop appointment and inspect your iPhone in person.</h2>
+                  <p className="mt-3 text-sm leading-6 text-neutral-600 sm:text-base">The shop receives your request, prepares for your visit, and follows up through your preferred contact method.</p>
+                </div>
+                <div className="flex shrink-0 flex-col gap-3 sm:flex-row lg:justify-end">
+                  <AppointmentModalButton className="btn-primary w-full sm:w-auto" label="Book appointment" showIcon={false}>
+                    <LeadForm variant="modal" />
+                  </AppointmentModalButton>
+                  <Link className="btn-secondary w-full sm:w-auto" href="/iphones">Browse iPhones</Link>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -221,21 +236,6 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="bg-white py-16 sm:py-24">
-          <div className="container-page">
-            <div className="rounded-[2rem] border border-line bg-ink p-7 text-center text-white shadow-soft sm:p-10">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-200">Ready to visit?</p>
-              <h2 className="mx-auto mt-4 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">Book a shop appointment and inspect your iPhone in person.</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/70 sm:text-base">The shop receives your request, prepares for your visit, and follows up through your preferred contact method.</p>
-              <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-                <AppointmentModalButton className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/20 px-5 py-3 text-sm font-medium text-white transition hover:bg-white hover:text-ink focus:outline-none focus:ring-2 focus:ring-white/30" label="Book appointment" showIcon={false}>
-                  <LeadForm variant="modal" />
-                </AppointmentModalButton>
-                <Link className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/20 px-5 py-3 text-sm font-medium text-white transition hover:bg-white hover:text-ink" href="/iphones">Browse iPhones</Link>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
       <a className="fixed bottom-20 right-4 z-40 rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-soft md:bottom-6" href={`https://wa.me/${settings.whatsapp?.replace(/\D/g, "")}`}>WhatsApp</a>
       <Footer settings={settings} />
