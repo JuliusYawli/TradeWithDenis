@@ -57,33 +57,33 @@ export default async function Home() {
       <main>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }} />
 
-        <section id="top" className="hero-showcase border-b border-line bg-white">
-          <div className="container-page py-12 text-center sm:py-16 lg:py-20">
+        <section id="top" className="hero-showcase relative overflow-hidden border-b border-line bg-white">
+          <div className="container-page relative py-9 text-center sm:py-16 lg:py-20">
             <div className="mx-auto flex max-w-4xl flex-col items-center">
               <p className="section-eyebrow">
                 Premium iPhones in Ghana
               </p>
-              <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-ink sm:text-5xl lg:text-6xl">
-                Own your next iPhone with confidence.
+              <h1 className="mt-4 max-w-5xl text-balance text-3xl font-semibold tracking-tight text-ink sm:mt-6 sm:text-5xl lg:whitespace-nowrap lg:text-6xl">
+                Own Your Next iPhone With Confidence.
               </h1>
-              <div className="mt-6 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
-                <div className="rounded-xl border border-line bg-white p-4 shadow-sm">
+              <div className="mt-5 grid w-full max-w-3xl gap-2 text-left sm:mt-6 sm:grid-cols-3 sm:gap-3">
+                <div className="rounded-lg border border-line bg-white/90 p-3 shadow-sm backdrop-blur sm:rounded-xl sm:p-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-red">40% deposit ready</p>
-                  <p className="mt-1 text-sm font-medium leading-6 text-neutral-600">Discuss payment terms before visiting.</p>
+                  <p className="mt-1 text-sm font-medium leading-5 text-neutral-600 sm:leading-6">Discuss payment terms before visiting.</p>
                 </div>
-                <div className="rounded-xl border border-line bg-white p-4 shadow-sm">
+                <div className="rounded-lg border border-line bg-white/90 p-3 shadow-sm backdrop-blur sm:rounded-xl sm:p-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-red">No online checkout</p>
-                  <p className="mt-1 text-sm font-medium leading-6 text-neutral-600">Every order is completed at the shop.</p>
+                  <p className="mt-1 text-sm font-medium leading-5 text-neutral-600 sm:leading-6">Every order is completed at the shop.</p>
                 </div>
-                <div className="rounded-xl border border-line bg-white p-4 shadow-sm">
+                <div className="rounded-lg border border-line bg-white/90 p-3 shadow-sm backdrop-blur sm:rounded-xl sm:p-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-red">Prepared appointment</p>
-                  <p className="mt-1 text-sm font-medium leading-6 text-neutral-600">The shop knows what you want to inspect.</p>
+                  <p className="mt-1 text-sm font-medium leading-5 text-neutral-600 sm:leading-6">The shop knows what you want to inspect.</p>
                 </div>
               </div>
               <Suspense fallback={null}>
                 <HomeActionModals calculator={<PaymentCalculatorPanel />} appointment={<LeadForm variant="modal" />} />
               </Suspense>
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-neutral-500 sm:text-sm">
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-medium text-neutral-500 sm:mt-6 sm:gap-x-5 sm:text-sm">
                 <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-gold" /> Verified stock</span>
                 <span className="hidden h-1 w-1 rounded-full bg-neutral-300 sm:block" />
                 <span className="inline-flex items-center gap-1.5"><Clock className="h-4 w-4 text-gold" /> {settings.opening_hours}</span>
@@ -92,17 +92,17 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="relative mx-auto mt-12 max-w-6xl sm:mt-16">
-              <div className="showcase-frame relative overflow-hidden rounded-[1.75rem] border border-white/70 bg-snow shadow-soft sm:rounded-[2.25rem]">
+            <div className="relative mx-auto mt-8 max-w-6xl sm:mt-16">
+              <div className="showcase-frame relative overflow-hidden rounded-2xl border border-white/80 bg-snow shadow-soft sm:rounded-[2.25rem]">
                 <div className="aspect-[16/9] bg-cover bg-center" style={{ backgroundImage: `url("${heroImageUrl}")` }} />
               </div>
             </div>
           </div>
         </section>
 
-        <section className="border-b border-line bg-white py-8">
+        <section className="border-b border-line bg-white/90 py-6 backdrop-blur sm:py-8">
           <div className="container-page">
-            <div className="grid gap-y-6 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-y-6 lg:grid-cols-5">
               {trustItems.map(([label, Icon]) => (
                 <div key={label} className="flex flex-col items-center gap-2 text-center sm:flex-row sm:justify-center sm:gap-3">
                   <Icon className="h-5 w-5 text-gold" />
@@ -113,21 +113,21 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="how-it-works" className="scroll-mt-24 bg-snow py-16 sm:py-24">
+        <section id="how-it-works" className="scroll-mt-24 bg-snow py-12 sm:py-24">
           <div className="container-page">
             <div className="mx-auto max-w-2xl text-center">
               <p className="section-eyebrow">How it works</p>
-              <h2 className="mt-5 text-3xl font-semibold tracking-tight sm:text-4xl">Simple flow. Serious purchase.</h2>
+              <h2 className="mt-4 text-2xl font-semibold tracking-tight sm:mt-5 sm:text-4xl">Simple flow. Serious purchase.</h2>
               <p className="mt-5 text-base leading-7 text-neutral-600 sm:text-lg">The website helps customers choose and book. The final decision happens in the shop after inspection.</p>
             </div>
-            <div className="mt-12 grid gap-5 md:grid-cols-3">
+            <div className="mt-8 grid gap-4 sm:mt-12 md:grid-cols-3 md:gap-5">
               {steps.map(([title, copy, Icon], index) => (
-                <div key={title} className="premium-card p-7">
+                <div key={title} className="premium-card p-5 sm:p-7">
                   <div className="flex items-start justify-between">
                     <span className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-400">Step 0{index + 1}</span>
                     <Icon className="h-6 w-6 text-gold" />
                   </div>
-                  <h3 className="mt-12 text-2xl font-semibold tracking-tight text-ink">{title}</h3>
+                  <h3 className="mt-8 text-xl font-semibold tracking-tight text-ink sm:mt-12 sm:text-2xl">{title}</h3>
                   <p className="mt-3 text-sm leading-6 text-neutral-600">{copy}</p>
                 </div>
               ))}
