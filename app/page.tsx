@@ -66,9 +66,20 @@ export default async function Home() {
               <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-ink sm:text-5xl lg:text-6xl">
                 Own your next iPhone with confidence.
               </h1>
-              <p className="mt-6 max-w-2xl text-balance text-base leading-7 text-neutral-600 sm:text-xl sm:leading-8">
-                Browse verified iPhones, see payment details clearly, then book a shop appointment to inspect the device and complete the order in person.
-              </p>
+              <div className="mt-6 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
+                <div className="rounded-xl border border-line bg-white p-4 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-red">40% deposit ready</p>
+                  <p className="mt-1 text-sm font-medium leading-6 text-neutral-600">Discuss payment terms before visiting.</p>
+                </div>
+                <div className="rounded-xl border border-line bg-white p-4 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-red">No online checkout</p>
+                  <p className="mt-1 text-sm font-medium leading-6 text-neutral-600">Every order is completed at the shop.</p>
+                </div>
+                <div className="rounded-xl border border-line bg-white p-4 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-red">Prepared appointment</p>
+                  <p className="mt-1 text-sm font-medium leading-6 text-neutral-600">The shop knows what you want to inspect.</p>
+                </div>
+              </div>
               <Suspense fallback={null}>
                 <HomeActionModals calculator={<PaymentCalculatorPanel />} appointment={<LeadForm variant="modal" />} />
               </Suspense>
