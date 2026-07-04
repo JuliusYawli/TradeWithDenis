@@ -8,10 +8,13 @@ import { createPortal } from "react-dom";
 import { useLockBodyScroll } from "@/components/use-lock-body-scroll";
 
 const links = [
+  ["Home", "/"],
   ["How It Works", "/#how-it-works"],
-  ["iPhones", "/iphones"],
-  ["Why Us", "/#why-us"],
-  ["FAQ", "/#faq"]
+  ["Catalog", "/iphones"],
+  ["Reviews", "/reviews"],
+  ["Warranty", "/warranty"],
+  ["FAQ", "/#faq"],
+  ["Contact", "/contact"]
 ] as const;
 
 type MobileModalName = "calculator" | "appointment" | null;
