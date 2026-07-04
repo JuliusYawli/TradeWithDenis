@@ -221,6 +221,7 @@ async function exportSettings(supabase: ServerSupabase | null) {
     tiktok_url: settings.tiktok_url,
     google_maps_url: settings.google_maps_url,
     business_registration: settings.business_registration,
+    homepage_hero_image_url: settings.homepage_hero_image_url,
     created_at: settings.created_at,
     updated_at: settings.updated_at
   }));
@@ -238,6 +239,7 @@ async function exportSettings(supabase: ServerSupabase | null) {
     ["tiktok_url", "TikTok"],
     ["google_maps_url", "Google Maps"],
     ["business_registration", "Business registration"],
+    ["homepage_hero_image_url", "Homepage hero image"],
     ["created_at", "Created at"],
     ["updated_at", "Updated at"]
   ], rows);

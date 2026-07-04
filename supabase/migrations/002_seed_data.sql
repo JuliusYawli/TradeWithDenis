@@ -14,5 +14,5 @@ values
 ('Kwame A.', 'Tema', 5, 'The financing breakdown made it easy to decide before reserving.', true)
 on conflict do nothing;
 
-insert into public.site_settings (brand_name, phone, whatsapp, email, address, opening_hours, instagram_url, facebook_url, tiktok_url, google_maps_url, business_registration)
-values ('TradeWithDennis', '+233 54 370 9361', '+233 54 370 9361', 'ampiawdennis5@gmail.com', 'Circle Mall, Block C, Shop 27', '8:00 AM - 7:00 PM', 'https://www.instagram.com/tradewithdennis1?utm_source=qr', 'https://www.facebook.com/share/1F1FB8s6x3/?mibextid=wwXIfr', 'https://www.tiktok.com/@tradewithdennis?_r=1&_t=ZS-97gO9Qd1Q5A', 'https://maps.app.goo.gl/ey1DeFiVvcrZf6Lw8', 'BN120850225');
+insert into public.site_settings (brand_name, phone, whatsapp, email, address, opening_hours, instagram_url, facebook_url, tiktok_url, google_maps_url, business_registration, homepage_hero_image_url)
+values ('TradeWithDennis', '+233 54 370 9361', '+233 54 370 9361', 'ampiawdennis5@gmail.com', 'Circle Mall, Block C, Shop 27', '8:00 AM - 7:00 PM', 'https://www.instagram.com/tradewithdennis1?utm_source=qr', 'https://www.facebook.com/share/1F1FB8s6x3/?mibextid=wwXIfr', 'https://www.tiktok.com/@tradewithdennis?_r=1&_t=ZS-97gO9Qd1Q5A', 'https://maps.app.goo.gl/ey1DeFiVvcrZf6Lw8', 'BN120850225', 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85');

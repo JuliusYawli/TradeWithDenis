@@ -13,7 +13,8 @@ export const siteSettings: SiteSettings = {
   facebook_url: "https://www.facebook.com/share/1F1FB8s6x3/?mibextid=wwXIfr",
   tiktok_url: "https://www.tiktok.com/@tradewithdennis?_r=1&_t=ZS-97gO9Qd1Q5A",
   google_maps_url: "https://maps.app.goo.gl/ey1DeFiVvcrZf6Lw8",
-  business_registration: "BN120850225"
+  business_registration: "BN120850225",
+  homepage_hero_image_url: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85"
 };
 
 export const products: Product[] = [

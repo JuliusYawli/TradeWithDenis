@@ -38,6 +38,7 @@ const steps: Array<[string, string, LucideIcon]> = [
 
 export default async function Home() {
   const [settings, featured, testimonials] = await Promise.all([getSiteSettings(), getFeaturedProducts(), getTestimonials()]);
+  const heroImageUrl = settings.homepage_hero_image_url || "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85";
 
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
@@ -79,7 +80,7 @@ export default async function Home() {
 
             <div className="relative mx-auto mt-12 max-w-6xl sm:mt-16">
               <div className="showcase-frame relative overflow-hidden rounded-[1.75rem] border border-white/70 bg-snow shadow-soft sm:rounded-[2.25rem]">
-                <div className="aspect-[16/9] bg-[url('https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85')] bg-cover bg-center" />
+                <div className="aspect-[16/9] bg-cover bg-center" style={{ backgroundImage: `url("${heroImageUrl}")` }} />
                 <div className="grid gap-3 rounded-2xl border border-white/60 bg-white p-4 text-left shadow-soft md:absolute md:inset-x-6 md:bottom-6 md:grid-cols-3 md:bg-white/90 md:backdrop-blur">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wide text-red">40% deposit ready</p>

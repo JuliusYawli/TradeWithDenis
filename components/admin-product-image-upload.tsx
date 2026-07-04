@@ -44,24 +44,51 @@ async function resizeImage(file: File) {
   });
 }
 
-function appendUrlToTextarea(form: HTMLFormElement, textareaName: string, url: string) {
-  const textarea = form.elements.namedItem(textareaName);
-  if (!(textarea instanceof HTMLTextAreaElement)) return false;
+function addUrlToField(form: HTMLFormElement, fieldName: string, url: string, mode: "append" | "replace") {
+  const field = form.elements.namedItem(fieldName);
 
-  const currentUrls = textarea.value
+  if (field instanceof HTMLInputElement) {
+    field.value = url;
+    field.dispatchEvent(new Event("input", { bubbles: true }));
+    return true;
+  }
+
+  if (!(field instanceof HTMLTextAreaElement)) return false;
+
+  if (mode === "replace") {
+    field.value = url;
+    field.dispatchEvent(new Event("input", { bubbles: true }));
+    return true;
+  }
+
+  const currentUrls = field.value
     .split("\n")
     .map((value) => value.trim())
     .filter(Boolean);
 
-  textarea.value = [...currentUrls, url].join("\n");
-  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+  field.value = [...currentUrls, url].join("\n");
+  field.dispatchEvent(new Event("input", { bubbles: true }));
   return true;
 }
 
-export function AdminProductImageUpload({ textareaName = "image_urls" }: { textareaName?: string }) {
+export function AdminProductImageUpload({
+  fieldName = "image_urls",
+  mode = "append",
+  title = "Product photos",
+  buttonLabel = "Upload photos",
+  helpText = "Upload real photos from this device. They will be added to Image URLs automatically.",
+  multiple = true
+}: {
+  fieldName?: string;
+  mode?: "append" | "replace";
+  title?: string;
+  buttonLabel?: string;
+  helpText?: string;
+  multiple?: boolean;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [state, setState] = useState<UploadState>("idle");
-  const [message, setMessage] = useState("Upload real photos from this device. They will be added to Image URLs automatically.");
+  const [message, setMessage] = useState(helpText);
 
   async function uploadFiles(files: FileList | null) {
     if (!files?.length) return;
@@ -74,12 +101,13 @@ export function AdminProductImageUpload({ textareaName = "image_urls" }: { texta
     }
 
     setState("uploading");
-    setMessage(`Uploading ${files.length} photo${files.length === 1 ? "" : "s"}...`);
+    const selectedFiles = multiple ? Array.from(files) : Array.from(files).slice(0, 1);
+    setMessage(`Uploading ${selectedFiles.length} photo${selectedFiles.length === 1 ? "" : "s"}...`);
 
     try {
       let uploaded = 0;
 
-      for (const file of Array.from(files)) {
+      for (const file of selectedFiles) {
         if (!file.type.startsWith("image/")) {
           throw new Error("Only image files can be uploaded.");
         }
@@ -98,7 +126,7 @@ export function AdminProductImageUpload({ textareaName = "image_urls" }: { texta
           throw new Error(result.error ?? "Image upload failed.");
         }
 
-        if (!appendUrlToTextarea(form, textareaName, result.url)) {
+        if (!addUrlToField(form, fieldName, result.url, mode)) {
           throw new Error("Could not add the image URL to the form.");
         }
 
@@ -106,7 +134,7 @@ export function AdminProductImageUpload({ textareaName = "image_urls" }: { texta
       }
 
       setState("done");
-      setMessage(`${uploaded} photo${uploaded === 1 ? "" : "s"} uploaded. Click Save product to keep the change.`);
+      setMessage(`${uploaded} photo${uploaded === 1 ? "" : "s"} uploaded. Click Save to keep the change.`);
     } catch (error) {
       setState("error");
       setMessage(error instanceof Error ? error.message : "Image upload failed.");
@@ -122,12 +150,12 @@ export function AdminProductImageUpload({ textareaName = "image_urls" }: { texta
         className="sr-only"
         type="file"
         accept="image/png,image/jpeg,image/webp"
-        multiple
+        multiple={multiple}
         onChange={(event) => uploadFiles(event.target.files)}
       />
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-semibold text-ink">Product photos</p>
+          <p className="text-sm font-semibold text-ink">{title}</p>
           <p className={`mt-1 text-xs leading-5 ${state === "error" ? "text-danger" : "text-neutral-600"}`}>{message}</p>
         </div>
         <button
@@ -137,7 +165,7 @@ export function AdminProductImageUpload({ textareaName = "image_urls" }: { texta
           disabled={state === "uploading"}
         >
           {state === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
-          Upload photos
+          {buttonLabel}
         </button>
       </div>
     </div>

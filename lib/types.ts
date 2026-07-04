@@ -89,4 +89,5 @@ export type SiteSettings = {
   tiktok_url: string | null;
   google_maps_url: string | null;
   business_registration: string | null;
+  homepage_hero_image_url?: string | null;
 };

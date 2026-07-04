@@ -418,6 +418,21 @@ export default async function AdminPage({
                   </div>
                 </div>
                 <div className="rounded-lg border border-line bg-snow p-4">
+                  <h3 className="font-semibold text-ink">Homepage image</h3>
+                  <p className="mt-1 text-sm leading-6 text-neutral-600">Controls the large image shown near the top of the homepage.</p>
+                  <div className="mt-4 grid gap-2">
+                    <AdminProductImageUpload
+                      fieldName="homepage_hero_image_url"
+                      mode="replace"
+                      title="Homepage hero image"
+                      buttonLabel="Upload homepage image"
+                      helpText="Upload one shop or product photo. It will replace the homepage hero image URL below."
+                      multiple={false}
+                    />
+                    <label className="text-xs font-medium uppercase text-neutral-500">Homepage hero image URL<input className="field mt-1" name="homepage_hero_image_url" defaultValue={settings.homepage_hero_image_url ?? ""} placeholder="Upload a photo or paste an image URL" /></label>
+                  </div>
+                </div>
+                <div className="rounded-lg border border-line bg-snow p-4">
                   <h3 className="font-semibold text-ink">Contact and location</h3>
                   <p className="mt-1 text-sm leading-6 text-neutral-600">Used in the header/footer, contact page, booking emails, WhatsApp links, and Google directions.</p>
                   <div className="mt-4 grid gap-3 md:grid-cols-2">

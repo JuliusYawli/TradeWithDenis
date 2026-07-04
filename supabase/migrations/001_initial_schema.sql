@@ -69,6 +69,7 @@ create table if not exists public.site_settings (
   tiktok_url text,
   google_maps_url text,
   business_registration text,
+  homepage_hero_image_url text,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );

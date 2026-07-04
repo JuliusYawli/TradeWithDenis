@@ -260,6 +260,7 @@ export async function saveSettings(formData: FormData) {
     facebook_url: String(formData.get("facebook_url") || "") || null,
     tiktok_url: String(formData.get("tiktok_url") || "") || null,
     google_maps_url: String(formData.get("google_maps_url") || "") || null,
+    homepage_hero_image_url: String(formData.get("homepage_hero_image_url") || "") || null,
     business_registration: String(formData.get("business_registration") || "") || null
   };
 
@@ -267,7 +268,29 @@ export async function saveSettings(formData: FormData) {
     ? supabase.from("site_settings").update(payload).eq("id", id)
     : supabase.from("site_settings").insert(payload);
   const { error } = await query;
-  if (error) throw new Error(error.message);
+  if (error) {
+    const fallbackPayload = {
+      brand_name: payload.brand_name,
+      phone: payload.phone,
+      whatsapp: payload.whatsapp,
+      email: payload.email,
+      address: payload.address,
+      opening_hours: payload.opening_hours,
+      instagram_url: payload.instagram_url,
+      facebook_url: payload.facebook_url,
+      tiktok_url: payload.tiktok_url,
+      google_maps_url: payload.google_maps_url,
+      business_registration: payload.business_registration
+    };
+    const fallbackQuery = id
+      ? supabase.from("site_settings").update(fallbackPayload).eq("id", id)
+      : supabase.from("site_settings").insert(fallbackPayload);
+    const fallbackResult = await fallbackQuery;
+    if (fallbackResult.error) throw new Error(fallbackResult.error.message);
+    revalidatePath("/");
+    revalidatePath("/admin");
+    adminToast("Site settings saved. Add the homepage hero image database column before saving the hero image.", "settings");
+  }
   revalidatePath("/");
   revalidatePath("/admin");
   adminToast("Site settings saved.", "settings");
