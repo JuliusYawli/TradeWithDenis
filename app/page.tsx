@@ -15,7 +15,6 @@ import {
   type LucideIcon
 } from "lucide-react";
 import { Footer } from "@/components/footer";
-import { AppointmentModalButton } from "@/components/appointment-modal-button";
 import { HomeActionModals } from "@/components/home-action-modals";
 import { LeadForm } from "@/components/lead-form";
 import { Nav } from "@/components/nav";
@@ -133,18 +132,10 @@ export default async function Home() {
               ))}
             </div>
             <div className="mt-8 rounded-xl border border-line bg-white p-5 shadow-sm sm:mt-10 sm:p-6">
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                <div className="max-w-2xl">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red">Ready to visit?</p>
-                  <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">Book a shop appointment and inspect your iPhone in person.</h2>
-                  <p className="mt-3 text-sm leading-6 text-neutral-600 sm:text-base">The shop receives your request, prepares for your visit, and follows up through your preferred contact method.</p>
-                </div>
-                <div className="flex shrink-0 flex-col gap-3 sm:flex-row lg:justify-end">
-                  <AppointmentModalButton className="btn-primary w-full sm:w-auto" label="Book appointment" showIcon={false}>
-                    <LeadForm variant="modal" />
-                  </AppointmentModalButton>
-                  <Link className="btn-secondary w-full sm:w-auto" href="/iphones">Browse iPhones</Link>
-                </div>
+              <div className="max-w-2xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red">Ready to visit?</p>
+                <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">Book a shop appointment and inspect your iPhone in person.</h2>
+                <p className="mt-3 text-sm leading-6 text-neutral-600 sm:text-base">The shop receives your request, prepares for your visit, and follows up through your preferred contact method.</p>
               </div>
             </div>
           </div>
