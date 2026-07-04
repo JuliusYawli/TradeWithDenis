@@ -3,6 +3,7 @@ import { BarChart3, CalendarDays, Database, Download, ExternalLink, KeyRound, Lo
 import { AdminAppointmentSearch, AdminLeadSearch } from "@/components/admin-customer-search";
 import { AdminToast } from "@/components/admin-toast";
 import { AdminPasswordForm } from "@/components/admin-password-form";
+import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
@@ -269,7 +270,10 @@ export default async function AdminPage({
                 <label className="text-xs font-medium uppercase text-neutral-500">Quantity<input className="field mt-1" name="quantity" type="number" placeholder="1" defaultValue={1} /></label>
                 <label className="text-xs font-medium uppercase text-neutral-500">Warranty months<input className="field mt-1" name="warranty_months" type="number" placeholder="3" defaultValue={3} /></label>
               </div>
-              <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" placeholder="Image URLs, one per line" /></label>
+              <div className="grid gap-2">
+                <AdminProductImageUpload />
+                <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" placeholder="Uploaded photo URLs will appear here. You can also paste image URLs, one per line." /></label>
+              </div>
               <label className="text-xs font-medium uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" placeholder="Description" /></label>
               <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" /> Featured</label>
               <button className="btn-primary w-full md:w-fit" type="submit">Add product</button>
@@ -318,7 +322,10 @@ export default async function AdminPage({
                       <label className="text-xs font-medium uppercase text-neutral-500">Quantity<input className="field mt-1" name="quantity" type="number" defaultValue={product.quantity} /></label>
                       <label className="text-xs font-medium uppercase text-neutral-500">Warranty months<input className="field mt-1" name="warranty_months" type="number" defaultValue={product.warranty_months} /></label>
                     </div>
-                    <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" defaultValue={product.image_urls.join("\n")} /></label>
+                    <div className="grid gap-2">
+                      <AdminProductImageUpload />
+                      <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" defaultValue={product.image_urls.join("\n")} /></label>
+                    </div>
                     <label className="text-xs font-medium uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" defaultValue={product.description ?? ""} /></label>
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" defaultChecked={product.is_featured} /> Featured</label>
