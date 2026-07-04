@@ -96,20 +96,6 @@ export default async function Home() {
               <div className="showcase-frame relative overflow-hidden rounded-[1.75rem] border border-white/70 bg-snow shadow-soft sm:rounded-[2.25rem]">
                 <div className="aspect-[16/9] bg-cover bg-center" style={{ backgroundImage: `url("${heroImageUrl}")` }} />
               </div>
-              <div className="mx-auto mt-5 grid max-w-5xl gap-3 text-left sm:grid-cols-3">
-                <div className="rounded-xl border border-line bg-white p-4 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-red">40% deposit ready</p>
-                  <p className="mt-1 text-sm font-medium text-neutral-600">Discuss payment terms before visiting.</p>
-                </div>
-                <div className="rounded-xl border border-line bg-white p-4 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-red">No online checkout</p>
-                  <p className="mt-1 text-sm font-medium text-neutral-600">Every order is completed at the shop.</p>
-                </div>
-                <div className="rounded-xl border border-line bg-white p-4 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-red">Prepared appointment</p>
-                  <p className="mt-1 text-sm font-medium text-neutral-600">The shop knows what you want to inspect.</p>
-                </div>
-              </div>
             </div>
           </div>
         </section>
