@@ -48,7 +48,7 @@ const getCachedPublicTestimonials = unstable_cache(
       .eq("is_featured", true)
       .order("created_at", { ascending: false });
     const approvedTestimonials = (data as Testimonial[] | null) ?? [];
-    if (approvedTestimonials.length >= 4) return approvedTestimonials;
+    if (approvedTestimonials.length >= 4) return approvedTestimonials.slice(0, 4);
 
     const supplementalTestimonials = seedTestimonials.filter((seed) => (
       !approvedTestimonials.some((testimonial) => testimonial.customer_name === seed.customer_name && testimonial.quote === seed.quote)
@@ -57,6 +57,22 @@ const getCachedPublicTestimonials = unstable_cache(
     return [...approvedTestimonials, ...supplementalTestimonials].slice(0, 4);
   },
   ["public-testimonials"],
+  { revalidate: publicRevalidateSeconds, tags: [publicCacheTags.testimonials] }
+);
+
+const getCachedAllPublicTestimonials = unstable_cache(
+  async () => {
+    if (!hasSupabaseEnv()) return seedTestimonials;
+    const supabase = createPublicSupabaseClient();
+    const { data } = await supabase
+      .from("testimonials")
+      .select("*")
+      .eq("status", "approved")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    return (data as Testimonial[] | null) ?? [];
+  },
+  ["all-public-testimonials"],
   { revalidate: publicRevalidateSeconds, tags: [publicCacheTags.testimonials] }
 );
 
@@ -95,6 +111,10 @@ export async function getFeaturedProducts() {
 
 export async function getTestimonials() {
   return getCachedPublicTestimonials();
+}
+
+export async function getAllPublicTestimonials() {
+  return getCachedAllPublicTestimonials();
 }
 
 export async function getAdminTestimonials() {

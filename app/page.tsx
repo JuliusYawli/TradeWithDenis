@@ -193,6 +193,9 @@ export default async function Home() {
                 </blockquote>
               ))}
             </div>
+            <div className="mt-8 flex justify-center">
+              <Link className="btn-secondary w-full sm:w-auto" href="/reviews">View all reviews</Link>
+            </div>
           </div>
         </section>
 
