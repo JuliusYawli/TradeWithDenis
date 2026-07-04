@@ -7,11 +7,12 @@ import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createAdminSupabaseClient } from "@/lib/supabase-admin";
 
 export async function submitLead(formData: FormData) {
+  const email = String(formData.get("email") || "").trim();
   const payload = {
     product_id: String(formData.get("product_id") || "") || null,
-    customer_name: String(formData.get("customer_name") || ""),
-    phone: String(formData.get("phone") || ""),
-    email: String(formData.get("email") || "") || null,
+    customer_name: String(formData.get("customer_name") || "").trim(),
+    phone: String(formData.get("phone") || "").trim(),
+    email,
     preferred_contact_method: String(formData.get("preferred_contact_method") || "whatsapp"),
     desired_payment_option: String(formData.get("desired_payment_option") || "") || null,
     message: String(formData.get("message") || "") || null
@@ -19,8 +20,12 @@ export async function submitLead(formData: FormData) {
   const appointmentDate = String(formData.get("appointment_date") || "") || null;
   const appointmentTime = String(formData.get("appointment_time") || "") || null;
 
-  if (!payload.customer_name || !payload.phone) {
-    throw new Error("Name and phone are required.");
+  if (!payload.customer_name || !payload.phone || !payload.email) {
+    throw new Error("Name, phone, and email are required.");
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+    throw new Error("A valid email address is required.");
   }
 
   try {

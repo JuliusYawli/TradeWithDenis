@@ -26,7 +26,7 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
         <input className="field" name="customer_name" placeholder="Full name" required />
         <input className="field" name="phone" placeholder="WhatsApp or phone" required />
       </div>
-      <input className="field" type="email" name="email" placeholder="Email address" />
+      <input className="field" type="email" name="email" placeholder="Email address" autoComplete="email" required />
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-semibold text-neutral-700">
           Preferred contact method
