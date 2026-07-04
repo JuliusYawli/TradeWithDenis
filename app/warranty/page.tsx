@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
-import { getSiteSettings } from "@/lib/data";
+import { getPublicSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Warranty", description: "TradeWithDennis warranty policy and device support terms." };
 
@@ -65,7 +65,7 @@ const sections = [
 ];
 
 export default async function WarrantyPage() {
-  const settings = await getSiteSettings();
+  const settings = await getPublicSiteSettings();
   return (
     <>
       <Nav settings={settings} />

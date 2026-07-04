@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import {
   BadgeCheck,
   CalendarCheck,
@@ -20,7 +21,7 @@ import { LeadForm } from "@/components/lead-form";
 import { Nav } from "@/components/nav";
 import { PaymentCalculatorPanel } from "@/components/payment-calculator";
 import { ProductCard } from "@/components/product-card";
-import { getFeaturedProducts, getSiteSettings, getTestimonials } from "@/lib/data";
+import { getFeaturedProducts, getPublicSiteSettings, getTestimonials } from "@/lib/data";
 
 const trustItems: Array<[string, LucideIcon]> = [
   ["Verified iPhones", BadgeCheck],
@@ -37,7 +38,7 @@ const steps: Array<[string, string, LucideIcon]> = [
 ];
 
 export default async function Home() {
-  const [settings, featured, testimonials] = await Promise.all([getSiteSettings(), getFeaturedProducts(), getTestimonials()]);
+  const [settings, featured, testimonials] = await Promise.all([getPublicSiteSettings(), getFeaturedProducts(), getTestimonials()]);
   const heroImageUrl = settings.homepage_hero_image_url || "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85";
 
   const localBusinessJsonLd = {
@@ -68,7 +69,9 @@ export default async function Home() {
               <p className="mt-6 max-w-2xl text-balance text-base leading-7 text-neutral-600 sm:text-xl sm:leading-8">
                 Browse verified iPhones, see payment details clearly, then book a shop appointment to inspect the device and complete the order in person.
               </p>
-              <HomeActionModals calculator={<PaymentCalculatorPanel />} appointment={<LeadForm variant="modal" />} />
+              <Suspense fallback={null}>
+                <HomeActionModals calculator={<PaymentCalculatorPanel />} appointment={<LeadForm variant="modal" />} />
+              </Suspense>
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-neutral-500 sm:text-sm">
                 <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-gold" /> Verified stock</span>
                 <span className="hidden h-1 w-1 rounded-full bg-neutral-300 sm:block" />

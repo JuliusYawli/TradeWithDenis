@@ -7,7 +7,7 @@ import { LeadForm } from "@/components/lead-form";
 import { Nav } from "@/components/nav";
 import { ProductCard } from "@/components/product-card";
 import { financingFor, formatCedi } from "@/lib/finance";
-import { getProduct, getProducts, getSiteSettings } from "@/lib/data";
+import { getProduct, getPublicProducts, getPublicSiteSettings } from "@/lib/data";
 import { stockImageForProduct } from "@/lib/iphone-pricing";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [settings, product, allProducts] = await Promise.all([getSiteSettings(), getProduct(slug), getProducts()]);
+  const [settings, product, allProducts] = await Promise.all([getPublicSiteSettings(), getProduct(slug), getPublicProducts()]);
   if (!product) notFound();
 
   const finance = financingFor(product);

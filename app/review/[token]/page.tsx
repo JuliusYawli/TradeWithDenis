@@ -1,7 +1,7 @@
 import { CheckCircle2, ShieldCheck, Star } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
-import { getSiteSettings } from "@/lib/data";
+import { getPublicSiteSettings } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createAdminSupabaseClient } from "@/lib/supabase-admin";
 import { submitTestimonial } from "./actions";
@@ -46,7 +46,7 @@ export default async function ReviewPage({
   params: Promise<{ token: string }>;
   searchParams?: Promise<{ submitted?: string; error?: string; status?: string }>;
 }) {
-  const [{ token }, query, settings] = await Promise.all([params, searchParams, getSiteSettings()]);
+  const [{ token }, query, settings] = await Promise.all([params, searchParams, getPublicSiteSettings()]);
   const request = await getReviewRequest(token);
   const isSubmitted = query?.submitted === "1" || query?.status === "already_submitted" || ["submitted", "approved", "declined"].includes(request?.status ?? "");
   const errorCopy: Record<string, string> = {

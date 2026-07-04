@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { ProductFilters } from "@/components/product-filters";
-import { getProducts, getSiteSettings } from "@/lib/data";
+import { getPublicProducts, getPublicSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "iPhone Catalog",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function IphonesPage() {
-  const [settings, products] = await Promise.all([getSiteSettings(), getProducts()]);
+  const [settings, products] = await Promise.all([getPublicSiteSettings(), getPublicProducts()]);
 
   return (
     <>

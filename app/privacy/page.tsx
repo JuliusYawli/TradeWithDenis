@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
-import { getSiteSettings } from "@/lib/data";
+import { getPublicSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Privacy Policy", description: "How TradeWithDennis handles lead and customer information." };
 
@@ -58,7 +58,7 @@ const sections = [
 ];
 
 export default async function PrivacyPage() {
-  const settings = await getSiteSettings();
+  const settings = await getPublicSiteSettings();
   return (
     <>
       <Nav settings={settings} />

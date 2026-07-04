@@ -1,8 +1,75 @@
-import { unstable_noStore as noStore } from "next/cache";
+import { unstable_cache, unstable_noStore as noStore } from "next/cache";
+import { createClient } from "@supabase/supabase-js";
 import { hasSupabaseEnv } from "./supabase-env";
 import { createServerSupabaseClient } from "./supabase-server";
 import { products as seedProducts, siteSettings as seedSettings, testimonials as seedTestimonials } from "./seed";
 import type { Appointment, Lead, Product, Testimonial } from "./types";
+
+export const publicCacheTags = {
+  products: "public-products",
+  settings: "public-site-settings",
+  testimonials: "public-testimonials"
+} as const;
+
+const publicRevalidateSeconds = 60;
+
+function createPublicSupabaseClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false
+      }
+    }
+  );
+}
+
+const getCachedPublicProducts = unstable_cache(
+  async () => {
+    if (!hasSupabaseEnv()) return seedProducts;
+    const supabase = createPublicSupabaseClient();
+    const { data } = await supabase.from("products").select("*").order("created_at", { ascending: false });
+    return (data as Product[] | null) ?? seedProducts;
+  },
+  ["public-products"],
+  { revalidate: publicRevalidateSeconds, tags: [publicCacheTags.products] }
+);
+
+const getCachedPublicTestimonials = unstable_cache(
+  async () => {
+    if (!hasSupabaseEnv()) return seedTestimonials;
+    const supabase = createPublicSupabaseClient();
+    const { data } = await supabase
+      .from("testimonials")
+      .select("*")
+      .eq("status", "approved")
+      .eq("is_featured", true)
+      .order("created_at", { ascending: false });
+    const approvedTestimonials = (data as Testimonial[] | null) ?? [];
+    if (approvedTestimonials.length >= 4) return approvedTestimonials;
+
+    const supplementalTestimonials = seedTestimonials.filter((seed) => (
+      !approvedTestimonials.some((testimonial) => testimonial.customer_name === seed.customer_name && testimonial.quote === seed.quote)
+    ));
+
+    return [...approvedTestimonials, ...supplementalTestimonials].slice(0, 4);
+  },
+  ["public-testimonials"],
+  { revalidate: publicRevalidateSeconds, tags: [publicCacheTags.testimonials] }
+);
+
+const getCachedPublicSiteSettings = unstable_cache(
+  async () => {
+    if (!hasSupabaseEnv()) return seedSettings;
+    const supabase = createPublicSupabaseClient();
+    const { data } = await supabase.from("site_settings").select("*").limit(1).maybeSingle();
+    return data ?? seedSettings;
+  },
+  ["public-site-settings"],
+  { revalidate: publicRevalidateSeconds, tags: [publicCacheTags.settings] }
+);
 
 export async function getProducts() {
   noStore();
@@ -12,34 +79,22 @@ export async function getProducts() {
   return (data as Product[] | null) ?? seedProducts;
 }
 
+export async function getPublicProducts() {
+  return getCachedPublicProducts();
+}
+
 export async function getProduct(slug: string) {
-  const all = await getProducts();
+  const all = await getPublicProducts();
   return all.find((product) => product.slug === slug) ?? null;
 }
 
 export async function getFeaturedProducts() {
-  const all = await getProducts();
+  const all = await getPublicProducts();
   return all.filter((product) => product.is_featured).slice(0, 4);
 }
 
 export async function getTestimonials() {
-  noStore();
-  if (!hasSupabaseEnv()) return seedTestimonials;
-  const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
-    .from("testimonials")
-    .select("*")
-    .eq("status", "approved")
-    .eq("is_featured", true)
-    .order("created_at", { ascending: false });
-  const approvedTestimonials = (data as Testimonial[] | null) ?? [];
-  if (approvedTestimonials.length >= 4) return approvedTestimonials;
-
-  const supplementalTestimonials = seedTestimonials.filter((seed) => (
-    !approvedTestimonials.some((testimonial) => testimonial.customer_name === seed.customer_name && testimonial.quote === seed.quote)
-  ));
-
-  return [...approvedTestimonials, ...supplementalTestimonials].slice(0, 4);
+  return getCachedPublicTestimonials();
 }
 
 export async function getAdminTestimonials() {
@@ -56,6 +111,10 @@ export async function getSiteSettings() {
   const supabase = await createServerSupabaseClient();
   const { data } = await supabase.from("site_settings").select("*").limit(1).maybeSingle();
   return data ?? seedSettings;
+}
+
+export async function getPublicSiteSettings() {
+  return getCachedPublicSiteSettings();
 }
 
 export async function getLeads() {

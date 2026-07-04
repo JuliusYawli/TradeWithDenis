@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
-import { getSiteSettings } from "@/lib/data";
+import { getPublicSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Financing Terms", description: "Transparent iPhone financing terms, deposits, weekly payments, and total cost." };
 
 export default async function FinancingTermsPage() {
-  const settings = await getSiteSettings();
+  const settings = await getPublicSiteSettings();
   return (
     <>
       <Nav settings={settings} />

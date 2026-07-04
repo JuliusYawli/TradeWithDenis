@@ -3,12 +3,12 @@ import { Clock, Facebook, Instagram, Mail, MapPin, MessageCircle, Phone, Store }
 import { Footer } from "@/components/footer";
 import { LeadForm } from "@/components/lead-form";
 import { Nav } from "@/components/nav";
-import { getSiteSettings } from "@/lib/data";
+import { getPublicSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Contact", description: "Contact TradeWithDennis for iPhone sales and financing in Ghana." };
 
 export default async function ContactPage() {
-  const settings = await getSiteSettings();
+  const settings = await getPublicSiteSettings();
   const whatsappUrl = `https://wa.me/${settings.whatsapp?.replace(/\D/g, "")}`;
 
   return (

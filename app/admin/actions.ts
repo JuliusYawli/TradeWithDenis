@@ -1,10 +1,11 @@
 "use server";
 
 import { randomBytes } from "crypto";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { isAppointmentTimeSlot } from "@/lib/appointment-times";
+import { publicCacheTags } from "@/lib/data";
 import { sendAppointmentUpdateNotification, sendTestimonialRequestNotification } from "@/lib/notifications";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
@@ -163,6 +164,8 @@ export async function saveProduct(formData: FormData) {
 
   revalidatePath("/admin");
   revalidatePath("/iphones");
+  revalidatePath("/");
+  revalidateTag(publicCacheTags.products);
   adminToast(id ? "Product updated." : "Product added.", "products");
 }
 
@@ -174,6 +177,8 @@ export async function deleteProduct(formData: FormData) {
   if (error) throw new Error(error.message);
   revalidatePath("/admin");
   revalidatePath("/iphones");
+  revalidatePath("/");
+  revalidateTag(publicCacheTags.products);
   adminToast("Product deleted.", "products");
 }
 
@@ -289,10 +294,12 @@ export async function saveSettings(formData: FormData) {
     if (fallbackResult.error) throw new Error(fallbackResult.error.message);
     revalidatePath("/");
     revalidatePath("/admin");
+    revalidateTag(publicCacheTags.settings);
     adminToast("Site settings saved. Add the homepage hero image database column before saving the hero image.", "settings");
   }
   revalidatePath("/");
   revalidatePath("/admin");
+  revalidateTag(publicCacheTags.settings);
   adminToast("Site settings saved.", "settings");
 }
 
@@ -329,5 +336,6 @@ export async function updateTestimonialStatus(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/admin");
+  revalidateTag(publicCacheTags.testimonials);
   adminToast(isApproved ? "Testimonial approved." : "Testimonial declined.", "testimonials");
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CalendarCheck, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
-import { getSiteSettings } from "@/lib/data";
+import { getPublicSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Appointment Requested",
@@ -15,7 +15,7 @@ export default async function AppointmentConfirmedPage({
 }: {
   searchParams?: Promise<{ status?: string }>;
 }) {
-  const settings = await getSiteSettings();
+  const settings = await getPublicSiteSettings();
   const params = await searchParams;
   const needsManualFollowUp = params?.status === "manual-follow-up";
   const whatsappUrl = `https://wa.me/${settings.whatsapp?.replace(/\D/g, "")}`;
