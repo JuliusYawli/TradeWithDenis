@@ -82,7 +82,7 @@ function svg(slug: string) {
   const color = colors(slug);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="${label} stock image">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="${label} product photo placeholder">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ffffff"/>
@@ -98,6 +98,7 @@ function svg(slug: string) {
     </filter>
   </defs>
   <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect x="94" y="74" width="1012" height="752" rx="54" fill="#ffffff" opacity=".68"/>
   <circle cx="930" cy="140" r="220" fill="#dbeafe" opacity=".45"/>
   <circle cx="190" cy="760" r="190" fill="#bfdbfe" opacity=".35"/>
   <g filter="url(#shadow)">
@@ -118,8 +119,9 @@ function svg(slug: string) {
     <rect x="656" y="698" width="82" height="7" rx="4" fill="#0b1220" opacity=".7"/>
   </g>
   <g font-family="Inter, Arial, sans-serif" fill="#0b1220">
-    <text x="600" y="818" text-anchor="middle" font-size="28" font-weight="800">Temporary stock image</text>
-    <text x="600" y="852" text-anchor="middle" font-size="18" font-weight="600" fill="#64748b">Replace with real shop photos before launch</text>
+    <rect x="420" y="788" width="360" height="46" rx="23" fill="#ffffff" opacity=".9"/>
+    <text x="600" y="818" text-anchor="middle" font-size="20" font-weight="700">Product photo coming soon</text>
+    <text x="600" y="862" text-anchor="middle" font-size="17" font-weight="500" fill="#64748b">Real shop photos can be uploaded from admin</text>
   </g>
 </svg>`;
 }
