@@ -53,11 +53,11 @@ textarea {
 }
 
 .btn-primary {
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-sm font-medium text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 active:translate-y-0;
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-sm font-medium text-white shadow-soft transition duration-150 hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 active:translate-y-0 active:scale-[0.98] active:shadow-sm;
 }
 
 .btn-secondary {
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-3 text-sm font-medium text-ink transition hover:-translate-y-0.5 hover:border-gold hover:text-red hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 active:translate-y-0;
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-3 text-sm font-medium text-ink transition duration-150 hover:-translate-y-0.5 hover:border-gold hover:text-red hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 active:translate-y-0 active:scale-[0.98] active:bg-snow;
 }
 
 .field {
@@ -150,4 +150,8 @@ textarea {
   border-color: #dbeafe;
   background: #f7fbff;
   color: #0f3f9c;
+}
+
+.admin-clickable {
+  @apply transition duration-150 active:scale-[0.98] active:ring-2 active:ring-gold/20;
 }

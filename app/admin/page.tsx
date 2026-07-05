@@ -29,8 +29,8 @@ const testimonialStatuses = [
   ["approved", "Approved"],
   ["declined", "Declined"]
 ] as const;
-const adminActionButtonClass = "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-sm font-medium text-ink shadow-sm transition hover:border-gold hover:bg-snow hover:text-red focus:outline-none focus:ring-2 focus:ring-gold/25";
-const adminDangerButtonClass = "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-danger/20 bg-white px-4 py-2 text-sm font-medium text-danger shadow-sm transition hover:border-danger/40 hover:bg-danger/5 focus:outline-none focus:ring-2 focus:ring-danger/20";
+const adminActionButtonClass = "admin-clickable inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-sm font-medium text-ink shadow-sm transition hover:border-gold hover:bg-snow hover:text-red focus:outline-none focus:ring-2 focus:ring-gold/25";
+const adminDangerButtonClass = "admin-clickable inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-danger/20 bg-white px-4 py-2 text-sm font-medium text-danger shadow-sm transition hover:border-danger/40 hover:bg-danger/5 focus:outline-none focus:ring-2 focus:ring-danger/20";
 
 function formatDateTime(value: string) {
   return new Intl.DateTimeFormat("en-GH", {
@@ -147,7 +147,7 @@ export default async function AdminPage({
             </div>
             <nav className="mt-3 space-y-1">
               {adminNavItems.map(([label, href, Icon, count]) => (
-                <a key={label} className="admin-nav-link flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 text-sm font-medium text-neutral-700 transition hover:bg-snow hover:text-red" href={href}>
+                <a key={label} className="admin-nav-link admin-clickable flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 text-sm font-medium text-neutral-700 transition hover:bg-snow hover:text-red" href={href}>
                   <span className="inline-flex items-center gap-3">
                     <Icon className="h-4 w-4 text-gold" />
                     {label}
@@ -198,22 +198,22 @@ export default async function AdminPage({
               ))}
             </div>
             <div className="mt-5 grid gap-4 lg:grid-cols-4">
-              <a className="rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#appointments">
+              <a className="admin-clickable rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#appointments">
                 <CalendarDays className="h-5 w-5 text-gold" />
                 <p className="mt-3 font-semibold">Review appointments</p>
                 <p className="mt-1 text-sm leading-6 text-neutral-600">Confirm, postpone, complete, cancel, or mark visits as no-show.</p>
               </a>
-              <a className="rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#leads">
+              <a className="admin-clickable rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#leads">
                 <Users className="h-5 w-5 text-gold" />
                 <p className="mt-3 font-semibold">Follow up leads</p>
                 <p className="mt-1 text-sm leading-6 text-neutral-600">Call, WhatsApp, email, and update customer inquiry status.</p>
               </a>
-              <a className="rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#products">
+              <a className="admin-clickable rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#products">
                 <Package className="h-5 w-5 text-gold" />
                 <p className="mt-3 font-semibold">Manage inventory</p>
                 <p className="mt-1 text-sm leading-6 text-neutral-600">Update product prices, stock status, images, and featured devices.</p>
               </a>
-              <a className="rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#backups">
+              <a className="admin-clickable rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#backups">
                 <Database className="h-5 w-5 text-gold" />
                 <p className="mt-3 font-semibold">Back up records</p>
                 <p className="mt-1 text-sm leading-6 text-neutral-600">Open Supabase backup settings and export business records as CSV files.</p>
@@ -336,7 +336,7 @@ export default async function AdminPage({
                   </form>
                   <form action={deleteProduct} className="mt-3">
                     <input type="hidden" name="id" value={product.id} />
-                    <button className="text-sm font-medium text-danger" type="submit">Delete product</button>
+                    <button className="admin-clickable rounded-md px-2 py-1 text-sm font-medium text-danger transition hover:bg-danger/5" type="submit">Delete product</button>
                   </form>
                 </details>
               ))}

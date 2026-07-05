@@ -159,7 +159,7 @@ export function AdminProductImageUpload({
           <p className={`mt-1 text-xs leading-5 ${state === "error" ? "text-danger" : "text-neutral-600"}`}>{message}</p>
         </div>
         <button
-          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-line bg-snow px-4 py-2 text-sm font-medium text-ink transition hover:border-gold hover:text-red disabled:cursor-not-allowed disabled:opacity-60"
+          className="admin-clickable inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-line bg-snow px-4 py-2 text-sm font-medium text-ink transition hover:border-gold hover:text-red disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100"
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={state === "uploading"}
