@@ -60,7 +60,7 @@ function supabaseProjectInfo() {
 export default async function AdminPage({
   searchParams
 }: {
-  searchParams?: Promise<{ toast?: string; type?: "success" | "info" }>;
+  searchParams?: Promise<{ toast?: string; toastTitle?: string; type?: "success" | "info" }>;
 }) {
   const toast = await searchParams;
 
@@ -116,7 +116,7 @@ export default async function AdminPage({
 
   return (
     <main className="min-h-screen bg-snow">
-      <AdminToast message={toast?.toast} type={toast?.type} />
+      <AdminToast message={toast?.toast} title={toast?.toastTitle} type={toast?.type} />
       <div className="container-page py-10">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>

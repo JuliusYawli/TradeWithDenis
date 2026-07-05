@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, X } from "lucide-react";
+import { CheckCircle2, Info, X } from "lucide-react";
 
-export function AdminToast({ message, type = "success" }: { message?: string; type?: "success" | "info" }) {
+export function AdminToast({ message, title, type = "success" }: { message?: string; title?: string; type?: "success" | "info" }) {
   const router = useRouter();
   const [visible, setVisible] = useState(Boolean(message));
 
@@ -24,10 +24,10 @@ export function AdminToast({ message, type = "success" }: { message?: string; ty
     <div className="fixed right-4 top-4 z-50 w-[calc(100vw-2rem)] max-w-sm rounded-lg border border-line bg-white p-4 shadow-soft">
       <div className="flex items-start gap-3">
         <div className={type === "success" ? "mt-0.5 text-emerald-600" : "mt-0.5 text-gold"}>
-          <CheckCircle2 className="h-5 w-5" />
+          {type === "success" ? <CheckCircle2 className="h-5 w-5" /> : <Info className="h-5 w-5" />}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-ink">{type === "success" ? "Saved successfully" : "Admin notice"}</p>
+          <p className="text-sm font-semibold text-ink">{title ?? (type === "success" ? "Saved successfully" : "Admin notice")}</p>
           <p className="mt-1 text-sm leading-5 text-neutral-600">{message}</p>
         </div>
         <button
