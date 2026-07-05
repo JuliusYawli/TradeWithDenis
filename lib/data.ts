@@ -121,7 +121,7 @@ export async function getAdminTestimonials() {
   noStore();
   if (!hasSupabaseEnv()) return seedTestimonials.map((testimonial) => ({ ...testimonial, status: "approved" as const }));
   const supabase = await createServerSupabaseClient();
-  const { data } = await supabase.from("testimonials").select("*").order("created_at", { ascending: false }).limit(100);
+  const { data } = await supabase.from("testimonials").select("*").order("created_at", { ascending: false }).limit(50);
   return data ?? [];
 }
 
@@ -153,6 +153,6 @@ export async function getAppointments() {
     .from("appointments")
     .select("*, leads(customer_name, phone, email, preferred_contact_method, message, desired_payment_option)")
     .order("created_at", { ascending: false })
-    .limit(50);
+    .limit(25);
   return (data as Appointment[] | null) ?? [];
 }
