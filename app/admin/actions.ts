@@ -173,6 +173,10 @@ export async function deleteProduct(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");
   if (!id) return;
+
+  const { error: leadError } = await supabase.from("leads").update({ product_id: null }).eq("product_id", id);
+  if (leadError) throw new Error(leadError.message);
+
   const { error } = await supabase.from("products").delete().eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/admin");
