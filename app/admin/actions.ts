@@ -130,7 +130,8 @@ export async function logoutAdmin(formData: FormData) {
     const supabase = await createServerSupabaseClient();
     await supabase.auth.signOut();
   }
-  redirect(safePublicPath(formData.get("next")));
+  const next = safePublicPath(formData.get("next"));
+  redirect(next === "/admin/login" ? "/admin/login?notice=signed-out" : next);
 }
 
 export async function saveProduct(formData: FormData) {

@@ -5,6 +5,7 @@ import { AdminToast } from "@/components/admin-toast";
 import { AdminPasswordForm } from "@/components/admin-password-form";
 import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
+import { AdminSubmitButton } from "@/components/admin-submit-button";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
@@ -126,15 +127,15 @@ export default async function AdminPage({
           <div className="flex flex-wrap gap-2 lg:hidden">
             <form action={logoutAdmin}>
               <input type="hidden" name="next" value="/iphones" />
-              <button className={adminActionButtonClass} type="submit"><ExternalLink className="h-4 w-4" /> Catalog</button>
+              <AdminSubmitButton className={adminActionButtonClass} pendingLabel="Opening..."><ExternalLink className="h-4 w-4" /> Catalog</AdminSubmitButton>
             </form>
             <form action={logoutAdmin}>
               <input type="hidden" name="next" value="/" />
-              <button className={adminActionButtonClass} type="submit"><ExternalLink className="h-4 w-4" /> View site</button>
+              <AdminSubmitButton className={adminActionButtonClass} pendingLabel="Opening..."><ExternalLink className="h-4 w-4" /> View site</AdminSubmitButton>
             </form>
             <form action={logoutAdmin}>
               <input type="hidden" name="next" value="/admin/login" />
-              <button className={adminDangerButtonClass} type="submit"><LogOut className="h-4 w-4" /> Logout</button>
+              <AdminSubmitButton className={adminDangerButtonClass} pendingLabel="Logging out..."><LogOut className="h-4 w-4" /> Logout</AdminSubmitButton>
             </form>
           </div>
         </div>
@@ -159,15 +160,15 @@ export default async function AdminPage({
             <div className="mt-4 space-y-2 border-t border-line pt-4">
               <form action={logoutAdmin}>
                 <input type="hidden" name="next" value="/iphones" />
-                <button className={`${adminActionButtonClass} w-full`} type="submit"><ExternalLink className="h-4 w-4" /> Catalog</button>
+                <AdminSubmitButton className={`${adminActionButtonClass} w-full`} pendingLabel="Opening..."><ExternalLink className="h-4 w-4" /> Catalog</AdminSubmitButton>
               </form>
               <form action={logoutAdmin}>
                 <input type="hidden" name="next" value="/" />
-                <button className={`${adminActionButtonClass} w-full`} type="submit"><ExternalLink className="h-4 w-4" /> View site</button>
+                <AdminSubmitButton className={`${adminActionButtonClass} w-full`} pendingLabel="Opening..."><ExternalLink className="h-4 w-4" /> View site</AdminSubmitButton>
               </form>
               <form action={logoutAdmin}>
                 <input type="hidden" name="next" value="/admin/login" />
-                <button className={`${adminDangerButtonClass} w-full`} type="submit"><LogOut className="h-4 w-4" /> Logout</button>
+                <AdminSubmitButton className={`${adminDangerButtonClass} w-full`} pendingLabel="Logging out..."><LogOut className="h-4 w-4" /> Logout</AdminSubmitButton>
               </form>
             </div>
           </aside>
