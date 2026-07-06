@@ -4,13 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import type { Appointment, Lead, Product } from "@/lib/types";
 
-function formatDateTime(value: string) {
-  return new Intl.DateTimeFormat("en-GH", {
-    dateStyle: "medium",
-    timeStyle: "short"
-  }).format(new Date(value));
-}
-
 type StatType = "products" | "in_stock" | "new_leads" | "appointment_queue";
 
 export function OverviewStatsModal({
