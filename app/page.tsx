@@ -57,28 +57,30 @@ export default async function Home() {
       <main>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }} />
 
-        <section id="top" className="hero-showcase relative overflow-hidden border-b border-line bg-white">
+        <section id="top" className="hero-showcase relative overflow-hidden border-b border-line bg-white animate-fade-in">
           <div className="container-page relative py-9 text-center sm:py-16 lg:py-20">
             <div className="mx-auto flex max-w-4xl flex-col items-center">
-              <p className="section-eyebrow">
+              <p className="section-eyebrow animate-slide-up" style={{ animationDelay: "0.1s" }}>
                 Premium iPhones in Ghana
               </p>
-              <h1 className="mt-4 max-w-5xl text-balance text-3xl font-semibold tracking-tight text-ink sm:mt-6 sm:text-5xl lg:whitespace-nowrap lg:text-6xl">
+              <h1 className="mt-4 max-w-5xl text-balance text-3xl font-semibold tracking-tight text-ink sm:mt-6 sm:text-5xl lg:whitespace-nowrap lg:text-6xl animate-slide-up" style={{ animationDelay: "0.2s" }}>
                 Own Your Next iPhone With Confidence.
               </h1>
               <div className="mt-5 grid w-full max-w-3xl gap-2 text-left sm:mt-6 sm:grid-cols-3 sm:gap-3">
-                <div className="rounded-lg border border-line bg-white/90 p-3 shadow-sm backdrop-blur sm:rounded-xl sm:p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-red">40% deposit ready</p>
-                  <p className="mt-1 text-sm font-medium leading-5 text-neutral-600 sm:leading-6">Discuss payment terms before visiting.</p>
-                </div>
-                <div className="rounded-lg border border-line bg-white/90 p-3 shadow-sm backdrop-blur sm:rounded-xl sm:p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-red">No online checkout</p>
-                  <p className="mt-1 text-sm font-medium leading-5 text-neutral-600 sm:leading-6">Every order is completed at the shop.</p>
-                </div>
-                <div className="rounded-lg border border-line bg-white/90 p-3 shadow-sm backdrop-blur sm:rounded-xl sm:p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-red">Prepared appointment</p>
-                  <p className="mt-1 text-sm font-medium leading-5 text-neutral-600 sm:leading-6">The shop knows what you want to inspect.</p>
-                </div>
+                {[
+                  { title: "40% deposit ready", desc: "Discuss payment terms before visiting." },
+                  { title: "No online checkout", desc: "Every order is completed at the shop." },
+                  { title: "Prepared appointment", desc: "The shop knows what you want to inspect." }
+                ].map((item, i) => (
+                  <div
+                    key={item.title}
+                    className="card-modern p-3 sm:rounded-xl sm:p-4 animate-slide-up transition-all duration-300 hover:shadow-glow"
+                    style={{ animationDelay: `${0.3 + i * 0.1}s` }}
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-wide text-gold">{item.title}</p>
+                    <p className="mt-1 text-sm font-medium leading-5 text-neutral-600 dark:text-neutral-300">{item.desc}</p>
+                  </div>
+                ))}
               </div>
               <Suspense fallback={null}>
                 <HomeActionModals calculator={<PaymentCalculatorPanel />} appointment={<LeadForm variant="modal" />} />
@@ -102,13 +104,17 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="border-b border-line bg-white/90 py-6 backdrop-blur sm:py-8">
+        <section className="border-b border-line bg-white/90 backdrop-blur py-6 sm:py-8 animate-fade-in">
           <div className="container-page">
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-y-6 lg:grid-cols-5">
-              {trustItems.map(([label, Icon]) => (
-                <div key={label} className="flex flex-col items-center gap-2 text-center sm:flex-row sm:justify-center sm:gap-3">
-                  <Icon className="h-5 w-5 text-gold" />
-                  <span className="text-sm font-medium text-neutral-600">{label}</span>
+              {trustItems.map(([label, Icon], i) => (
+                <div
+                  key={label}
+                  className="flex flex-col items-center gap-2 text-center transition-all duration-300 sm:flex-row sm:justify-center sm:gap-3 hover:scale-105 animate-scale-in"
+                  style={{ animationDelay: `${i * 0.05}s` }}
+                >
+                  <Icon className="h-6 w-6 text-gold transition-colors duration-300" />
+                  <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">{label}</span>
                 </div>
               ))}
             </div>
