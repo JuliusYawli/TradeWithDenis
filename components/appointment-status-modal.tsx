@@ -52,7 +52,7 @@ export function AppointmentStatusModal({
     <>
       <div className="mt-4 grid gap-2 sm:grid-cols-3">
         {statusCounts.map(([label, count]) => {
-          const status = appointmentStatuses.find(([_, labelText]) => labelText === label)?.[0];
+          const status = appointmentStatuses.find(([, labelText]) => labelText === label)?.[0];
           return (
             <button
               key={label}
