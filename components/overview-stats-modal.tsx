@@ -19,6 +19,20 @@ export function OverviewStatsModal({
 }) {
   const [selectedStat, setSelectedStat] = useState<StatType | null>(null);
 
+  const handleItemClick = (id: string, type: "product" | "lead" | "appointment") => {
+    setSelectedStat(null);
+    setTimeout(() => {
+      if (type === "product") {
+        document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+        document.querySelector(`[data-product-id="${id}"]`)?.scrollIntoView({ behavior: "smooth" });
+      } else if (type === "lead") {
+        document.getElementById("leads")?.scrollIntoView({ behavior: "smooth" });
+      } else if (type === "appointment") {
+        document.getElementById("appointments")?.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
+
   const data = useMemo(() => {
     switch (selectedStat) {
       case "products":
@@ -89,25 +103,37 @@ export function OverviewStatsModal({
               {data.items.length ? (
                 data.type === "product" ? (
                   (data.items as Product[]).map((product) => (
-                    <div key={product.id} className="rounded-md border border-line bg-snow p-3">
+                    <button
+                      key={product.id}
+                      onClick={() => handleItemClick(product.id, "product")}
+                      className="w-full rounded-md border border-line bg-snow p-3 text-left transition hover:border-gold hover:bg-white cursor-pointer"
+                    >
                       <p className="font-medium">{product.model} · {product.storage}</p>
                       <p className="text-sm text-neutral-600">GH₵{product.price.toLocaleString()} · {product.stock_status}</p>
-                    </div>
+                    </button>
                   ))
                 ) : data.type === "lead" ? (
                   (data.items as Lead[]).map((lead) => (
-                    <div key={lead.id} className="rounded-md border border-line bg-snow p-3">
+                    <button
+                      key={lead.id}
+                      onClick={() => handleItemClick(lead.id, "lead")}
+                      className="w-full rounded-md border border-line bg-snow p-3 text-left transition hover:border-gold hover:bg-white cursor-pointer"
+                    >
                       <p className="font-medium">{lead.customer_name}</p>
                       <p className="text-sm text-neutral-600">{lead.phone} · {lead.email || "No email"}</p>
                       <p className="text-xs text-neutral-500 mt-1">Status: {lead.status}</p>
-                    </div>
+                    </button>
                   ))
                 ) : (
                   (data.items as Appointment[]).map((apt) => (
-                    <div key={apt.id} className="rounded-md border border-line bg-snow p-3">
+                    <button
+                      key={apt.id}
+                      onClick={() => handleItemClick(apt.id, "appointment")}
+                      className="w-full rounded-md border border-line bg-snow p-3 text-left transition hover:border-gold hover:bg-white cursor-pointer"
+                    >
                       <p className="font-medium">{apt.leads?.customer_name || "Customer"} · {apt.appointment_date || "No date"}</p>
                       <p className="text-sm text-neutral-600">{apt.appointment_time || "No time"} · {apt.leads?.phone}</p>
-                    </div>
+                    </button>
                   ))
                 )
               ) : (

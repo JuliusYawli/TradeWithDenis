@@ -288,7 +288,7 @@ export default async function AdminPage({
             </div>
             <div className="mt-5 space-y-3">
               {products.map((product) => (
-                <details key={product.id} className="rounded-md border border-line bg-snow p-4">
+                <details key={product.id} data-product-id={product.id} className="rounded-md border border-line bg-snow p-4">
                   <summary className="cursor-pointer list-none">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
