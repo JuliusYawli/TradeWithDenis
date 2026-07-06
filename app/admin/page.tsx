@@ -8,6 +8,7 @@ import { AdminProductTemplateSelect } from "@/components/admin-product-template-
 import { AdminSubmitButton } from "@/components/admin-submit-button";
 import { AdminInactivityLogout } from "@/components/admin-inactivity-logout";
 import { AppointmentStatusModal } from "@/components/appointment-status-modal";
+import { OverviewStatsModal } from "@/components/overview-stats-modal";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
@@ -190,17 +191,14 @@ export default async function AdminPage({
           <section id="overview" className="admin-panel admin-panel-overview scroll-mt-8 rounded-lg border border-line bg-white p-5">
             <div>
               <h2 className="text-xl font-semibold">Overview</h2>
-              <p className="mt-1 text-sm text-neutral-600">Your daily snapshot for stock, inquiries, and appointment activity.</p>
+              <p className="mt-1 text-sm text-neutral-600">Click any stat to view details. Your daily snapshot for stock, inquiries, and appointment activity.</p>
             </div>
-            <div className="mt-5 grid gap-4 md:grid-cols-4">
-              {stats.map(([label, value, Icon]) => (
-                <div key={String(label)} className="rounded-lg border border-line bg-snow p-5">
-                  <Icon className="h-5 w-5 text-gold" />
-                  <p className="mt-4 text-sm text-neutral-500">{label}</p>
-                  <p className="text-2xl font-semibold">{value}</p>
-                </div>
-              ))}
-            </div>
+            <OverviewStatsModal
+              products={products}
+              leads={leads}
+              appointments={appointments}
+              stats={stats.map(([label, value]) => [String(label), Number(value)])}
+            />
             <div className="mt-5 grid gap-4 lg:grid-cols-4">
               <a className="admin-clickable rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#appointments">
                 <CalendarDays className="h-5 w-5 text-gold" />
