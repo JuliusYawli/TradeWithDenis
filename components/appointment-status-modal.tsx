@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import type { Appointment } from "@/lib/types";
 
@@ -33,15 +33,26 @@ export function AppointmentStatusModal({
 }) {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
 
-  const filtered = selectedStatus
-    ? appointments.filter((apt) => apt.status === selectedStatus)
-    : [];
+  const filtered = useMemo(
+    () => selectedStatus
+      ? appointments.filter((apt) => apt.status === selectedStatus)
+      : [],
+    [selectedStatus, appointments]
+  );
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedStatus(null);
+    };
+    if (selectedStatus) document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [selectedStatus]);
 
   return (
     <>
       <div className="mt-4 grid gap-2 sm:grid-cols-3">
         {statusCounts.map(([label, count]) => {
-          const status = appointmentStatuses.find(([s]) => s === label)?.[0];
+          const status = appointmentStatuses.find(([_, labelText]) => labelText === label)?.[0];
           return (
             <button
               key={label}
@@ -56,7 +67,10 @@ export function AppointmentStatusModal({
       </div>
 
       {selectedStatus && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          onClick={(e) => e.target === e.currentTarget && setSelectedStatus(null)}
+        >
           <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-lg">
             <button
               onClick={() => setSelectedStatus(null)}

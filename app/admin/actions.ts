@@ -144,8 +144,8 @@ export async function saveProduct(formData: FormData) {
   const price = Number(formData.get("price") || 0);
   const weekly_payment = Number(formData.get("weekly_payment") || 0);
 
-  if (!slug || !model || !storage || price <= 0 || weekly_payment <= 0) {
-    throw new Error("Please fill in all required fields: Model, Slug, Storage, Price, and Weekly payment (must be greater than 0)");
+  if (!slug || !model || !storage || isNaN(price) || isNaN(weekly_payment) || price <= 0 || weekly_payment <= 0) {
+    throw new Error("Please fill in all required fields: Model, Slug, Storage, Price, and Weekly payment (must be numbers greater than 0)");
   }
 
   const payload = {
@@ -170,13 +170,10 @@ export async function saveProduct(formData: FormData) {
     const { error } = await supabase.from("products").update(payload).eq("id", id);
     if (error) throw new Error(`Update failed: ${error.message}`);
   } else {
+    const { data: existing } = await supabase.from("products").select("id").eq("slug", slug).maybeSingle();
+    if (existing) throw new Error("This slug already exists. Please use a unique slug.");
     const { error } = await supabase.from("products").insert(payload);
-    if (error) {
-      if (error.message.includes("slug")) {
-        throw new Error("This slug already exists. Please use a unique slug.");
-      }
-      throw new Error(`Insert failed: ${error.message}`);
-    }
+    if (error) throw new Error(`Insert failed: ${error.message}`);
   }
 
   revalidatePath("/admin");
