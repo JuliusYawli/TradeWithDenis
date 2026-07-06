@@ -23,7 +23,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   const finance = financingFor(product);
   const similar = allProducts.filter((item) => item.slug !== product.slug).slice(0, 3);
-  const imageUrls = product.image_urls.length ? product.image_urls : [stockImageForProduct(product.model, product.storage, product.condition)];
+  const validImages = product.image_urls.filter((url) => url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/"));
+  const imageUrls = validImages.length ? validImages : [stockImageForProduct(product.model, product.storage, product.condition)];
   const stockLabel = product.stock_status.replace("_", " ");
   const productJsonLd = {
     "@context": "https://schema.org",

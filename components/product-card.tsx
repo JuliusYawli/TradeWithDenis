@@ -7,8 +7,9 @@ import type { Product } from "@/lib/types";
 
 export function ProductCard({ product }: { product: Product }) {
   const finance = financingFor(product);
-  const imageUrl = product.image_urls[0] || stockImageForProduct(product.model, product.storage, product.condition);
-  const hasRealPhoto = product.image_urls.length > 0;
+  const validImages = product.image_urls.filter((url) => url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/"));
+  const imageUrl = validImages[0] || stockImageForProduct(product.model, product.storage, product.condition);
+  const hasRealPhoto = validImages.length > 0;
   const stockLabel = product.stock_status.replace("_", " ");
   const conditionLabel = product.grade ? `${product.condition} / Grade ${product.grade}` : product.condition;
 
