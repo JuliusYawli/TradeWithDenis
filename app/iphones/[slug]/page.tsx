@@ -43,7 +43,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
           <div className="space-y-4">
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-line bg-[#f5f7fb] shadow-sm">
-              <Image src={imageUrls[0]} alt={`${product.model} ${product.storage}`} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" priority />
+              <Image src={imageUrls[0]} alt={`${product.model} ${product.storage}`} fill className="object-contain" sizes="(max-width: 1024px) 100vw, 50vw" priority />
               <div className="absolute left-4 top-4 flex flex-wrap gap-2">
                 <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium capitalize text-red shadow-sm ring-1 ring-black/5 backdrop-blur">{stockLabel}</span>
                 <span className="rounded-full bg-ink/80 px-3 py-1 text-xs font-medium text-white shadow-sm backdrop-blur">{product.condition}</span>
@@ -52,7 +52,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className="grid grid-cols-4 gap-3">
               {imageUrls.map((src) => (
                 <div key={src} className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
-                  <Image src={src} alt={product.model} fill className="object-cover" sizes="120px" />
+                  <Image src={src} alt={product.model} fill className="object-contain" sizes="120px" />
                 </div>
               ))}
             </div>

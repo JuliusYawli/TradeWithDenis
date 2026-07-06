@@ -21,7 +21,7 @@ export function ProductCard({ product }: { product: Product }) {
             src={imageUrl}
             alt={`${product.model} ${product.storage}`}
             fill
-            className={`object-cover transition duration-500 group-hover:scale-[1.03] ${hasRealPhoto ? "" : "p-4 sm:p-6"}`}
+            className={`transition duration-500 group-hover:scale-[1.03] ${hasRealPhoto ? "object-contain" : "object-cover p-4 sm:p-6"}`}
             sizes="(max-width: 768px) 100vw, 33vw"
           />
           <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-3">
