@@ -141,7 +141,9 @@ export async function getLeads() {
   noStore();
   if (!hasSupabaseEnv()) return [] as Lead[];
   const supabase = await createServerSupabaseClient();
-  const { data } = await supabase.from("leads").select("*").order("created_at", { ascending: false }).limit(20);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const { data } = await supabase.from("leads").select("*").gte("created_at", today.toISOString()).order("created_at", { ascending: false }).limit(20);
   return (data as Lead[] | null) ?? [];
 }
 

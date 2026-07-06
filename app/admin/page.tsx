@@ -6,6 +6,7 @@ import { AdminPasswordForm } from "@/components/admin-password-form";
 import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
 import { AdminSubmitButton } from "@/components/admin-submit-button";
+import { AppointmentStatusModal } from "@/components/appointment-status-modal";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
@@ -230,14 +231,7 @@ export default async function AdminPage({
               </div>
             </div>
             <AdminAppointmentSearch appointments={appointments}>
-              <div className="mt-4 grid gap-2 sm:grid-cols-3">
-                {appointmentStatusCounts.map(([label, count]) => (
-                  <div key={label} className="rounded-md border border-line bg-snow px-3 py-2">
-                    <p className="text-xs font-medium uppercase text-neutral-500">{label}</p>
-                    <p className="text-xl font-semibold">{count}</p>
-                  </div>
-                ))}
-              </div>
+              <AppointmentStatusModal appointments={appointments} statusCounts={appointmentStatusCounts} />
             </AdminAppointmentSearch>
           </section>
 

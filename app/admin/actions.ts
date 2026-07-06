@@ -137,15 +137,26 @@ export async function logoutAdmin(formData: FormData) {
 export async function saveProduct(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");
+
+  const slug = String(formData.get("slug") || "").trim();
+  const model = String(formData.get("model") || "").trim();
+  const storage = String(formData.get("storage") || "").trim();
+  const price = Number(formData.get("price") || 0);
+  const weekly_payment = Number(formData.get("weekly_payment") || 0);
+
+  if (!slug || !model || !storage || price <= 0 || weekly_payment <= 0) {
+    throw new Error("Please fill in all required fields: Model, Slug, Storage, Price, and Weekly payment (must be greater than 0)");
+  }
+
   const payload = {
-    slug: String(formData.get("slug") || ""),
-    model: String(formData.get("model") || ""),
-    storage: String(formData.get("storage") || ""),
+    slug,
+    model,
+    storage,
     condition: String(formData.get("condition") || "Used"),
     grade: String(formData.get("grade") || "") || null,
-    price: Number(formData.get("price") || 0),
+    price,
     down_payment_percent: Number(formData.get("down_payment_percent") || 40),
-    weekly_payment: Number(formData.get("weekly_payment") || 0),
+    weekly_payment,
     installment_weeks: Number(formData.get("installment_weeks") || 12),
     stock_status: String(formData.get("stock_status") || "in_stock"),
     quantity: Number(formData.get("quantity") || 1),
@@ -157,10 +168,15 @@ export async function saveProduct(formData: FormData) {
 
   if (id) {
     const { error } = await supabase.from("products").update(payload).eq("id", id);
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(`Update failed: ${error.message}`);
   } else {
     const { error } = await supabase.from("products").insert(payload);
-    if (error) throw new Error(error.message);
+    if (error) {
+      if (error.message.includes("slug")) {
+        throw new Error("This slug already exists. Please use a unique slug.");
+      }
+      throw new Error(`Insert failed: ${error.message}`);
+    }
   }
 
   revalidatePath("/admin");
@@ -243,17 +259,15 @@ export async function updateAppointmentStatus(formData: FormData) {
   revalidatePath("/admin");
   if (reviewResult === "sent") {
     adminToast("Appointment completed. Review request sent to the customer.", "appointments");
-  }
-  if (reviewResult === "already_sent") {
+  } else if (reviewResult === "already_sent") {
     adminToast("Appointment updated. Review request had already been sent.", "appointments");
-  }
-  if (reviewResult === "no_email") {
+  } else if (reviewResult === "no_email") {
     adminToast("Appointment updated. No customer email was available for a review request.", "appointments");
-  }
-  if (reviewResult === "failed") {
+  } else if (reviewResult === "failed") {
     adminToast("Appointment updated, but the review request could not be sent.", "appointments");
+  } else {
+    adminToast("Appointment updated. Customer notification was attempted if an email exists.", "appointments");
   }
-  adminToast("Appointment updated. Customer notification was attempted if an email exists.", "appointments");
 }
 
 export async function saveSettings(formData: FormData) {
