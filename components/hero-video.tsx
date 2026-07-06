@@ -50,6 +50,9 @@ export function HeroVideo({ videoUrl, imageUrl, fallbackImage }: { videoUrl?: st
       autoPlay
       muted
       loop
+      playsInline
+      preload="metadata"
+      poster={imageUrl || fallbackImage}
       controls={false}
     >
       <source src={videoUrl} type="video/mp4" />

@@ -11,11 +11,15 @@ type ModalName = "calculator" | "appointment" | null;
 
 export function HomeActionModals({
   calculator,
-  appointment
+  appointment,
+  variant
 }: {
   calculator: ReactNode;
   appointment: ReactNode;
+  variant?: "hero";
 }) {
+  const primaryClass = variant === "hero" ? "btn-hero-primary w-full sm:w-auto" : "btn-secondary w-full sm:w-auto";
+  const ghostClass = variant === "hero" ? "btn-hero-ghost w-full sm:w-auto" : "btn-secondary w-full sm:w-auto";
   const searchParams = useSearchParams();
   const [open, setOpen] = useState<ModalName>(null);
   const [mounted, setMounted] = useState(false);
@@ -62,9 +66,9 @@ export function HomeActionModals({
   return (
     <>
       <div className="mt-7 grid w-full gap-3 sm:mt-9 sm:flex sm:flex-wrap sm:justify-center">
-        <Link className="btn-secondary w-full sm:w-auto" href="/iphones"><Smartphone className="h-4 w-4" /> Browse iPhones</Link>
-        <button className="btn-secondary w-full sm:w-auto" type="button" onClick={() => setOpen("calculator")}><Calculator className="h-4 w-4" /> Calculate payments</button>
-        <button className="btn-secondary w-full sm:w-auto" type="button" onClick={() => setOpen("appointment")}><CalendarCheck className="h-4 w-4" /> Book appointment</button>
+        <Link className={primaryClass} href="/iphones"><Smartphone className="h-4 w-4" /> Browse iPhones</Link>
+        <button className={ghostClass} type="button" onClick={() => setOpen("calculator")}><Calculator className="h-4 w-4" /> Calculate payments</button>
+        <button className={ghostClass} type="button" onClick={() => setOpen("appointment")}><CalendarCheck className="h-4 w-4" /> Book appointment</button>
       </div>
 
       {mounted && modal ? createPortal(modal, document.body) : null}

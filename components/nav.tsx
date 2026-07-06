@@ -4,7 +4,6 @@ import { AppointmentModalButton } from "@/components/appointment-modal-button";
 import { LeadForm } from "@/components/lead-form";
 import { MobileMenu } from "@/components/mobile-menu";
 import { PaymentCalculatorPanel } from "@/components/payment-calculator";
-import { ThemeToggle } from "@/components/theme-toggle";
 import type { SiteSettings } from "@/lib/types";
 
 const navLinks = [
@@ -32,7 +31,6 @@ export function Nav(_props: { settings: SiteSettings }) {
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           <AppointmentModalButton>
             <LeadForm variant="modal" />
           </AppointmentModalButton>
