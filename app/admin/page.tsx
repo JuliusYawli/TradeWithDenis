@@ -6,6 +6,7 @@ import { AdminPasswordForm } from "@/components/admin-password-form";
 import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
 import { AdminSubmitButton } from "@/components/admin-submit-button";
+import { AdminInactivityLogout } from "@/components/admin-inactivity-logout";
 import { AppointmentStatusModal } from "@/components/appointment-status-modal";
 import { isAllowedAdminEmail } from "@/lib/admin";
 import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
@@ -118,6 +119,7 @@ export default async function AdminPage({
 
   return (
     <main className="min-h-screen bg-snow">
+      <AdminInactivityLogout />
       <AdminToast message={toast?.toast} title={toast?.toastTitle} type={toast?.type} />
       <div className="container-page py-10">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
