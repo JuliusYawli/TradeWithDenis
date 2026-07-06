@@ -90,4 +90,5 @@ export type SiteSettings = {
   google_maps_url: string | null;
   business_registration: string | null;
   homepage_hero_image_url?: string | null;
+  homepage_hero_video_url?: string | null;
 };

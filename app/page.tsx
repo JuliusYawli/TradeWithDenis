@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { HomeActionModals } from "@/components/home-action-modals";
+import { HeroVideo } from "@/components/hero-video";
 import { LeadForm } from "@/components/lead-form";
 import { Nav } from "@/components/nav";
 import { PaymentCalculatorPanel } from "@/components/payment-calculator";
@@ -38,7 +39,7 @@ const steps: Array<[string, string, LucideIcon]> = [
 
 export default async function Home() {
   const [settings, featured, testimonials] = await Promise.all([getPublicSiteSettings(), getFeaturedProducts(), getTestimonials()]);
-  const heroImageUrl = settings.homepage_hero_image_url || "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85";
+  const fallbackImage = "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85";
 
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
@@ -93,7 +94,9 @@ export default async function Home() {
 
             <div className="relative mx-auto mt-8 max-w-6xl sm:mt-16">
               <div className="showcase-frame relative overflow-hidden rounded-2xl border border-white/80 bg-snow shadow-soft sm:rounded-[2.25rem]">
-                <div className="aspect-[16/9] bg-cover bg-center" style={{ backgroundImage: `url("${heroImageUrl}")` }} />
+                <div className="aspect-[16/9]">
+                  <HeroVideo videoUrl={settings.homepage_hero_video_url} imageUrl={settings.homepage_hero_image_url} fallbackImage={fallbackImage} />
+                </div>
               </div>
             </div>
           </div>

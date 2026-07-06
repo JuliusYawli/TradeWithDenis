@@ -282,6 +282,7 @@ export async function saveSettings(formData: FormData) {
     tiktok_url: String(formData.get("tiktok_url") || "") || null,
     google_maps_url: String(formData.get("google_maps_url") || "") || null,
     homepage_hero_image_url: String(formData.get("homepage_hero_image_url") || "") || null,
+    homepage_hero_video_url: String(formData.get("homepage_hero_video_url") || "") || null,
     business_registration: String(formData.get("business_registration") || "") || null
   };
 
@@ -301,6 +302,8 @@ export async function saveSettings(formData: FormData) {
       facebook_url: payload.facebook_url,
       tiktok_url: payload.tiktok_url,
       google_maps_url: payload.google_maps_url,
+      homepage_hero_image_url: payload.homepage_hero_image_url,
+      homepage_hero_video_url: payload.homepage_hero_video_url,
       business_registration: payload.business_registration
     };
     const fallbackQuery = id

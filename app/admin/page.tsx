@@ -425,6 +425,7 @@ export default async function AdminPage({
                       multiple={false}
                     />
                     <label className="text-xs font-medium uppercase text-neutral-500">Homepage hero image URL<input className="field mt-1" name="homepage_hero_image_url" defaultValue={settings.homepage_hero_image_url ?? ""} placeholder="Upload a photo or paste an image URL" /></label>
+                    <label className="text-xs font-medium uppercase text-neutral-500">Homepage hero video URL<input className="field mt-1" name="homepage_hero_video_url" defaultValue={settings.homepage_hero_video_url ?? ""} placeholder="Paste video URL (YouTube, Vimeo, or direct video URL)" /></label>
                   </div>
                 </div>
                 <div className="rounded-lg border border-line bg-snow p-4">
