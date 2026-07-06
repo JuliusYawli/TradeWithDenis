@@ -18,7 +18,7 @@ export function HomeActionModals({
   appointment: ReactNode;
   variant?: "hero";
 }) {
-  const primaryClass = variant === "hero" ? "btn-hero-primary w-full sm:w-auto" : "btn-secondary w-full sm:w-auto";
+  const primaryClass = variant === "hero" ? "btn-hero-ghost w-full sm:w-auto" : "btn-secondary w-full sm:w-auto";
   const ghostClass = variant === "hero" ? "btn-hero-ghost w-full sm:w-auto" : "btn-secondary w-full sm:w-auto";
   const searchParams = useSearchParams();
   const [open, setOpen] = useState<ModalName>(null);
