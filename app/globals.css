@@ -185,6 +185,42 @@ textarea {
   @apply transition duration-150 active:scale-[0.98] active:ring-2 active:ring-gold/20;
 }
 
+/* Admin dashboard modern styles */
+.admin-card {
+  @apply rounded-xl border transition-all duration-300;
+  border-color: var(--line-soft);
+  background: var(--surface);
+}
+
+.admin-card:hover {
+  border-color: rgb(var(--color-gold) / 0.5);
+  box-shadow: 0 4px 12px rgba(var(--color-gold) / 0.1);
+  transform: translateY(-1px);
+}
+
+.admin-stat {
+  @apply rounded-lg border transition-all duration-300 p-4;
+  border-color: var(--line-soft);
+  background: var(--surface);
+}
+
+.admin-stat:hover {
+  border-color: rgb(var(--color-gold) / 0.4);
+  background: rgba(var(--color-gold) / 0.02);
+}
+
+/* Better form styling */
+.admin-form-group {
+  @apply rounded-lg border transition-colors duration-200 p-4;
+  border-color: var(--line-soft);
+  background: var(--surface-blue);
+}
+
+.admin-form-group:focus-within {
+  border-color: rgb(var(--color-gold) / 0.6);
+  background: var(--surface);
+}
+
 /* Modern animations */
 @keyframes fadeIn {
   from {
