@@ -121,57 +121,61 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="how-it-works" className="scroll-mt-24 bg-snow py-12 sm:py-24">
+        <section id="how-it-works" className="scroll-mt-24 bg-snow py-12 sm:py-24 animate-fade-in">
           <div className="container-page">
-            <div className="mx-auto max-w-2xl text-center">
+            <div className="mx-auto max-w-2xl text-center animate-slide-up">
               <p className="section-eyebrow">How it works</p>
               <h2 className="mt-4 text-2xl font-semibold tracking-tight sm:mt-5 sm:text-4xl">Simple flow. Serious purchase.</h2>
-              <p className="mt-5 text-base leading-7 text-neutral-600 sm:text-lg">The website helps customers choose and book. The final decision happens in the shop after inspection.</p>
+              <p className="mt-5 text-base leading-7 text-neutral-600 dark:text-neutral-300 sm:text-lg">The website helps customers choose and book. The final decision happens in the shop after inspection.</p>
             </div>
             <div className="mt-8 grid gap-4 sm:mt-12 md:grid-cols-3 md:gap-5">
               {steps.map(([title, copy, Icon], index) => (
-                <div key={title} className="premium-card p-5 sm:p-7">
+                <div key={title} className="premium-card p-5 sm:p-7 animate-scale-in hover:shadow-glow" style={{ animationDelay: `${index * 0.1}s` }}>
                   <div className="flex items-start justify-between">
-                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-400">Step 0{index + 1}</span>
-                    <Icon className="h-6 w-6 text-gold" />
+                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-400 dark:text-neutral-500">Step 0{index + 1}</span>
+                    <Icon className="h-6 w-6 text-gold transition-transform duration-300 hover:scale-110" />
                   </div>
-                  <h3 className="mt-8 text-xl font-semibold tracking-tight text-ink sm:mt-12 sm:text-2xl">{title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-neutral-600">{copy}</p>
+                  <h3 className="mt-8 text-xl font-semibold tracking-tight text-ink dark:text-snow sm:mt-12 sm:text-2xl">{title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-neutral-600 dark:text-neutral-300">{copy}</p>
                 </div>
               ))}
             </div>
-            <div className="mt-8 rounded-xl border border-line bg-white p-5 shadow-sm sm:mt-10 sm:p-6">
+            <div className="mt-8 card-modern p-5 shadow-sm sm:mt-10 sm:p-6 animate-slide-up">
               <div className="max-w-2xl">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red">Ready to visit?</p>
-                <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">Book a shop appointment and inspect your iPhone in person.</h2>
-                <p className="mt-3 text-sm leading-6 text-neutral-600 sm:text-base">The shop receives your request, prepares for your visit, and follows up through your preferred contact method.</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">Ready to visit?</p>
+                <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink dark:text-snow sm:text-3xl">Book a shop appointment and inspect your iPhone in person.</h2>
+                <p className="mt-3 text-sm leading-6 text-neutral-600 dark:text-neutral-300 sm:text-base">The shop receives your request, prepares for your visit, and follows up through your preferred contact method.</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="iphones" className="bg-white py-16 sm:py-24">
+        <section id="iphones" className="bg-white py-16 sm:py-24 animate-fade-in">
           <div className="container-page">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between animate-slide-up">
               <div className="max-w-2xl">
                 <p className="section-eyebrow">Available stock</p>
                 <h2 className="mt-5 text-3xl font-semibold tracking-tight sm:text-4xl">Featured iPhones ready for inspection.</h2>
-                <p className="mt-4 text-base leading-7 text-neutral-600">Every listing shows the details customers need before booking a shop visit.</p>
+                <p className="mt-4 text-base leading-7 text-neutral-600 dark:text-neutral-300">Every listing shows the details customers need before booking a shop visit.</p>
               </div>
-              <Link className="btn-secondary w-full sm:w-auto" href="/iphones">View all iPhones</Link>
+              <Link className="btn-primary w-full sm:w-auto transition-all duration-300 hover:shadow-glow" href="/iphones">View all iPhones</Link>
             </div>
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {featured.map((product) => <ProductCard key={product.id} product={product} />)}
+              {featured.map((product, i) => (
+                <div key={product.id} className="animate-scale-in" style={{ animationDelay: `${i * 0.08}s` }}>
+                  <ProductCard product={product} />
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        <section id="why-us" className="scroll-mt-24 bg-snow py-16 sm:py-24">
+        <section id="why-us" className="scroll-mt-24 bg-snow py-16 sm:py-24 animate-fade-in">
           <div className="container-page grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-            <div>
+            <div className="animate-slide-up">
               <p className="section-eyebrow">Why customers trust it</p>
               <h2 className="mt-5 text-3xl font-semibold tracking-tight sm:text-4xl">Clear before visit. Confident before payment.</h2>
-              <p className="mt-5 text-base leading-7 text-neutral-600">TradeWithDennis keeps the online experience focused on discovery and appointment booking, while the final purchase remains personal and inspectable in shop.</p>
+              <p className="mt-5 text-base leading-7 text-neutral-600 dark:text-neutral-300">TradeWithDennis keeps the online experience focused on discovery and appointment booking, while the final purchase remains personal and inspectable in shop.</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {[
@@ -179,10 +183,10 @@ export default async function Home() {
                 ["Real shop visit", "No hidden online checkout. The customer inspects the device and confirms everything at Circle Mall."],
                 ["Fast follow-up", "Appointments and inquiries enter the admin dashboard so the shop can call, WhatsApp, or email quickly."],
                 ["Editable business site", "Products, prices, contact details, policies, and customer requests can be managed from the admin dashboard."]
-              ].map(([title, copy]) => (
-                <div key={title} className="premium-card p-5">
-                  <h3 className="font-semibold text-ink">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-neutral-600">{copy}</p>
+              ].map(([title, copy], i) => (
+                <div key={title} className="premium-card p-5 animate-scale-in hover:shadow-glow" style={{ animationDelay: `${i * 0.1}s` }}>
+                  <h3 className="font-semibold text-ink dark:text-snow">{title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-neutral-600 dark:text-neutral-300">{copy}</p>
                 </div>
               ))}
             </div>
