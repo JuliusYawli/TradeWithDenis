@@ -41,7 +41,7 @@ export default async function Home() {
   const [settings, featured, testimonials] = await Promise.all([getPublicSiteSettings(), getFeaturedProducts(), getTestimonials()]);
   const fallbackImage = "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85";
   // Pexels stock video (free for commercial use); admins can override it in site settings.
-  const heroVideoUrl = settings.homepage_hero_video_url || "https://videos.pexels.com/video-files/853987/853987-hd_1920_1080_25fps.mp4";
+  const heroVideoUrl = settings.homepage_hero_video_url || "https://videos.pexels.com/video-files/6611941/6611941-hd_1920_1080_25fps.mp4";
 
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
