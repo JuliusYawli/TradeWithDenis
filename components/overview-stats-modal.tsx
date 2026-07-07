@@ -21,16 +21,16 @@ export function OverviewStatsModal({
 
   const handleItemClick = (id: string, type: "product" | "lead" | "appointment") => {
     setSelectedStat(null);
-    setTimeout(() => {
-      if (type === "product") {
-        document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
-        document.querySelector(`[data-product-id="${id}"]`)?.scrollIntoView({ behavior: "smooth" });
-      } else if (type === "lead") {
-        document.getElementById("leads")?.scrollIntoView({ behavior: "smooth" });
-      } else if (type === "appointment") {
-        document.getElementById("appointments")?.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100);
+    // Admin panels are hidden until the URL hash targets them, so navigate
+    // via the hash instead of scrollIntoView on a display:none section.
+    window.location.hash = type === "product" ? "products" : type === "lead" ? "leads" : "appointments";
+    if (type === "product") {
+      setTimeout(() => {
+        const el = document.querySelector(`[data-product-id="${id}"]`);
+        if (el instanceof HTMLDetailsElement) el.open = true;
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 150);
+    }
   };
 
   const data = useMemo(() => {

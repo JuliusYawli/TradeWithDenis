@@ -86,7 +86,15 @@ export function AppointmentStatusModal({
             <div className="space-y-3">
               {filtered.length ? (
                 filtered.map((apt) => (
-                  <div key={apt.id} className="rounded-md border border-line bg-snow p-4">
+                  <button
+                    key={apt.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedStatus(null);
+                      window.location.hash = "appointments";
+                    }}
+                    className="w-full rounded-md border border-line bg-snow p-4 text-left transition hover:border-gold hover:bg-white cursor-pointer"
+                  >
                     <div className="flex items-center justify-between gap-2 mb-2">
                       <p className="font-medium">{apt.leads?.customer_name ?? "Customer"}</p>
                       <span className="text-xs font-medium text-neutral-600">
@@ -102,7 +110,7 @@ export function AppointmentStatusModal({
                     <p className="mt-1 text-xs text-neutral-500">
                       Booked {formatDateTime(apt.created_at)}
                     </p>
-                  </div>
+                  </button>
                 ))
               ) : (
                 <p className="text-center text-neutral-600">No appointments</p>
