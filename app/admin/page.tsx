@@ -84,9 +84,10 @@ export default async function AdminPage({
   ]);
   const inStock = products.filter((product) => product.stock_status === "in_stock").length;
   const todaysLeads = leads.filter((lead) => isLeadFromToday(lead.created_at));
+  const activeAppointments = appointments.filter((appointment) => !appointment.archived);
   const appointmentStatusCounts = appointmentStatuses.map(([status, label]) => [
     label,
-    appointments.filter((appointment) => appointment.status === status).length
+    activeAppointments.filter((appointment) => appointment.status === status).length
   ] as const);
   const testimonialStatusCounts = testimonialStatuses.map(([status, label]) => [
     label,
@@ -96,11 +97,11 @@ export default async function AdminPage({
     ["Total products", products.length, Package],
     ["In stock", inStock, BarChart3],
     ["New leads", todaysLeads.filter((lead) => lead.status === "new").length, Users],
-    ["Appointment queue", appointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status)).length, CalendarDays]
+    ["Appointment queue", activeAppointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status)).length, CalendarDays]
   ];
   const adminNavItems: Array<[string, string, LucideIcon, string | number | null]> = [
     ["Overview", "#overview", BarChart3, null],
-    ["Appointments", "#appointments", CalendarDays, appointments.length],
+    ["Appointments", "#appointments", CalendarDays, activeAppointments.length],
     ["Leads", "#leads", Users, todaysLeads.length],
     ["Add product", "#add-product", Plus, null],
     ["Products", "#products", Package, products.length],
@@ -197,7 +198,7 @@ export default async function AdminPage({
             <OverviewStatsModal
               products={products}
               leads={todaysLeads}
-              appointments={appointments}
+              appointments={activeAppointments}
               stats={stats.map(([label, value]) => [String(label), Number(value)])}
             />
             <div className="mt-5 grid gap-4 lg:grid-cols-4">
@@ -232,7 +233,7 @@ export default async function AdminPage({
               </div>
             </div>
             <AdminAppointmentSearch appointments={appointments}>
-              <AppointmentStatusModal appointments={appointments} statusCounts={appointmentStatusCounts} />
+              <AppointmentStatusModal appointments={activeAppointments} statusCounts={appointmentStatusCounts} />
             </AdminAppointmentSearch>
           </section>
 

@@ -73,6 +73,7 @@ export type Appointment = {
   status: string;
   notes: string | null;
   created_at: string;
+  archived?: boolean | null;
   leads?: Pick<Lead, "customer_name" | "phone" | "email" | "preferred_contact_method" | "message" | "desired_payment_option"> | null;
 };
 

@@ -267,6 +267,23 @@ export async function updateAppointmentStatus(formData: FormData) {
   }
 }
 
+export async function setAppointmentArchived(formData: FormData) {
+  const supabase = await adminClient();
+  const id = String(formData.get("id") || "");
+  const archived = String(formData.get("archived") || "") === "true";
+  if (!id) return;
+  const { error } = await supabase.from("appointments").update({ archived }).eq("id", id);
+  if (error) {
+    if (error.message.includes("archived")) {
+      adminToast("Archiving needs a database column. Run in Supabase SQL Editor: alter table appointments add column archived boolean not null default false;", "appointments");
+      return;
+    }
+    throw new Error(`Archive failed: ${error.message}`);
+  }
+  revalidatePath("/admin");
+  adminToast(archived ? "Appointment archived." : "Appointment restored to the queue.", "appointments");
+}
+
 export async function deleteAppointment(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");

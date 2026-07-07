@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { Mail, MessageCircle, Phone, Search, Trash2 } from "lucide-react";
+import { Archive, Mail, MessageCircle, Phone, Search, Trash2 } from "lucide-react";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
 import type { Appointment, Lead } from "@/lib/types";
-import { deleteAppointment, updateAppointmentStatus, updateLeadStatus } from "@/app/admin/actions";
+import { deleteAppointment, setAppointmentArchived, updateAppointmentStatus, updateLeadStatus } from "@/app/admin/actions";
 
 const appointmentStatuses = [
   ["pending", "Pending"],
@@ -102,17 +102,40 @@ function SearchBox({
 
 export function AdminAppointmentSearch({ appointments, children }: { appointments: Appointment[]; children?: ReactNode }) {
   const [query, setQuery] = useState("");
+  const [showArchived, setShowArchived] = useState(false);
   const normalizedQuery = query.trim().toLowerCase();
+  const visibleAppointments = useMemo(
+    () => appointments.filter((appointment) => (showArchived ? Boolean(appointment.archived) : !appointment.archived)),
+    [appointments, showArchived]
+  );
   const filtered = useMemo(
-    () => (normalizedQuery ? appointments.filter((appointment) => matchesAppointment(appointment, normalizedQuery)) : appointments),
-    [appointments, normalizedQuery]
+    () => (normalizedQuery ? visibleAppointments.filter((appointment) => matchesAppointment(appointment, normalizedQuery)) : visibleAppointments),
+    [visibleAppointments, normalizedQuery]
   );
 
   return (
     <>
       <div className="mt-4">
         <SearchBox value={query} onChange={setQuery} placeholder="Search appointments by name, phone, email, or note" />
-        <p className="mt-2 text-xs font-medium text-neutral-500">{filtered.length} of {appointments.length} appointments showing</p>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs font-medium text-neutral-500">{filtered.length} of {visibleAppointments.length} appointments showing{showArchived ? " (archived)" : ""}</p>
+          <div className="inline-flex rounded-full border border-line bg-white p-0.5 text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => setShowArchived(false)}
+              className={`rounded-full px-3 py-1.5 transition ${!showArchived ? "bg-gold text-white" : "text-neutral-600 hover:text-red"}`}
+            >
+              Active
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowArchived(true)}
+              className={`rounded-full px-3 py-1.5 transition ${showArchived ? "bg-gold text-white" : "text-neutral-600 hover:text-red"}`}
+            >
+              Archived
+            </button>
+          </div>
+        </div>
       </div>
       {children}
       <div className="mt-4 min-h-[440px] max-h-[820px] space-y-3 overflow-y-scroll pr-2 [scrollbar-gutter:stable] sm:min-h-[620px]">
@@ -149,16 +172,26 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
               <label className="text-xs font-medium uppercase text-neutral-500">Internal note<textarea className="field mt-1 min-h-20" name="notes" defaultValue={appointment.notes ?? ""} placeholder="Example: customer asked to postpone to Friday, confirmed by WhatsApp" /></label>
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <button className="btn-primary w-full px-4 py-2 md:w-fit" type="submit">Save appointment</button>
-                <button
-                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-danger/30 bg-white px-4 py-2 text-sm font-medium text-danger transition hover:border-danger hover:bg-danger hover:text-white md:w-fit"
-                  type="submit"
-                  formAction={deleteAppointment}
-                  onClick={(event) => {
-                    if (!confirm("Delete this appointment permanently? This cannot be undone.")) event.preventDefault();
-                  }}
-                >
-                  <Trash2 className="h-4 w-4" /> Delete
-                </button>
+                <div className="flex w-full flex-wrap gap-2 md:w-fit">
+                  <input type="hidden" name="archived" value={appointment.archived ? "false" : "true"} />
+                  <button
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-gold hover:text-red md:w-fit"
+                    type="submit"
+                    formAction={setAppointmentArchived}
+                  >
+                    <Archive className="h-4 w-4" /> {appointment.archived ? "Unarchive" : "Archive"}
+                  </button>
+                  <button
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-danger/30 bg-white px-4 py-2 text-sm font-medium text-danger transition hover:border-danger hover:bg-danger hover:text-white md:w-fit"
+                    type="submit"
+                    formAction={deleteAppointment}
+                    onClick={(event) => {
+                      if (!confirm("Delete this appointment permanently? This cannot be undone.")) event.preventDefault();
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" /> Delete
+                  </button>
+                </div>
               </div>
             </form>
           </div>
