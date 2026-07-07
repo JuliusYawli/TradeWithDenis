@@ -267,6 +267,16 @@ export async function updateAppointmentStatus(formData: FormData) {
   }
 }
 
+export async function deleteAppointment(formData: FormData) {
+  const supabase = await adminClient();
+  const id = String(formData.get("id") || "");
+  if (!id) return;
+  const { error } = await supabase.from("appointments").delete().eq("id", id);
+  if (error) throw new Error(`Delete failed: ${error.message}`);
+  revalidatePath("/admin");
+  adminToast("Appointment deleted.", "appointments");
+}
+
 export async function saveSettings(formData: FormData) {
   const supabase = await adminClient();
   const id = String(formData.get("id") || "");

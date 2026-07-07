@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { Mail, MessageCircle, Phone, Search } from "lucide-react";
+import { Mail, MessageCircle, Phone, Search, Trash2 } from "lucide-react";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
 import type { Appointment, Lead } from "@/lib/types";
-import { updateAppointmentStatus, updateLeadStatus } from "@/app/admin/actions";
+import { deleteAppointment, updateAppointmentStatus, updateLeadStatus } from "@/app/admin/actions";
 
 const appointmentStatuses = [
   ["pending", "Pending"],
@@ -147,7 +147,19 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
                 </select></label>
               </div>
               <label className="text-xs font-medium uppercase text-neutral-500">Internal note<textarea className="field mt-1 min-h-20" name="notes" defaultValue={appointment.notes ?? ""} placeholder="Example: customer asked to postpone to Friday, confirmed by WhatsApp" /></label>
-              <button className="btn-primary w-full px-4 py-2 md:w-fit" type="submit">Save appointment</button>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <button className="btn-primary w-full px-4 py-2 md:w-fit" type="submit">Save appointment</button>
+                <button
+                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-danger/30 bg-white px-4 py-2 text-sm font-medium text-danger transition hover:border-danger hover:bg-danger hover:text-white md:w-fit"
+                  type="submit"
+                  formAction={deleteAppointment}
+                  onClick={(event) => {
+                    if (!confirm("Delete this appointment permanently? This cannot be undone.")) event.preventDefault();
+                  }}
+                >
+                  <Trash2 className="h-4 w-4" /> Delete
+                </button>
+              </div>
             </form>
           </div>
         )) : <p className="rounded-md bg-snow p-4 text-sm text-neutral-600">No appointments match that search.</p>}
