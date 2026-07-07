@@ -10,7 +10,7 @@ import { AdminInactivityLogout } from "@/components/admin-inactivity-logout";
 import { AppointmentStatusModal } from "@/components/appointment-status-modal";
 import { OverviewStatsModal } from "@/components/overview-stats-modal";
 import { isAllowedAdminEmail } from "@/lib/admin";
-import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings } from "@/lib/data";
+import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings, isLeadFromToday } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { deleteProduct, logoutAdmin, saveProduct, saveSettings, updateTestimonialStatus } from "./actions";
@@ -83,6 +83,7 @@ export default async function AdminPage({
     getAppointments()
   ]);
   const inStock = products.filter((product) => product.stock_status === "in_stock").length;
+  const todaysLeads = leads.filter((lead) => isLeadFromToday(lead.created_at));
   const appointmentStatusCounts = appointmentStatuses.map(([status, label]) => [
     label,
     appointments.filter((appointment) => appointment.status === status).length
@@ -94,13 +95,13 @@ export default async function AdminPage({
   const stats: Array<[string, string | number, LucideIcon]> = [
     ["Total products", products.length, Package],
     ["In stock", inStock, BarChart3],
-    ["New leads", leads.filter((lead) => lead.status === "new").length, Users],
+    ["New leads", todaysLeads.filter((lead) => lead.status === "new").length, Users],
     ["Appointment queue", appointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status)).length, CalendarDays]
   ];
   const adminNavItems: Array<[string, string, LucideIcon, string | number | null]> = [
     ["Overview", "#overview", BarChart3, null],
     ["Appointments", "#appointments", CalendarDays, appointments.length],
-    ["Leads", "#leads", Users, leads.length],
+    ["Leads", "#leads", Users, todaysLeads.length],
     ["Add product", "#add-product", Plus, null],
     ["Products", "#products", Package, products.length],
     ["Backups", "#backups", Database, null],
@@ -195,7 +196,7 @@ export default async function AdminPage({
             </div>
             <OverviewStatsModal
               products={products}
-              leads={leads}
+              leads={todaysLeads}
               appointments={appointments}
               stats={stats.map(([label, value]) => [String(label), Number(value)])}
             />

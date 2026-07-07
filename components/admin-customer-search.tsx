@@ -168,10 +168,21 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
   );
 }
 
+function leadIsFromToday(createdAt: string) {
+  const now = new Date();
+  // Ghana is UTC+0, so UTC midnight is the local business-day boundary.
+  const ghanaMidnight = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0);
+  return new Date(createdAt).getTime() >= ghanaMidnight;
+}
+
 export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
   const [query, setQuery] = useState("");
+  const [showAll, setShowAll] = useState(false);
   const normalizedQuery = query.trim().toLowerCase();
-  const visibleLeads = leads.slice(0, 20);
+  const visibleLeads = useMemo(
+    () => (showAll ? leads : leads.filter((lead) => leadIsFromToday(lead.created_at))),
+    [leads, showAll]
+  );
   const filtered = useMemo(
     () => (normalizedQuery ? visibleLeads.filter((lead) => matchesLead(lead, normalizedQuery)) : visibleLeads),
     [visibleLeads, normalizedQuery]
@@ -181,7 +192,25 @@ export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
     <>
       <div className="mt-4">
         <SearchBox value={query} onChange={setQuery} placeholder="Search leads by name, phone, email, or message" />
-        <p className="mt-2 text-xs font-medium text-neutral-500">{filtered.length} of {visibleLeads.length} leads showing</p>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs font-medium text-neutral-500">{filtered.length} of {visibleLeads.length} leads showing{showAll ? " (all time)" : " (today)"}</p>
+          <div className="inline-flex rounded-full border border-line bg-white p-0.5 text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => setShowAll(false)}
+              className={`rounded-full px-3 py-1.5 transition ${!showAll ? "bg-gold text-white" : "text-neutral-600 hover:text-red"}`}
+            >
+              Today
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowAll(true)}
+              className={`rounded-full px-3 py-1.5 transition ${showAll ? "bg-gold text-white" : "text-neutral-600 hover:text-red"}`}
+            >
+              All leads
+            </button>
+          </div>
+        </div>
       </div>
       <div className="mt-4 min-h-[440px] max-h-[820px] space-y-3 overflow-y-scroll pr-2 [scrollbar-gutter:stable] sm:min-h-[620px]">
         {filtered.length ? filtered.map((lead) => (

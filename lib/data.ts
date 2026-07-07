@@ -141,10 +141,16 @@ export async function getLeads() {
   noStore();
   if (!hasSupabaseEnv()) return [] as Lead[];
   const supabase = await createServerSupabaseClient();
-  const now = new Date();
-  const ghanaMidnight = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
-  const { data } = await supabase.from("leads").select("*").gte("created_at", ghanaMidnight.toISOString()).order("created_at", { ascending: false }).limit(20);
+  // Full history (capped); the admin UI defaults to today's leads and offers a show-all toggle.
+  const { data } = await supabase.from("leads").select("*").order("created_at", { ascending: false }).limit(200);
   return (data as Lead[] | null) ?? [];
+}
+
+export function isLeadFromToday(createdAt: string) {
+  const now = new Date();
+  // Ghana is UTC+0, so UTC midnight is the local business-day boundary.
+  const ghanaMidnight = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0);
+  return new Date(createdAt).getTime() >= ghanaMidnight;
 }
 
 export async function getAppointments() {
