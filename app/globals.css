@@ -2,22 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Light mode colors */
+/* Luxury charcoal + gold palette */
 :root {
-  --color-ink: 11 18 32;
-  --color-snow: 247 251 255;
-  --color-line: 219 238 254;
-  --color-gold: 21 83 197;
-  --color-red: 15 63 156;
+  --color-ink: 12 10 9;
+  --color-snow: 250 250 249;
+  --color-line: 231 229 228;
+  --color-gold: 161 98 7;
+  --color-red: 133 77 14;
   --color-danger: 185 28 28;
 
-  --background: #f8fbff;
-  --foreground: #0b1220;
+  --background: #fafaf9;
+  --foreground: #0c0a09;
   --surface: #ffffff;
-  --surface-blue: #f1f7ff;
-  --brand: #1553c5;
-  --brand-dark: #0f3f9c;
-  --line-soft: #dbeafe;
+  --surface-blue: #faf6ef;
+  --brand: #a16207;
+  --brand-dark: #854d0e;
+  --line-soft: #e7e5e4;
 }
 
 * {
@@ -33,23 +33,34 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   font-weight: 400;
-  line-height: 1.47059;
+  line-height: 1.5;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1,
 h2,
 h3,
 h4 {
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
   font-weight: 600;
-  letter-spacing: 0;
-  line-height: 1.08;
+  letter-spacing: 0.01em;
+  line-height: 1.12;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 input,
@@ -79,7 +90,7 @@ textarea {
 }
 
 .premium-card {
-  @apply rounded-xl border border-line bg-white shadow-sm transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-soft;
+  @apply rounded-xl border border-line bg-white/85 shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-soft;
 }
 
 .soft-panel {
@@ -91,23 +102,23 @@ textarea {
 }
 
 .badge-blue {
-  @apply inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-red;
+  @apply inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-red;
 }
 
 .hero-shell {
-  background: linear-gradient(180deg, #ffffff 0%, #f1f7ff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #faf6ef 100%);
 }
 
-/* Cinematic dark hero */
+/* Cinematic dark hero — charcoal & gold */
 .hero-cinematic {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 90% 55% at 50% -12%, rgba(37, 99, 235, 0.42), transparent 62%),
-    radial-gradient(ellipse 55% 45% at 88% 105%, rgba(21, 83, 197, 0.3), transparent 58%),
-    radial-gradient(ellipse 45% 35% at 8% 85%, rgba(30, 64, 175, 0.22), transparent 55%),
-    linear-gradient(180deg, #070c1a 0%, #0a1228 48%, #070c1a 100%);
+    radial-gradient(ellipse 90% 55% at 50% -12%, rgba(202, 138, 4, 0.32), transparent 62%),
+    radial-gradient(ellipse 55% 45% at 88% 105%, rgba(161, 98, 7, 0.24), transparent 58%),
+    radial-gradient(ellipse 45% 35% at 8% 85%, rgba(120, 72, 10, 0.18), transparent 55%),
+    linear-gradient(180deg, #0c0a09 0%, #1c1917 48%, #0c0a09 100%);
 }
 
 .hero-cinematic::before {
@@ -116,8 +127,8 @@ textarea {
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(147, 197, 253, 0.05) 0 1px, transparent 1px 100%),
-    linear-gradient(180deg, rgba(147, 197, 253, 0.05) 0 1px, transparent 1px 100%);
+    linear-gradient(90deg, rgba(250, 204, 21, 0.045) 0 1px, transparent 1px 100%),
+    linear-gradient(180deg, rgba(250, 204, 21, 0.045) 0 1px, transparent 1px 100%);
   background-size: 52px 52px;
   mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, black 30%, transparent 75%);
 }
@@ -131,47 +142,47 @@ textarea {
   animation: floatSlow 9s ease-in-out infinite;
 }
 
-.text-gradient-blue {
-  background: linear-gradient(100deg, #93c5fd 0%, #3b82f6 48%, #bfdbfe 100%);
+.text-gradient-gold {
+  background: linear-gradient(100deg, #fde68a 0%, #d4a017 48%, #fef3c7 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .glass-pill {
-  border: 1px solid rgba(147, 197, 253, 0.22);
-  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(250, 204, 21, 0.24);
+  background: rgba(202, 138, 4, 0.12);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
 .glass-card {
-  border: 1px solid rgba(147, 197, 253, 0.16);
-  background: rgba(15, 30, 65, 0.45);
+  border: 1px solid rgba(250, 204, 21, 0.16);
+  background: rgba(48, 38, 20, 0.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
 
 .btn-hero-primary {
   @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98];
-  background: linear-gradient(135deg, #2563eb 0%, #1553c5 100%);
-  box-shadow: 0 0 32px rgba(37, 99, 235, 0.45), 0 8px 24px rgba(10, 18, 40, 0.5);
+  background: linear-gradient(135deg, #ca8a04 0%, #854d0e 100%);
+  box-shadow: 0 0 32px rgba(202, 138, 4, 0.4), 0 8px 24px rgba(20, 15, 5, 0.5);
 }
 
 .btn-hero-primary:hover {
-  box-shadow: 0 0 48px rgba(37, 99, 235, 0.65), 0 10px 28px rgba(10, 18, 40, 0.55);
+  box-shadow: 0 0 48px rgba(202, 138, 4, 0.6), 0 10px 28px rgba(20, 15, 5, 0.55);
 }
 
 .btn-hero-ghost {
   @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 active:translate-y-0;
-  border: 1px solid rgba(147, 197, 253, 0.3);
+  border: 1px solid rgba(250, 204, 21, 0.3);
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
 .btn-hero-ghost:hover {
-  border-color: rgba(147, 197, 253, 0.55);
+  border-color: rgba(250, 204, 21, 0.55);
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -179,8 +190,8 @@ textarea {
   position: relative;
   border-radius: 1.5rem;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(147, 197, 253, 0.45), rgba(37, 99, 235, 0.15) 40%, rgba(147, 197, 253, 0.35));
-  box-shadow: 0 0 80px rgba(37, 99, 235, 0.35), 0 30px 80px rgba(5, 10, 25, 0.7);
+  background: linear-gradient(135deg, rgba(253, 230, 138, 0.45), rgba(161, 98, 7, 0.15) 40%, rgba(253, 230, 138, 0.35));
+  box-shadow: 0 0 80px rgba(202, 138, 4, 0.32), 0 30px 80px rgba(10, 8, 3, 0.7);
 }
 
 @keyframes floatSlow {
@@ -192,8 +203,8 @@ textarea {
   isolation: isolate;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(247, 251, 255, 0.9) 46%, rgba(238, 246, 255, 0.96) 100%),
-    linear-gradient(90deg, rgba(21, 83, 197, 0.1) 0 1px, transparent 1px 100%),
-    linear-gradient(180deg, rgba(21, 83, 197, 0.08) 0 1px, transparent 1px 100%);
+    linear-gradient(90deg, rgba(161, 98, 7, 0.1) 0 1px, transparent 1px 100%),
+    linear-gradient(180deg, rgba(161, 98, 7, 0.08) 0 1px, transparent 1px 100%);
   background-size: auto, 44px 44px, 44px 44px;
 }
 
@@ -203,14 +214,14 @@ textarea {
   z-index: -1;
   content: "";
   background:
-    linear-gradient(115deg, rgba(21, 83, 197, 0.14), transparent 32%),
-    linear-gradient(295deg, rgba(15, 63, 156, 0.12), transparent 34%),
+    linear-gradient(115deg, rgba(161, 98, 7, 0.14), transparent 32%),
+    linear-gradient(295deg, rgba(133, 77, 14, 0.12), transparent 34%),
     linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.58) 72%, rgba(255, 255, 255, 0.88) 100%);
   pointer-events: none;
 }
 
 .showcase-frame {
-  box-shadow: 0 28px 80px rgba(21, 83, 197, 0.16), 0 1px 0 rgba(255, 255, 255, 0.88) inset;
+  box-shadow: 0 28px 80px rgba(161, 98, 7, 0.16), 0 1px 0 rgba(255, 255, 255, 0.88) inset;
 }
 
 .modal-panel {
@@ -247,9 +258,9 @@ textarea {
 .admin-shell:has(#settings:target) .admin-nav-link[href="#settings"],
 .admin-shell:has(#password:target) .admin-nav-link[href="#password"],
 .admin-shell:has(#testimonials:target) .admin-nav-link[href="#testimonials"] {
-  border-color: #dbeafe;
-  background: #f7fbff;
-  color: #0f3f9c;
+  border-color: #fde68a;
+  background: #fffbeb;
+  color: #854d0e;
 }
 
 .admin-clickable {

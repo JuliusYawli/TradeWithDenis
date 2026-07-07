@@ -60,30 +60,30 @@ export default async function Home() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }} />
 
         <section id="top" className="hero-cinematic border-b border-line">
-          <div className="hero-orb left-[-8%] top-[4%] h-72 w-72 bg-blue-600" />
-          <div className="hero-orb right-[-6%] top-[36%] h-96 w-96 bg-blue-500" style={{ animationDelay: "3s" }} />
-          <div className="hero-orb bottom-[-10%] left-[22%] h-64 w-64 bg-blue-800" style={{ animationDelay: "5.5s" }} />
+          <div className="hero-orb left-[-8%] top-[4%] h-72 w-72 bg-amber-500" />
+          <div className="hero-orb right-[-6%] top-[36%] h-96 w-96 bg-yellow-600" style={{ animationDelay: "3s" }} />
+          <div className="hero-orb bottom-[-10%] left-[22%] h-64 w-64 bg-amber-800" style={{ animationDelay: "5.5s" }} />
 
           <div className="container-page relative py-14 text-center sm:py-20 lg:py-24">
             <div className="mx-auto flex max-w-4xl flex-col items-center">
-              <p className="glass-pill inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-blue-200 animate-fade-in">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-400" />
+              <p className="glass-pill inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-amber-200 animate-fade-in">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
                 Premium iPhones in Ghana
               </p>
               <h1 className="mt-6 text-balance text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl animate-slide-up">
                 Own Your Next iPhone
-                <span className="block pb-2 text-gradient-blue">With Confidence.</span>
+                <span className="block pb-2 text-gradient-gold">With Confidence.</span>
               </h1>
-              <p className="mt-5 max-w-2xl text-balance text-base leading-7 text-blue-100/70 sm:text-lg animate-slide-up" style={{ animationDelay: "0.15s" }}>
+              <p className="mt-5 max-w-2xl text-balance text-base leading-7 text-stone-300 sm:text-lg animate-slide-up" style={{ animationDelay: "0.15s" }}>
                 Transparent pricing, flexible weekly payments, and every device inspected in person at Circle Mall before you pay a cedi.
               </p>
               <Suspense fallback={null}>
                 <HomeActionModals variant="hero" calculator={<PaymentCalculatorPanel />} appointment={<LeadForm variant="modal" />} />
               </Suspense>
               <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5 animate-fade-in sm:mt-8" style={{ animationDelay: "0.3s" }}>
-                <span className="glass-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium text-blue-100 sm:text-sm"><ShieldCheck className="h-4 w-4 text-blue-300" /> Verified stock</span>
-                <span className="glass-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium text-blue-100 sm:text-sm"><Clock className="h-4 w-4 text-blue-300" /> {settings.opening_hours}</span>
-                <span className="glass-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium text-blue-100 sm:text-sm"><MapPin className="h-4 w-4 text-blue-300" /> Circle Mall, Block C</span>
+                <span className="glass-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium text-amber-100 sm:text-sm"><ShieldCheck className="h-4 w-4 text-amber-300" /> Verified stock</span>
+                <span className="glass-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium text-amber-100 sm:text-sm"><Clock className="h-4 w-4 text-amber-300" /> {settings.opening_hours}</span>
+                <span className="glass-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium text-amber-100 sm:text-sm"><MapPin className="h-4 w-4 text-amber-300" /> Circle Mall, Block C</span>
               </div>
             </div>
 
@@ -105,8 +105,8 @@ export default async function Home() {
                 { title: "Prepared appointment", desc: "The shop knows what you want to inspect." }
               ].map((item, i) => (
                 <div key={item.title} className="glass-card rounded-2xl p-4 animate-slide-up sm:p-5" style={{ animationDelay: `${0.35 + i * 0.1}s` }}>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-blue-300">{item.title}</p>
-                  <p className="mt-1.5 text-sm font-medium leading-6 text-blue-100/75">{item.desc}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-amber-300">{item.title}</p>
+                  <p className="mt-1.5 text-sm font-medium leading-6 text-stone-300">{item.desc}</p>
                 </div>
               ))}
             </div>

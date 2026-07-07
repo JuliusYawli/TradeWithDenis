@@ -12,10 +12,14 @@ const config: Config = {
         red: "rgb(var(--color-red) / <alpha-value>)",
         danger: "rgb(var(--color-danger) / <alpha-value>)"
       },
+      fontFamily: {
+        sans: ["var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "Helvetica Neue", "Arial", "sans-serif"],
+        serif: ["var(--font-playfair)", "Georgia", "Times New Roman", "serif"]
+      },
       boxShadow: {
-        soft: "0 20px 60px rgba(21, 83, 197, 0.12)",
-        glow: "0 0 30px rgba(21, 83, 197, 0.2)",
-        "glow-sm": "0 0 15px rgba(21, 83, 197, 0.1)"
+        soft: "0 20px 60px rgba(161, 98, 7, 0.12)",
+        glow: "0 0 30px rgba(202, 138, 4, 0.25)",
+        "glow-sm": "0 0 15px rgba(202, 138, 4, 0.12)"
       },
       animation: {
         "fade-in": "fadeIn 0.6s ease-in-out",

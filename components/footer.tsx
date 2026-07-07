@@ -8,7 +8,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-blue-900 bg-ink text-white">
+    <footer className="border-t border-stone-800 bg-ink text-white">
       <div className="container-page py-8 sm:py-9">
         <div className="grid gap-7 md:grid-cols-[1.15fr_1fr_0.85fr]">
           <div>
@@ -31,26 +31,26 @@ export function Footer({ settings }: { settings: SiteSettings }) {
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-blue-200">Shop details</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">Shop details</p>
             <div className="mt-3 space-y-2 text-sm text-white/75">
               <a className="flex items-start gap-2 transition hover:text-white" href={`tel:${settings.phone ?? ""}`}>
-                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-blue-300" />
+                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
                 <span><strong className="text-white">Phone:</strong> {settings.phone}</span>
               </a>
               <a className="flex items-start gap-2 transition hover:text-white" href={whatsappUrl}>
-                <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-blue-300" />
+                <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
                 <span><strong className="text-white">WhatsApp:</strong> {settings.whatsapp}</span>
               </a>
               <a className="flex items-start gap-2 transition hover:text-white" href={`mailto:${settings.email ?? ""}`}>
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-blue-300" />
+                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
                 <span><strong className="text-white">Email:</strong> {settings.email}</span>
               </a>
               <p className="flex items-start gap-2">
-                <Clock className="mt-0.5 h-4 w-4 shrink-0 text-blue-300" />
+                <Clock className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
                 <span><strong className="text-white">Hours:</strong> {settings.opening_hours}</span>
               </p>
               <a className="flex items-start gap-2 transition hover:text-white" href={settings.google_maps_url ?? "#"} target="_blank" rel="noreferrer">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-blue-300" />
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
                 <span><strong className="text-white">Address:</strong> {settings.address}</span>
               </a>
             </div>
@@ -58,7 +58,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
 
           <div className="space-y-5">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-blue-200">Policies</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">Policies</p>
               <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-white/75 md:grid-cols-1">
                 <Link className="block hover:text-white" href="/warranty">Warranty</Link>
                 <Link className="block hover:text-white" href="/financing-terms">Financing terms</Link>
@@ -67,7 +67,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
               </div>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-blue-200">Social</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">Social</p>
               <div className="mt-3 flex flex-wrap gap-3 text-sm font-semibold text-white/75">
                 <a className="inline-flex items-center gap-1 hover:text-white" href={settings.facebook_url ?? "#"} target="_blank" rel="noreferrer"><Facebook className="h-4 w-4" /> Facebook</a>
                 <a className="inline-flex items-center gap-1 hover:text-white" href={settings.instagram_url ?? "#"} target="_blank" rel="noreferrer"><Instagram className="h-4 w-4" /> Instagram</a>
@@ -75,7 +75,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
               </div>
             </div>
             <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/75">
-              <ShieldCheck className="h-4 w-4 text-blue-300" />
+              <ShieldCheck className="h-4 w-4 text-amber-300" />
               Registration: {settings.business_registration}
             </p>
           </div>

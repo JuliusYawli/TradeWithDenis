@@ -14,7 +14,7 @@ export function ProductCard({ product }: { product: Product }) {
   const conditionLabel = product.grade ? `${product.condition} / Grade ${product.grade}` : product.condition;
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-soft">
+    <article className="group overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-soft active:scale-[0.99]">
       <Link href={`/iphones/${product.slug}`} className="block" aria-label={`View ${product.model} ${product.storage}`}>
         <div className="relative aspect-[4/3] overflow-hidden bg-[#f5f7fb]">
           <Image
@@ -50,11 +50,11 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="flex items-end justify-between gap-3">
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Cash price</p>
-              <p className="mt-1 text-2xl font-semibold tracking-tight text-ink">{formatCedi(product.price)}</p>
+              <p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums text-ink">{formatCedi(product.price)}</p>
             </div>
             <div className="text-right">
               <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Weekly</p>
-              <p className="mt-1 text-lg font-semibold text-red">{formatCedi(product.weekly_payment)}</p>
+              <p className="mt-1 text-lg font-semibold tabular-nums text-red">{formatCedi(product.weekly_payment)}</p>
             </div>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
