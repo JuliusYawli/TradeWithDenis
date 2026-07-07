@@ -303,7 +303,6 @@ export async function saveSettings(formData: FormData) {
       tiktok_url: payload.tiktok_url,
       google_maps_url: payload.google_maps_url,
       homepage_hero_image_url: payload.homepage_hero_image_url,
-      homepage_hero_video_url: payload.homepage_hero_video_url,
       business_registration: payload.business_registration
     };
     const fallbackQuery = id
@@ -314,7 +313,8 @@ export async function saveSettings(formData: FormData) {
     revalidatePath("/");
     revalidatePath("/admin");
     revalidateTag(publicCacheTags.settings);
-    adminToast("Site settings saved. Add the homepage hero image database column before saving the hero image.", "settings");
+    adminToast("Settings saved, except the hero video URL. Add the homepage_hero_video_url column in Supabase to enable it.", "settings");
+    return;
   }
   revalidatePath("/");
   revalidatePath("/admin");
