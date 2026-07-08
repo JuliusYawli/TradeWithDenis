@@ -142,10 +142,14 @@ export async function saveProduct(formData: FormData) {
   const model = String(formData.get("model") || "").trim();
   const storage = String(formData.get("storage") || "").trim();
   const price = Number(formData.get("price") || 0);
-  const weekly_payment = Number(formData.get("weekly_payment") || 0);
+  const cashOnly = formData.get("cash_only") === "on";
+  const weekly_payment = cashOnly ? 0 : Number(formData.get("weekly_payment") || 0);
 
-  if (!slug || !model || !storage || isNaN(price) || isNaN(weekly_payment) || price <= 0 || weekly_payment <= 0) {
-    throw new Error("Please fill in all required fields: Model, Slug, Storage, Price, and Weekly payment (must be numbers greater than 0)");
+  if (!slug || !model || !storage || isNaN(price) || price <= 0) {
+    throw new Error("Please fill in all required fields: Model, Slug, Storage, and Price (must be a number greater than 0)");
+  }
+  if (!cashOnly && (isNaN(weekly_payment) || weekly_payment <= 0)) {
+    throw new Error("Weekly payment must be a number greater than 0 — or tick 'Cash only' if this product has no weekly plan.");
   }
 
   const payload = {

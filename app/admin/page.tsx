@@ -261,7 +261,7 @@ export default async function AdminPage({
                 <label className="text-xs font-medium uppercase text-neutral-500">Grade<input className="field mt-1" name="grade" placeholder="A+, A, clean, etc." /></label>
                 <label className="text-xs font-medium uppercase text-neutral-500">Stock<select className="field mt-1" name="stock_status" defaultValue="in_stock">{stockStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
                 <label className="text-xs font-medium uppercase text-neutral-500">Price<input className="field mt-1" name="price" type="number" placeholder="9000" required /></label>
-                <label className="text-xs font-medium uppercase text-neutral-500">Weekly payment<input className="field mt-1" name="weekly_payment" type="number" placeholder="675" required /></label>
+                <label className="text-xs font-medium uppercase text-neutral-500">Weekly payment<input className="field mt-1" name="weekly_payment" type="number" placeholder="675 (leave empty if cash only)" /></label>
                 <label className="text-xs font-medium uppercase text-neutral-500">Deposit %<input className="field mt-1" name="down_payment_percent" type="number" placeholder="40" defaultValue={40} /></label>
                 <label className="text-xs font-medium uppercase text-neutral-500">Payment weeks<input className="field mt-1" name="installment_weeks" type="number" placeholder="12" defaultValue={12} /></label>
                 <label className="text-xs font-medium uppercase text-neutral-500">Quantity<input className="field mt-1" name="quantity" type="number" placeholder="1" defaultValue={1} /></label>
@@ -272,7 +272,10 @@ export default async function AdminPage({
                 <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" placeholder="Uploaded photo URLs will appear here. You can also paste image URLs, one per line." /></label>
               </div>
               <label className="text-xs font-medium uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" placeholder="Description" /></label>
-              <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" /> Featured</label>
+              <div className="flex flex-wrap items-center gap-5">
+                <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" /> Featured</label>
+                <label className="flex items-center gap-2 text-sm font-semibold"><input name="cash_only" type="checkbox" /> Cash only (no weekly plan)</label>
+              </div>
               <button className="btn-primary w-full md:w-fit" type="submit">Add product</button>
             </form>
           </section>
@@ -313,7 +316,7 @@ export default async function AdminPage({
                       <label className="text-xs font-medium uppercase text-neutral-500">Grade<input className="field mt-1" name="grade" defaultValue={product.grade ?? ""} /></label>
                       <label className="text-xs font-medium uppercase text-neutral-500">Stock<select className="field mt-1" name="stock_status" defaultValue={product.stock_status}>{stockStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
                       <label className="text-xs font-medium uppercase text-neutral-500">Price<input className="field mt-1" name="price" type="number" defaultValue={product.price} required /></label>
-                      <label className="text-xs font-medium uppercase text-neutral-500">Weekly<input className="field mt-1" name="weekly_payment" type="number" defaultValue={product.weekly_payment} required /></label>
+                      <label className="text-xs font-medium uppercase text-neutral-500">Weekly<input className="field mt-1" name="weekly_payment" type="number" defaultValue={product.weekly_payment || ""} /></label>
                       <label className="text-xs font-medium uppercase text-neutral-500">Deposit %<input className="field mt-1" name="down_payment_percent" type="number" defaultValue={product.down_payment_percent} /></label>
                       <label className="text-xs font-medium uppercase text-neutral-500">Weeks<input className="field mt-1" name="installment_weeks" type="number" defaultValue={product.installment_weeks} /></label>
                       <label className="text-xs font-medium uppercase text-neutral-500">Quantity<input className="field mt-1" name="quantity" type="number" defaultValue={product.quantity} /></label>
@@ -325,7 +328,10 @@ export default async function AdminPage({
                     </div>
                     <label className="text-xs font-medium uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" defaultValue={product.description ?? ""} /></label>
                     <div className="flex flex-wrap items-center justify-between gap-3">
-                      <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" defaultChecked={product.is_featured} /> Featured</label>
+                      <div className="flex flex-wrap items-center gap-5">
+                        <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" defaultChecked={product.is_featured} /> Featured</label>
+                        <label className="flex items-center gap-2 text-sm font-semibold"><input name="cash_only" type="checkbox" defaultChecked={!product.weekly_payment || product.weekly_payment <= 0} /> Cash only</label>
+                      </div>
                       <div className="flex flex-wrap gap-2">
                         <button className="btn-primary px-4 py-2" type="submit">Save product</button>
                       </div>

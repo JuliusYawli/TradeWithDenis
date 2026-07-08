@@ -36,14 +36,22 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
             <option value="email">Email</option>
           </select>
         </label>
-        <label className="text-sm font-semibold text-neutral-700">
-          Payment preference
-          <select className="field mt-2" name="desired_payment_option" defaultValue="weekly">
-            <option value="weekly">Weekly payments</option>
-            <option value="cash">Pay cash</option>
-            <option value="discuss">Discuss options</option>
-          </select>
-        </label>
+        {product && (!product.weekly_payment || product.weekly_payment <= 0) ? (
+          <label className="text-sm font-semibold text-neutral-700">
+            Payment preference
+            <input type="hidden" name="desired_payment_option" value="cash" />
+            <p className="field mt-2 flex items-center bg-snow text-neutral-600">Cash — this phone is sold at cash price only</p>
+          </label>
+        ) : (
+          <label className="text-sm font-semibold text-neutral-700">
+            Payment preference
+            <select className="field mt-2" name="desired_payment_option" defaultValue="weekly">
+              <option value="weekly">Weekly payments</option>
+              <option value="cash">Pay cash</option>
+              <option value="discuss">Discuss options</option>
+            </select>
+          </label>
+        )}
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-semibold text-neutral-700">

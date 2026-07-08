@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer";
 import { LeadForm } from "@/components/lead-form";
 import { Nav } from "@/components/nav";
 import { ProductCard } from "@/components/product-card";
-import { financingFor, formatCedi } from "@/lib/finance";
+import { financingFor, formatCedi, isCashOnly } from "@/lib/finance";
 import { getProduct, getPublicProducts, getPublicSiteSettings } from "@/lib/data";
 import { stockImageForProduct } from "@/lib/iphone-pricing";
 
@@ -22,6 +22,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (!product) notFound();
 
   const finance = financingFor(product);
+  const cashOnly = isCashOnly(product);
   const similar = allProducts.filter((item) => item.slug !== product.slug).slice(0, 3);
   const validImages = product.image_urls.filter((url) => url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/"));
   const imageUrls = validImages.length ? validImages : [stockImageForProduct(product.model, product.storage, product.condition)];
@@ -69,25 +70,31 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   <p className="mt-1 text-4xl font-semibold tracking-tight text-ink">{formatCedi(product.price)}</p>
                 </div>
                 <div className="rounded-2xl bg-snow px-4 py-3 text-right">
-                  <p className="text-sm font-medium uppercase tracking-wide text-neutral-500">Weekly plan</p>
-                  <p className="mt-1 text-2xl font-semibold text-red">{formatCedi(product.weekly_payment)}</p>
+                  <p className="text-sm font-medium uppercase tracking-wide text-neutral-500">{cashOnly ? "Payment" : "Weekly plan"}</p>
+                  <p className="mt-1 text-2xl font-semibold text-red">{cashOnly ? "Cash only" : formatCedi(product.weekly_payment)}</p>
                 </div>
               </div>
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                {[
-                  ["Down payment", finance.downPayment],
-                  ["Financed balance", finance.financedBalance],
-                  ["Term", `${product.installment_weeks} weeks`],
-                  ["Total weekly paid", finance.totalWeeklyPaid],
-                  ["Total paid", finance.totalPaid],
-                  ["Finance cost", finance.financeCost]
-                ].map(([label, value]) => (
-                  <div key={String(label)} className="rounded-2xl bg-snow p-4">
-                    <p className="text-sm font-medium text-neutral-500">{label}</p>
-                    <p className="mt-1 text-xl font-semibold text-ink">{typeof value === "number" ? formatCedi(value) : value}</p>
-                  </div>
-                ))}
-              </div>
+              {cashOnly ? (
+                <p className="mt-5 rounded-2xl bg-snow p-4 text-sm leading-6 text-neutral-700">
+                  This phone is sold at cash price only — no weekly payment plan. Pay the full {formatCedi(product.price)} at the shop after inspecting the device.
+                </p>
+              ) : (
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {[
+                    ["Down payment", finance.downPayment],
+                    ["Financed balance", finance.financedBalance],
+                    ["Term", `${product.installment_weeks} weeks`],
+                    ["Total weekly paid", finance.totalWeeklyPaid],
+                    ["Total paid", finance.totalPaid],
+                    ["Finance cost", finance.financeCost]
+                  ].map(([label, value]) => (
+                    <div key={String(label)} className="rounded-2xl bg-snow p-4">
+                      <p className="text-sm font-medium text-neutral-500">{label}</p>
+                      <p className="mt-1 text-xl font-semibold text-ink">{typeof value === "number" ? formatCedi(value) : value}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="mt-6 flex flex-wrap gap-3">

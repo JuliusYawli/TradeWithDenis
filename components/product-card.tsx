@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, Eye, ShieldCheck } from "lucide-react";
-import { financingFor, formatCedi } from "@/lib/finance";
+import { financingFor, formatCedi, isCashOnly } from "@/lib/finance";
 import { stockImageForProduct } from "@/lib/iphone-pricing";
 import type { Product } from "@/lib/types";
 
 export function ProductCard({ product }: { product: Product }) {
   const finance = financingFor(product);
+  const cashOnly = isCashOnly(product);
   const validImages = product.image_urls.filter((url) => url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/"));
   const imageUrl = validImages[0] || stockImageForProduct(product.model, product.storage, product.condition);
   const hasRealPhoto = validImages.length > 0;
@@ -52,21 +53,31 @@ export function ProductCard({ product }: { product: Product }) {
               <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Cash price</p>
               <p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums text-ink">{formatCedi(product.price)}</p>
             </div>
-            <div className="text-right">
-              <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Weekly</p>
-              <p className="mt-1 text-lg font-semibold tabular-nums text-red">{formatCedi(product.weekly_payment)}</p>
-            </div>
+            {cashOnly ? (
+              <div className="text-right">
+                <span className="badge-blue">Cash only</span>
+              </div>
+            ) : (
+              <div className="text-right">
+                <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Weekly</p>
+                <p className="mt-1 text-lg font-semibold tabular-nums text-red">{formatCedi(product.weekly_payment)}</p>
+              </div>
+            )}
           </div>
-          <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-            <div>
-              <p className="text-neutral-500">Deposit</p>
-              <p className="font-medium text-ink">{formatCedi(finance.downPayment)}</p>
+          {cashOnly ? (
+            <p className="mt-4 text-sm text-neutral-600">Full payment at the shop — no weekly plan on this phone.</p>
+          ) : (
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="text-neutral-500">Deposit</p>
+                <p className="font-medium text-ink">{formatCedi(finance.downPayment)}</p>
+              </div>
+              <div>
+                <p className="text-neutral-500">Term</p>
+                <p className="font-medium text-ink">{product.installment_weeks} weeks</p>
+              </div>
             </div>
-            <div>
-              <p className="text-neutral-500">Term</p>
-              <p className="font-medium text-ink">{product.installment_weeks} weeks</p>
-            </div>
-          </div>
+          )}
         </div>
         <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
           <Link className="btn-primary flex-1 py-2.5" href={`/iphones/${product.slug}`}>

@@ -8,6 +8,10 @@ export function formatCedi(value: number) {
   }).format(value);
 }
 
+export function isCashOnly(product: Pick<Product, "weekly_payment">) {
+  return !product.weekly_payment || product.weekly_payment <= 0;
+}
+
 export function financingFor(product: Pick<Product, "price" | "down_payment_percent" | "weekly_payment" | "installment_weeks">) {
   const downPayment = Math.round((product.price * product.down_payment_percent) / 100);
   const totalWeeklyPaid = product.weekly_payment * product.installment_weeks;

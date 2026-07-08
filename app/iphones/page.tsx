@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 export default async function IphonesPage() {
   const [settings, products] = await Promise.all([getPublicSiteSettings(), getPublicProducts()]);
   const inStockCount = products.filter((product) => product.stock_status === "in_stock").length;
-  const lowestWeekly = products.length ? Math.min(...products.map((product) => product.weekly_payment)) : 0;
+  const weeklyPlans = products.map((product) => product.weekly_payment).filter((amount) => amount > 0);
+  const lowestWeekly = weeklyPlans.length ? Math.min(...weeklyPlans) : 0;
   const maxWarranty = products.length ? Math.max(...products.map((product) => product.warranty_months)) : 0;
 
   return (
