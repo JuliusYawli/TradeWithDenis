@@ -142,14 +142,14 @@ export async function saveProduct(formData: FormData) {
   const model = String(formData.get("model") || "").trim();
   const storage = String(formData.get("storage") || "").trim();
   const price = Number(formData.get("price") || 0);
-  const cashOnly = formData.get("cash_only") === "on";
+  const cashOnly = String(formData.get("payment_type") || "") === "cash" || formData.get("cash_only") === "on";
   const weekly_payment = cashOnly ? 0 : Number(formData.get("weekly_payment") || 0);
 
   if (!slug || !model || !storage || isNaN(price) || price <= 0) {
     throw new Error("Please fill in all required fields: Model, Slug, Storage, and Price (must be a number greater than 0)");
   }
   if (!cashOnly && (isNaN(weekly_payment) || weekly_payment <= 0)) {
-    throw new Error("Weekly payment must be a number greater than 0 — or tick 'Cash only' if this product has no weekly plan.");
+    throw new Error("Weekly payment must be a number greater than 0 — or set Payment type to 'Cash only' if this product has no weekly plan.");
   }
 
   const payload = {
@@ -165,19 +165,41 @@ export async function saveProduct(formData: FormData) {
     stock_status: String(formData.get("stock_status") || "in_stock"),
     quantity: Number(formData.get("quantity") || 1),
     image_urls: imageUrls(formData.get("image_urls")),
+    colors: String(formData.get("colors") || "")
+      .split(",")
+      .map((color) => color.trim())
+      .filter(Boolean),
     description: String(formData.get("description") || "") || null,
     warranty_months: Number(formData.get("warranty_months") || 12),
     is_featured: formData.get("is_featured") === "on"
   };
 
-  if (id) {
-    const { error } = await supabase.from("products").update(payload).eq("id", id);
-    if (error) throw new Error(`Update failed: ${error.message}`);
-  } else {
+  if (!id) {
     const { data: existing } = await supabase.from("products").select("id").eq("slug", slug).maybeSingle();
     if (existing) throw new Error("This slug already exists. Please use a unique slug.");
-    const { error } = await supabase.from("products").insert(payload);
-    if (error) throw new Error(`Insert failed: ${error.message}`);
+  }
+
+  const query = id
+    ? supabase.from("products").update(payload).eq("id", id)
+    : supabase.from("products").insert(payload);
+  const { error } = await query;
+  if (error) {
+    if (error.message.includes("colors")) {
+      const { colors: _omit, ...fallbackPayload } = payload;
+      void _omit;
+      const fallbackQuery = id
+        ? supabase.from("products").update(fallbackPayload).eq("id", id)
+        : supabase.from("products").insert(fallbackPayload);
+      const fallbackResult = await fallbackQuery;
+      if (fallbackResult.error) throw new Error(`${id ? "Update" : "Insert"} failed: ${fallbackResult.error.message}`);
+      revalidatePath("/admin");
+      revalidatePath("/iphones");
+      revalidatePath("/");
+      revalidateTag(publicCacheTags.products);
+      adminToast("Product saved without colors. Run in Supabase SQL Editor: alter table products add column colors text[] not null default '{}';", "products");
+      return;
+    }
+    throw new Error(`${id ? "Update" : "Insert"} failed: ${error.message}`);
   }
 
   revalidatePath("/admin");

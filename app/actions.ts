@@ -8,6 +8,8 @@ import { createAdminSupabaseClient } from "@/lib/supabase-admin";
 
 export async function submitLead(formData: FormData) {
   const email = String(formData.get("email") || "").trim();
+  const preferredColor = String(formData.get("preferred_color") || "").trim();
+  const customerMessage = String(formData.get("message") || "").trim();
   const payload = {
     product_id: String(formData.get("product_id") || "") || null,
     customer_name: String(formData.get("customer_name") || "").trim(),
@@ -15,7 +17,7 @@ export async function submitLead(formData: FormData) {
     email,
     preferred_contact_method: String(formData.get("preferred_contact_method") || "whatsapp"),
     desired_payment_option: String(formData.get("desired_payment_option") || "") || null,
-    message: String(formData.get("message") || "") || null
+    message: [preferredColor ? `Preferred color: ${preferredColor}.` : "", customerMessage].filter(Boolean).join(" ") || null
   };
   const appointmentDate = String(formData.get("appointment_date") || "") || null;
   const appointmentTime = String(formData.get("appointment_time") || "") || null;

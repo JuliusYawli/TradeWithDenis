@@ -13,6 +13,7 @@ export type Product = {
   stock_status: string;
   quantity: number;
   image_urls: string[];
+  colors?: string[] | null;
   description: string | null;
   warranty_months: number;
   is_featured: boolean;

@@ -41,10 +41,11 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="flex flex-wrap gap-2">
             <span className="badge-soft">{product.storage}</span>
             <span className="badge-soft">{conditionLabel}</span>
+            {product.colors?.length ? <span className="badge-soft">{product.colors.length} {product.colors.length === 1 ? "color" : "colors"}</span> : null}
           </div>
           <div>
             <h3 className="text-lg font-semibold tracking-tight text-ink">{product.model}</h3>
-            <p className="mt-1 text-sm text-neutral-600">Verified stock · Qty {product.quantity}</p>
+            <p className="mt-1 text-sm text-neutral-600">Verified stock</p>
           </div>
         </div>
         <div className="border-y border-line py-4 text-sm">

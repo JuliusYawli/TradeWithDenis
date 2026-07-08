@@ -53,6 +53,18 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
           </label>
         )}
       </div>
+      {product?.colors?.length ? (
+        <label className="text-sm font-semibold text-neutral-700">
+          Preferred color
+          <select className="field mt-2" name="preferred_color" defaultValue="">
+            <option value="">Choose a color</option>
+            {product.colors.map((color) => (
+              <option key={color} value={color}>{color}</option>
+            ))}
+            <option value="Not sure — discuss at shop">Not sure — discuss at shop</option>
+          </select>
+        </label>
+      ) : null}
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-semibold text-neutral-700">
           Preferred appointment date
