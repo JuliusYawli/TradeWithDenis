@@ -6,6 +6,7 @@ import { AdminPasswordForm } from "@/components/admin-password-form";
 import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
 import { AdminPaymentFields } from "@/components/admin-payment-fields";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
+import { AdminStorageOptions } from "@/components/admin-storage-options";
 import { AdminSubmitButton } from "@/components/admin-submit-button";
 import { AdminInactivityLogout } from "@/components/admin-inactivity-logout";
 import { AppointmentStatusModal } from "@/components/appointment-status-modal";
@@ -266,6 +267,7 @@ export default async function AdminPage({
                 <label className="text-xs font-medium uppercase text-neutral-500">Warranty weeks<input className="field mt-1" name="warranty_months" type="number" placeholder="12" defaultValue={12} /></label>
                 <label className="text-xs font-medium uppercase text-neutral-500">Available colors<input className="field mt-1" name="colors" placeholder="Black Titanium, Natural, Blue" /></label>
               </div>
+              <AdminStorageOptions />
               <div className="grid gap-2">
                 <AdminProductImageUpload />
                 <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" placeholder="Uploaded photo URLs will appear here. You can also paste image URLs, one per line." /></label>
@@ -316,6 +318,7 @@ export default async function AdminPage({
                       <label className="text-xs font-medium uppercase text-neutral-500">Warranty weeks<input className="field mt-1" name="warranty_months" type="number" defaultValue={product.warranty_months} /></label>
                       <label className="text-xs font-medium uppercase text-neutral-500">Available colors<input className="field mt-1" name="colors" placeholder="Black Titanium, Natural, Blue" defaultValue={(product.colors ?? []).join(", ")} /></label>
                     </div>
+                    <AdminStorageOptions defaultOptions={product.storage_options ?? []} />
                     <div className="grid gap-2">
                       <AdminProductImageUpload />
                       <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" defaultValue={product.image_urls.join("\n")} /></label>

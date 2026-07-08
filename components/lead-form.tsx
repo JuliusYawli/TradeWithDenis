@@ -53,6 +53,24 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
           </label>
         )}
       </div>
+      {(() => {
+        const storages = product
+          ? [product.storage, ...(product.storage_options ?? []).map((option) => option.storage)].filter(
+              (storage, index, all) => storage && all.indexOf(storage) === index
+            )
+          : [];
+        return storages.length > 1 ? (
+          <label className="text-sm font-semibold text-neutral-700">
+            Preferred storage
+            <select className="field mt-2" name="preferred_storage" defaultValue="">
+              <option value="">Choose storage</option>
+              {storages.map((storage) => (
+                <option key={storage} value={storage}>{storage}</option>
+              ))}
+            </select>
+          </label>
+        ) : null;
+      })()}
       {product?.colors?.length ? (
         <label className="text-sm font-semibold text-neutral-700">
           Preferred color

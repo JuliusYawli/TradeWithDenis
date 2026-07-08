@@ -152,7 +152,23 @@ export async function saveProduct(formData: FormData) {
     throw new Error("Weekly payment must be a number greater than 0 — or set Payment type to 'Cash only' if this product has no weekly plan.");
   }
 
-  const payload = {
+  let storage_options: Array<{ storage: string; price: number; weekly_payment: number }> = [];
+  try {
+    const raw = JSON.parse(String(formData.get("storage_options") || "[]"));
+    if (Array.isArray(raw)) {
+      storage_options = raw
+        .map((option) => ({
+          storage: String(option?.storage || "").trim(),
+          price: Number(option?.price || 0),
+          weekly_payment: cashOnly ? 0 : Number(option?.weekly_payment || 0)
+        }))
+        .filter((option) => option.storage && !isNaN(option.price) && option.price > 0 && (cashOnly || option.weekly_payment > 0));
+    }
+  } catch {
+    storage_options = [];
+  }
+
+  const payload: Record<string, unknown> = {
     slug,
     model,
     storage,
@@ -169,6 +185,7 @@ export async function saveProduct(formData: FormData) {
       .split(",")
       .map((color) => color.trim())
       .filter(Boolean),
+    storage_options,
     description: String(formData.get("description") || "") || null,
     warranty_months: Number(formData.get("warranty_months") || 12),
     is_featured: formData.get("is_featured") === "on"
@@ -179,27 +196,35 @@ export async function saveProduct(formData: FormData) {
     if (existing) throw new Error("This slug already exists. Please use a unique slug.");
   }
 
-  const query = id
-    ? supabase.from("products").update(payload).eq("id", id)
-    : supabase.from("products").insert(payload);
-  const { error } = await query;
-  if (error) {
-    if (error.message.includes("colors")) {
-      const { colors: _omit, ...fallbackPayload } = payload;
-      void _omit;
-      const fallbackQuery = id
-        ? supabase.from("products").update(fallbackPayload).eq("id", id)
-        : supabase.from("products").insert(fallbackPayload);
-      const fallbackResult = await fallbackQuery;
-      if (fallbackResult.error) throw new Error(`${id ? "Update" : "Insert"} failed: ${fallbackResult.error.message}`);
-      revalidatePath("/admin");
-      revalidatePath("/iphones");
-      revalidatePath("/");
-      revalidateTag(publicCacheTags.products);
-      adminToast("Product saved without colors. Run in Supabase SQL Editor: alter table products add column colors text[] not null default '{}';", "products");
-      return;
-    }
-    throw new Error(`${id ? "Update" : "Insert"} failed: ${error.message}`);
+  // Optional columns degrade gracefully until their migrations are run.
+  const optionalColumns: Array<{ column: string; migration: string }> = [
+    { column: "colors", migration: "alter table products add column colors text[] not null default '{}';" },
+    { column: "storage_options", migration: "alter table products add column storage_options jsonb not null default '[]';" }
+  ];
+  let attempt = payload;
+  const dropped: Array<{ column: string; migration: string }> = [];
+  let { error } = await (id
+    ? supabase.from("products").update(attempt).eq("id", id)
+    : supabase.from("products").insert(attempt));
+  while (error) {
+    const missing = optionalColumns.find((item) => error!.message.includes(item.column) && item.column in attempt);
+    if (!missing) break;
+    const { [missing.column]: _omit, ...rest } = attempt;
+    void _omit;
+    attempt = rest;
+    dropped.push(missing);
+    ({ error } = await (id
+      ? supabase.from("products").update(attempt).eq("id", id)
+      : supabase.from("products").insert(attempt)));
+  }
+  if (error) throw new Error(`${id ? "Update" : "Insert"} failed: ${error.message}`);
+  if (dropped.length) {
+    revalidatePath("/admin");
+    revalidatePath("/iphones");
+    revalidatePath("/");
+    revalidateTag(publicCacheTags.products);
+    adminToast(`Product saved without ${dropped.map((item) => item.column).join(" and ")}. Run in Supabase SQL Editor: ${dropped.map((item) => item.migration).join(" ")}`, "products");
+    return;
   }
 
   revalidatePath("/admin");

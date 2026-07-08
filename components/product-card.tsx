@@ -8,6 +8,11 @@ import type { Product } from "@/lib/types";
 export function ProductCard({ product }: { product: Product }) {
   const finance = financingFor(product);
   const cashOnly = isCashOnly(product);
+  const extraStorages = (product.storage_options ?? []).filter((option) => option.storage && option.storage !== product.storage);
+  const storageCount = 1 + extraStorages.length;
+  const lowestPrice = Math.min(product.price, ...extraStorages.map((option) => option.price));
+  const weeklyAmounts = [product.weekly_payment, ...extraStorages.map((option) => option.weekly_payment)].filter((amount) => amount > 0);
+  const lowestWeekly = weeklyAmounts.length ? Math.min(...weeklyAmounts) : 0;
   const validImages = product.image_urls.filter((url) => url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/"));
   const imageUrl = validImages[0] || stockImageForProduct(product.model, product.storage, product.condition);
   const hasRealPhoto = validImages.length > 0;
@@ -39,7 +44,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="space-y-4 p-4 sm:p-5">
         <div className="space-y-3">
           <div className="flex flex-wrap gap-2">
-            <span className="badge-soft">{product.storage}</span>
+            <span className="badge-soft">{storageCount > 1 ? `${storageCount} storage options` : product.storage}</span>
             <span className="badge-soft">{conditionLabel}</span>
             {product.colors?.length ? <span className="badge-soft">{product.colors.length} {product.colors.length === 1 ? "color" : "colors"}</span> : null}
           </div>
@@ -52,7 +57,7 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="flex items-end justify-between gap-3">
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Cash price</p>
-              <p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums text-ink">{formatCedi(product.price)}</p>
+              <p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums text-ink">{storageCount > 1 ? `From ${formatCedi(lowestPrice)}` : formatCedi(product.price)}</p>
             </div>
             {cashOnly ? (
               <div className="text-right">
@@ -61,7 +66,7 @@ export function ProductCard({ product }: { product: Product }) {
             ) : (
               <div className="text-right">
                 <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Weekly</p>
-                <p className="mt-1 text-lg font-semibold tabular-nums text-red">{formatCedi(product.weekly_payment)}</p>
+                <p className="mt-1 text-lg font-semibold tabular-nums text-red">{storageCount > 1 && lowestWeekly ? `From ${formatCedi(lowestWeekly)}` : formatCedi(product.weekly_payment)}</p>
               </div>
             )}
           </div>

@@ -1,3 +1,9 @@
+export type StorageOption = {
+  storage: string;
+  price: number;
+  weekly_payment: number;
+};
+
 export type Product = {
   id: string;
   slug: string;
@@ -14,6 +20,7 @@ export type Product = {
   quantity: number;
   image_urls: string[];
   colors?: string[] | null;
+  storage_options?: StorageOption[] | null;
   description: string | null;
   warranty_months: number;
   is_featured: boolean;
