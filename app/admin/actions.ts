@@ -162,7 +162,7 @@ export async function saveProduct(formData: FormData) {
     quantity: Number(formData.get("quantity") || 1),
     image_urls: imageUrls(formData.get("image_urls")),
     description: String(formData.get("description") || "") || null,
-    warranty_months: Number(formData.get("warranty_months") || 3),
+    warranty_months: Number(formData.get("warranty_months") || 12),
     is_featured: formData.get("is_featured") === "on"
   };
 

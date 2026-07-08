@@ -37,7 +37,7 @@ export default async function IphonesPage() {
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-neutral-500">From weekly</p>
               </div>
               <div className="p-4">
-                <p className="text-2xl font-semibold text-ink">{maxWarranty || "-"} mo</p>
+                <p className="text-2xl font-semibold text-ink">{maxWarranty || "-"} wk</p>
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-neutral-500">Warranty</p>
               </div>
             </div>

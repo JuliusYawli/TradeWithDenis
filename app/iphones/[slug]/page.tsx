@@ -60,7 +60,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <section className="lg:pt-2">
             <p className="section-eyebrow">Verified device</p>
             <h1 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{product.model} {product.storage}</h1>
-            <p className="mt-3 text-base text-neutral-600">{product.condition}{product.grade ? ` · Grade ${product.grade}` : ""} · {product.warranty_months} month warranty · Qty {product.quantity}</p>
+            <p className="mt-3 text-base text-neutral-600">{product.condition}{product.grade ? ` · Grade ${product.grade}` : ""} · {product.warranty_months} week warranty · Qty {product.quantity}</p>
 
             <div className="mt-6 rounded-3xl border border-line bg-white p-5 shadow-sm sm:p-6">
               <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5">

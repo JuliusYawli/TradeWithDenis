@@ -265,7 +265,7 @@ export default async function AdminPage({
                 <label className="text-xs font-medium uppercase text-neutral-500">Deposit %<input className="field mt-1" name="down_payment_percent" type="number" placeholder="40" defaultValue={40} /></label>
                 <label className="text-xs font-medium uppercase text-neutral-500">Payment weeks<input className="field mt-1" name="installment_weeks" type="number" placeholder="12" defaultValue={12} /></label>
                 <label className="text-xs font-medium uppercase text-neutral-500">Quantity<input className="field mt-1" name="quantity" type="number" placeholder="1" defaultValue={1} /></label>
-                <label className="text-xs font-medium uppercase text-neutral-500">Warranty months<input className="field mt-1" name="warranty_months" type="number" placeholder="3" defaultValue={3} /></label>
+                <label className="text-xs font-medium uppercase text-neutral-500">Warranty weeks<input className="field mt-1" name="warranty_months" type="number" placeholder="12" defaultValue={12} /></label>
               </div>
               <div className="grid gap-2">
                 <AdminProductImageUpload />
@@ -317,7 +317,7 @@ export default async function AdminPage({
                       <label className="text-xs font-medium uppercase text-neutral-500">Deposit %<input className="field mt-1" name="down_payment_percent" type="number" defaultValue={product.down_payment_percent} /></label>
                       <label className="text-xs font-medium uppercase text-neutral-500">Weeks<input className="field mt-1" name="installment_weeks" type="number" defaultValue={product.installment_weeks} /></label>
                       <label className="text-xs font-medium uppercase text-neutral-500">Quantity<input className="field mt-1" name="quantity" type="number" defaultValue={product.quantity} /></label>
-                      <label className="text-xs font-medium uppercase text-neutral-500">Warranty months<input className="field mt-1" name="warranty_months" type="number" defaultValue={product.warranty_months} /></label>
+                      <label className="text-xs font-medium uppercase text-neutral-500">Warranty weeks<input className="field mt-1" name="warranty_months" type="number" defaultValue={product.warranty_months} /></label>
                     </div>
                     <div className="grid gap-2">
                       <AdminProductImageUpload />

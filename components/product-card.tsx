@@ -26,7 +26,7 @@ export function ProductCard({ product }: { product: Product }) {
           />
           <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-3">
             <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium capitalize text-red shadow-sm ring-1 ring-black/5 backdrop-blur">{stockLabel}</span>
-            <span className="rounded-full bg-ink/80 px-3 py-1 text-xs font-medium text-white shadow-sm backdrop-blur">{product.warranty_months} mo warranty</span>
+            <span className="rounded-full bg-ink/80 px-3 py-1 text-xs font-medium text-white shadow-sm backdrop-blur">{product.warranty_months} wk warranty</span>
           </div>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ink/20 to-transparent opacity-0 transition group-hover:opacity-100" />
           <div className="absolute bottom-3 right-3 hidden items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-ink shadow-sm ring-1 ring-black/5 backdrop-blur sm:inline-flex">

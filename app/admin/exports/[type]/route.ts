@@ -115,7 +115,7 @@ async function exportProducts(supabase: ServerSupabase | null) {
     ["installment_weeks", "Installment weeks"],
     ["stock_status", "Stock status"],
     ["quantity", "Quantity"],
-    ["warranty_months", "Warranty months"],
+    ["warranty_months", "Warranty weeks"],
     ["is_featured", "Featured"],
     ["image_urls", "Image URLs"],
     ["description", "Description"],

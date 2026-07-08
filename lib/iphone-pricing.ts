@@ -40,7 +40,7 @@ function template(model: string, storage: string, condition: "Used" | "New", pri
     downPaymentPercent: 40,
     weeklyPayment,
     installmentWeeks: 12,
-    warrantyMonths: condition === "New" ? 12 : 3
+    warrantyMonths: condition === "New" ? 52 : 12
   };
 }
 
