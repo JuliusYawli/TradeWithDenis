@@ -2,6 +2,28 @@
 
 Premium iPhone sales and transparent financing website for Ghana, built with Next.js 15, TypeScript, Tailwind CSS, lucide-react, and Supabase.
 
+## What This Project Does
+
+TradeWithDennis is the online storefront for an in-person iPhone shop at Circle Mall, Accra. It lets customers browse verified used and new iPhones, see a transparent breakdown of cash price vs. weekly payment plans, and book a shop appointment to inspect the device and complete the purchase in person — there is no online checkout or payment collection on the site itself.
+
+The public site is a marketing and booking funnel:
+
+- Customers discover stock, compare condition/storage/price, and see exactly what a weekly payment plan costs before visiting.
+- Booking a visit sends an appointment request to the shop (with WhatsApp/email follow-up) instead of taking payment online.
+- After a completed visit, customers can be sent a secure link to leave a testimonial, which an admin approves before it appears on the homepage.
+
+Behind the storefront is an admin dashboard (backed by Supabase with row-level security) where the shop owner manages products, pricing, site settings, leads, appointments, testimonials, and data exports/backups — so the catalog and terms can be updated without touching code.
+
+## Screenshots
+
+| Homepage | Catalog |
+|---|---|
+| [![Homepage](docs/screenshots/homepage.jpg)](docs/screenshots/homepage.jpg) | [![Catalog](docs/screenshots/catalog.jpg)](docs/screenshots/catalog.jpg) |
+
+| Product Detail | Admin Login |
+|---|---|
+| [![Product detail](docs/screenshots/product-detail.jpg)](docs/screenshots/product-detail.jpg) | [![Admin login](docs/screenshots/admin-login.jpg)](docs/screenshots/admin-login.jpg) |
+
 ## Features
 
 - Homepage with trust bar, product highlights, payment calculator, testimonials, FAQ, lead form, WhatsApp CTA, and mobile CTA.
