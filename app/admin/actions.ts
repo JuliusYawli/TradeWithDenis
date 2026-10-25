@@ -267,15 +267,33 @@ export async function updateAppointmentStatus(formData: FormData) {
   const id = String(formData.get("id") || "");
   const status = String(formData.get("status") || "pending");
   if (!id) return;
+  if (!["pending", "confirmed", "postponed", "completed", "cancelled", "no_show"].includes(status)) {
+    adminToast("That appointment status is not valid. Please refresh and try again.", "appointments");
+  }
+  const appointmentDate = String(formData.get("appointment_date") || "");
+  const originalAppointmentDate = String(formData.get("original_appointment_date") || "");
   const appointmentTime = String(formData.get("appointment_time") || "");
-  const payload = {
+  const originalAppointmentTime = String(formData.get("original_appointment_time") || "");
+  const payload: Record<string, string | null> = {
     status,
-    appointment_date: String(formData.get("appointment_date") || "") || null,
-    appointment_time: isAppointmentTimeSlot(appointmentTime) ? appointmentTime : null,
     notes: String(formData.get("notes") || "") || null
   };
+
+  // Do not resubmit unchanged scheduling fields. The availability trigger correctly
+  // rejects newly selected past dates, but resubmitting an existing historical date
+  // would otherwise block status/note updates for completed visits.
+  if (appointmentDate !== originalAppointmentDate) payload.appointment_date = appointmentDate || null;
+  if (appointmentTime !== originalAppointmentTime) {
+    if (appointmentTime && !isAppointmentTimeSlot(appointmentTime)) {
+      adminToast("Choose a valid appointment time and try again.", "appointments");
+    }
+    payload.appointment_time = appointmentTime || null;
+  }
   const { error } = await supabase.from("appointments").update(payload).eq("id", id);
-  if (error) throw new Error(error.message);
+  if (error) {
+    const unavailable = /unavailable|appointment date|validate_appointment/i.test(error.message);
+    adminToast(unavailable ? "That visit date is unavailable. Choose an open future date and try again." : `Appointment update failed: ${error.message}`, "appointments");
+  }
 
   const { data: appointment } = await supabase
     .from("appointments")
@@ -298,8 +316,8 @@ export async function updateAppointmentStatus(formData: FormData) {
       await sendAppointmentUpdateNotification({
         lead,
         status: appointment?.status ?? status,
-        appointmentDate: appointment?.appointment_date ?? payload.appointment_date,
-        appointmentTime: appointment?.appointment_time ?? payload.appointment_time
+        appointmentDate: appointment?.appointment_date ?? (appointmentDate || null),
+        appointmentTime: appointment?.appointment_time ?? (appointmentTime || null)
       });
     }
   }

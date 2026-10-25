@@ -210,6 +210,8 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
             </div>
             <form action={updateAppointmentStatus} className="mt-3 grid gap-2 rounded-md border border-line bg-white p-3">
               <input type="hidden" name="id" value={appointment.id} />
+              <input type="hidden" name="original_appointment_date" value={appointment.appointment_date ?? ""} />
+              <input type="hidden" name="original_appointment_time" value={appointment.appointment_time ?? ""} />
               <div className="grid gap-2 md:grid-cols-3">
                 <label className="text-xs font-medium uppercase text-neutral-500">Status<select className="field mt-1 bg-white" name="status" defaultValue={appointment.status}>
                   {appointmentStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
