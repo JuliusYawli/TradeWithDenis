@@ -5,10 +5,11 @@ import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLockBodyScroll } from "@/components/use-lock-body-scroll";
+import { useDialogFocus } from "@/components/use-dialog-focus";
 
 export function AppointmentModalButton({
   children,
-  className = "hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 lg:inline-flex",
+  className = "hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-semibold text-ink shadow-sm transition hover:-translate-y-0.5 hover:bg-red hover:text-white focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 lg:inline-flex",
   label = "Book Appointment",
   showIcon = true
 }: {
@@ -25,9 +26,10 @@ export function AppointmentModalButton({
   }, []);
 
   useLockBodyScroll(open);
+  const dialogRef = useDialogFocus(open, () => setOpen(false));
 
   const modal = open ? (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-hidden bg-ink/75 px-3 py-3 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6" role="dialog" aria-modal="true">
+    <div ref={dialogRef} className="fixed inset-0 z-[100] flex items-start justify-center overflow-hidden bg-ink/75 px-3 py-3 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6" role="dialog" aria-modal="true" aria-labelledby="appointment-dialog-title">
       <button className="absolute inset-0 cursor-default" type="button" aria-label="Close appointment modal" onClick={() => setOpen(false)} />
       <div className="modal-panel z-10 flex max-h-[calc(100svh-1.5rem)] max-w-2xl flex-col sm:max-h-[min(90vh,760px)]">
         <div className="shrink-0 border-b border-line bg-snow px-4 py-4 sm:px-5">
@@ -37,7 +39,7 @@ export function AppointmentModalButton({
               <CalendarCheck className="h-5 w-5 text-gold" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">Book appointment</h2>
+              <h2 id="appointment-dialog-title" className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">Book appointment</h2>
               <p className="mt-1 text-sm leading-6 text-neutral-600">Choose a visit time, then complete the order at the shop after inspection.</p>
               <p className="mt-2 inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold text-red">No online payment required</p>
             </div>

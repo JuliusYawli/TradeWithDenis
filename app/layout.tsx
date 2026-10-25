@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { FunnelAnalytics } from "@/components/funnel-analytics";
+import { CookieConsent } from "@/components/cookie-consent";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://tradewithdennis.com"),
@@ -22,10 +20,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en">
       <body>
+        <FunnelAnalytics />
         {children}
-        <SpeedInsights />
+        <CookieConsent />
+        {process.env.VERCEL ? <SpeedInsights /> : null}
       </body>
     </html>
   );

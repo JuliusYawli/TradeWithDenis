@@ -38,7 +38,7 @@ export function LoginForm() {
   }
 
   return (
-    <form action={onSubmit} className="w-full max-w-md overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
+    <form action={onSubmit} className="min-w-0 w-full max-w-full overflow-hidden rounded-2xl border border-line bg-white shadow-soft sm:max-w-md">
       <div className="border-b border-line bg-snow px-6 py-5">
         <div className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-gold shadow-sm">
           <LockKeyhole className="h-5 w-5" />
@@ -48,8 +48,8 @@ export function LoginForm() {
       </div>
 
       <div className="p-6">
-      <input className="field" name="email" type="email" placeholder="Email" required disabled={isSubmitting} />
-      <input className="field mt-3" name="password" type="password" placeholder="Password" required disabled={isSubmitting} />
+      <input className="field min-w-0" name="email" type="email" placeholder="Email" autoComplete="email" required disabled={isSubmitting} />
+      <input className="field mt-3 min-w-0" name="password" type="password" placeholder="Password" autoComplete="current-password" required disabled={isSubmitting} />
       {error ? <p className="mt-3 rounded-md bg-danger/10 px-3 py-2 text-sm text-danger">{error}</p> : null}
       {success ? (
         <div className="mt-3 flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm text-emerald-800">

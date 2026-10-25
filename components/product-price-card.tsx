@@ -35,7 +35,7 @@ export function ProductPriceCard({ product }: { product: Product }) {
                 onClick={() => setSelectedIndex(index)}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   index === selectedIndex
-                    ? "border-gold bg-gold text-white shadow-glow-sm"
+                    ? "border-gold bg-gold text-ink shadow-glow-sm"
                     : "border-line bg-white text-ink hover:border-gold hover:text-red"
                 }`}
               >
@@ -59,7 +59,7 @@ export function ProductPriceCard({ product }: { product: Product }) {
 
       {cashOnly ? (
         <p className="mt-5 rounded-2xl bg-snow p-4 text-sm leading-6 text-neutral-700">
-          This phone is sold at cash price only — no weekly payment plan. Pay the full {formatCedi(variant.price)} at the shop after inspecting the device.
+          This phone is sold at cash price only. There is no weekly payment plan. Pay the full {formatCedi(variant.price)} at the shop after inspecting the device.
         </p>
       ) : (
         <div className="mt-5 grid gap-3 sm:grid-cols-2">

@@ -39,7 +39,7 @@ const getCachedPublicProducts = unstable_cache(
 
 const getCachedPublicTestimonials = unstable_cache(
   async () => {
-    if (!hasSupabaseEnv()) return seedTestimonials;
+    if (!hasSupabaseEnv()) return [];
     const supabase = createPublicSupabaseClient();
     const { data } = await supabase
       .from("testimonials")
@@ -50,11 +50,7 @@ const getCachedPublicTestimonials = unstable_cache(
     const approvedTestimonials = (data as Testimonial[] | null) ?? [];
     if (approvedTestimonials.length >= 4) return approvedTestimonials.slice(0, 4);
 
-    const supplementalTestimonials = seedTestimonials.filter((seed) => (
-      !approvedTestimonials.some((testimonial) => testimonial.customer_name === seed.customer_name && testimonial.quote === seed.quote)
-    ));
-
-    return [...approvedTestimonials, ...supplementalTestimonials].slice(0, 4);
+    return approvedTestimonials.slice(0, 4);
   },
   ["public-testimonials"],
   { revalidate: publicRevalidateSeconds, tags: [publicCacheTags.testimonials] }
@@ -62,7 +58,7 @@ const getCachedPublicTestimonials = unstable_cache(
 
 const getCachedAllPublicTestimonials = unstable_cache(
   async () => {
-    if (!hasSupabaseEnv()) return seedTestimonials;
+    if (!hasSupabaseEnv()) return [];
     const supabase = createPublicSupabaseClient();
     const { data } = await supabase
       .from("testimonials")
@@ -163,4 +159,17 @@ export async function getAppointments() {
     .order("created_at", { ascending: false })
     .limit(25);
   return (data as Appointment[] | null) ?? [];
+}
+
+export async function getAnalyticsSummary() {
+  noStore();
+  if (!hasSupabaseEnv()) return { productViews: 0, bookingStarts: 0, bookings: 0 };
+  const supabase = await createServerSupabaseClient();
+  const since = new Date(Date.now() - 30 * 86400000).toISOString();
+  const { data } = await supabase.from("analytics_events").select("event_name").gte("created_at", since).limit(10000);
+  return {
+    productViews: data?.filter((event) => event.event_name === "product_view").length ?? 0,
+    bookingStarts: data?.filter((event) => event.event_name === "booking_started").length ?? 0,
+    bookings: data?.filter((event) => event.event_name === "booking_submitted").length ?? 0
+  };
 }

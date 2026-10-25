@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CalendarCheck, MessageCircle, ShieldCheck, Smartphone } from "lucide-react";
@@ -7,6 +6,7 @@ import { LeadForm } from "@/components/lead-form";
 import { Nav } from "@/components/nav";
 import { ProductCard } from "@/components/product-card";
 import { ProductPriceCard } from "@/components/product-price-card";
+import { ProductGallery } from "@/components/product-gallery";
 import { getProduct, getPublicProducts, getPublicSiteSettings } from "@/lib/data";
 import { stockImageForProduct } from "@/lib/iphone-pricing";
 
@@ -40,22 +40,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <main className="container-page py-8 sm:py-12">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
-          <div className="space-y-4">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-line bg-[#f5f7fb] shadow-sm">
-              <Image src={imageUrls[0]} alt={`${product.model} ${product.storage}`} fill className="object-contain" sizes="(max-width: 1024px) 100vw, 50vw" priority />
-              <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-                <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium capitalize text-red shadow-sm ring-1 ring-black/5 backdrop-blur">{stockLabel}</span>
-                <span className="rounded-full bg-ink/80 px-3 py-1 text-xs font-medium text-white shadow-sm backdrop-blur">{product.condition}</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-4 gap-3">
-              {imageUrls.map((src) => (
-                <div key={src} className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
-                  <Image src={src} alt={product.model} fill className="object-contain" sizes="120px" />
-                </div>
-              ))}
-            </div>
-          </div>
+          <ProductGallery images={imageUrls} alt={`${product.model} ${product.storage}, ${stockLabel}, ${product.condition}`} />
           <section className="lg:pt-2">
             <p className="section-eyebrow">Verified device</p>
             <h1 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{product.model} {product.storage}</h1>

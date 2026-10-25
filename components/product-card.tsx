@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Eye, ShieldCheck } from "lucide-react";
+import { ArrowRight, BadgeCheck, Eye, Scale, ShieldCheck } from "lucide-react";
 import { financingFor, formatCedi, isCashOnly } from "@/lib/finance";
 import { stockImageForProduct } from "@/lib/iphone-pricing";
 import type { Product } from "@/lib/types";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, comparing = false, onCompare }: { product: Product; comparing?: boolean; onCompare?: (product: Product) => void }) {
   const finance = financingFor(product);
   const cashOnly = isCashOnly(product);
   const extraStorages = (product.storage_options ?? []).filter((option) => option.storage && option.storage !== product.storage);
@@ -20,9 +20,9 @@ export function ProductCard({ product }: { product: Product }) {
   const conditionLabel = product.grade ? `${product.condition} / Grade ${product.grade}` : product.condition;
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-soft active:scale-[0.99]">
+    <article className="group overflow-hidden rounded-[1.25rem] border border-line bg-white transition duration-300 hover:-translate-y-1 hover:border-gold hover:shadow-soft active:scale-[0.99]">
       <Link href={`/iphones/${product.slug}`} className="block" aria-label={`View ${product.model} ${product.storage}`}>
-        <div className="relative aspect-[4/3] overflow-hidden bg-[#f5f7fb]">
+        <div className="relative aspect-[4/3] overflow-hidden bg-[#eae7df]">
           <Image
             src={imageUrl}
             alt={`${product.model} ${product.storage}`}
@@ -41,7 +41,12 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
       </Link>
-      <div className="space-y-4 p-4 sm:p-5">
+      <div className="space-y-4 p-5">
+        {onCompare ? (
+          <button className={`flex w-full items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition ${comparing ? "border-gold bg-snow text-red" : "border-line bg-snow text-neutral-700 hover:border-gold"}`} type="button" onClick={() => onCompare(product)}>
+            <Scale className="h-4 w-4" /> {comparing ? "Added to comparison" : "Compare this iPhone"}
+          </button>
+        ) : null}
         <div className="space-y-3">
           <div className="flex flex-wrap gap-2">
             <span className="badge-soft">{storageCount > 1 ? `${storageCount} storage options` : product.storage}</span>
@@ -57,7 +62,7 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="flex items-end justify-between gap-3">
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Cash price</p>
-              <p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums text-ink">{storageCount > 1 ? `From ${formatCedi(lowestPrice)}` : formatCedi(product.price)}</p>
+            <p className="mt-1 text-xl font-semibold tracking-tight tabular-nums text-ink sm:text-2xl">{storageCount > 1 ? `From ${formatCedi(lowestPrice)}` : formatCedi(product.price)}</p>
             </div>
             {cashOnly ? (
               <div className="text-right">
@@ -71,7 +76,7 @@ export function ProductCard({ product }: { product: Product }) {
             )}
           </div>
           {cashOnly ? (
-            <p className="mt-4 text-sm text-neutral-600">Full payment at the shop — no weekly plan on this phone.</p>
+            <p className="mt-4 text-sm text-neutral-600">Full payment at the shop. No weekly plan on this phone.</p>
           ) : (
             <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
               <div>

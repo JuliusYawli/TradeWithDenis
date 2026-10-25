@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createAdminSupabaseClient } from "@/lib/supabase-admin";
+import { canSubmitTestimonial } from "@/lib/testimonial-status";
 
 function clean(value: FormDataEntryValue | null) {
   return String(value || "").trim();
@@ -33,7 +34,7 @@ export async function submitTestimonial(formData: FormData) {
     .maybeSingle();
 
   if (error || !request) reviewRedirect(token, "error=invalid");
-  if (!["created", "sent"].includes(request.status)) reviewRedirect(token, "status=already_submitted");
+  if (!canSubmitTestimonial(request.status)) reviewRedirect(token, "status=already_submitted");
 
   const { error: testimonialError } = await supabase.from("testimonials").insert({
     testimonial_request_id: request.id,

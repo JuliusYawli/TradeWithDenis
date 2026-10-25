@@ -14,7 +14,9 @@ export const siteSettings: SiteSettings = {
   tiktok_url: "https://www.tiktok.com/@tradewithdennis?_r=1&_t=ZS-97gO9Qd1Q5A",
   google_maps_url: "https://maps.app.goo.gl/ey1DeFiVvcrZf6Lw8",
   business_registration: "BN120850225",
-  homepage_hero_image_url: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85"
+  homepage_hero_image_url: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=1800&q=85",
+  booking_days: [1, 2, 3, 4, 5, 6],
+  booking_max_days: 90
 };
 
 export const products: Product[] = [
@@ -45,45 +47,5 @@ export const products: Product[] = [
   created_at: new Date(Date.now() - index * 86400000).toISOString()
 }));
 
-export const testimonials: Testimonial[] = [
-  {
-    id: "1",
-    customer_name: "Ama B.",
-    location: "Accra",
-    rating: 5,
-    quote: "Clear payment plan, quick responses, and the phone condition matched what I saw online.",
-    image_url: null,
-    is_featured: true,
-    created_at: new Date().toISOString()
-  },
-  {
-    id: "2",
-    customer_name: "Kwame A.",
-    location: "Tema",
-    rating: 5,
-    quote: "The financing breakdown made it easy to decide before reserving.",
-    image_url: null,
-    is_featured: true,
-    created_at: new Date().toISOString()
-  },
-  {
-    id: "3",
-    customer_name: "Esi M.",
-    location: "East Legon",
-    rating: 5,
-    quote: "I liked that I could check the price and book first, then test the iPhone properly at the shop before paying.",
-    image_url: null,
-    is_featured: true,
-    created_at: new Date().toISOString()
-  },
-  {
-    id: "4",
-    customer_name: "Nana K.",
-    location: "Kasoa",
-    rating: 5,
-    quote: "They explained the warranty and payment plan clearly. The phone was ready when I arrived, so the whole process felt easy.",
-    image_url: null,
-    is_featured: true,
-    created_at: new Date().toISOString()
-  }
-];
+// Public reviews must come from the moderated customer-review workflow.
+export const testimonials: Testimonial[] = [];

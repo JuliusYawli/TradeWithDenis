@@ -13,13 +13,13 @@ const config: Config = {
         danger: "rgb(var(--color-danger) / <alpha-value>)"
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "Helvetica Neue", "Arial", "sans-serif"],
-        serif: ["var(--font-playfair)", "Georgia", "Times New Roman", "serif"]
+        sans: ["-apple-system", "BlinkMacSystemFont", "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Arial", "sans-serif"],
+        serif: ["-apple-system", "BlinkMacSystemFont", "SF Pro Display", "Helvetica Neue", "Arial", "sans-serif"]
       },
       boxShadow: {
-        soft: "0 20px 60px rgba(161, 98, 7, 0.12)",
-        glow: "0 0 30px rgba(202, 138, 4, 0.25)",
-        "glow-sm": "0 0 15px rgba(202, 138, 4, 0.12)"
+        soft: "0 20px 60px rgba(8, 26, 43, 0.13)",
+        glow: "0 0 30px rgba(200, 146, 46, 0.24)",
+        "glow-sm": "0 0 15px rgba(200, 146, 46, 0.12)"
       },
       animation: {
         "fade-in": "fadeIn 0.6s ease-in-out",

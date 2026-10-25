@@ -100,4 +100,6 @@ export type SiteSettings = {
   business_registration: string | null;
   homepage_hero_image_url?: string | null;
   homepage_hero_video_url?: string | null;
+  booking_days?: number[] | null;
+  booking_max_days?: number | null;
 };

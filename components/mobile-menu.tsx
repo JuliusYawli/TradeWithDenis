@@ -6,6 +6,7 @@ import { CalendarCheck, Calculator, ChevronRight, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useLockBodyScroll } from "@/components/use-lock-body-scroll";
+import { useDialogFocus } from "@/components/use-dialog-focus";
 
 const links = [
   ["Home", "/"],
@@ -30,6 +31,8 @@ export function MobileMenu({
   const [activeModal, setActiveModal] = useState<MobileModalName>(null);
 
   useLockBodyScroll(open || Boolean(activeModal));
+  const menuRef = useDialogFocus(open, () => setOpen(false));
+  const actionDialogRef = useDialogFocus(Boolean(activeModal), () => setActiveModal(null));
 
   function openActionModal(modal: Exclude<MobileModalName, null>) {
     setOpen(false);
@@ -37,7 +40,7 @@ export function MobileMenu({
   }
 
   const actionModal = activeModal ? (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-hidden bg-ink/75 px-3 py-3 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6 lg:hidden" role="dialog" aria-modal="true">
+    <div ref={actionDialogRef} className="fixed inset-0 z-[100] flex items-start justify-center overflow-hidden bg-ink/75 px-3 py-3 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6 lg:hidden" role="dialog" aria-modal="true" aria-label="Quick action">
       <button className="absolute inset-0 cursor-default" type="button" aria-label="Close modal" onClick={() => setActiveModal(null)} />
       <div className="modal-panel z-10 flex max-h-[calc(100svh-1.5rem)] max-w-3xl flex-col sm:max-h-[min(90vh,760px)]">
         <div className="shrink-0 border-b border-line bg-white px-4 py-4 sm:px-5">
@@ -74,7 +77,7 @@ export function MobileMenu({
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
+        <div ref={menuRef} className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
           <button
             className="absolute inset-0 bg-ink/35 backdrop-blur-[2px]"
             type="button"
@@ -85,7 +88,7 @@ export function MobileMenu({
           <aside className="absolute right-3 top-3 flex max-h-[calc(100dvh-1.5rem)] w-[min(360px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-2xl">
             <div className="flex items-center justify-between gap-4 border-b border-line bg-snow px-4 py-3">
               <Link href="/" className="min-w-0" aria-label="TradeWithDennis home" onClick={() => setOpen(false)}>
-                <Image src="/logo.svg" alt="TradeWithDennis" width={150} height={54} className="h-10 w-auto object-contain" />
+                <Image src="/logo-transparent.svg" alt="TradeWithDennis" width={166} height={70} className="h-10 w-auto object-contain" />
               </Link>
               <button
                 className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-ink shadow-sm ring-1 ring-line transition active:scale-95"
@@ -121,7 +124,7 @@ export function MobileMenu({
               </div>
 
               <button
-                className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-center text-base font-medium text-white shadow-soft transition hover:bg-red active:scale-[0.99]"
+                className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-center text-base font-semibold text-ink shadow-soft transition hover:bg-red hover:text-white active:scale-[0.99]"
                 type="button"
                 onClick={() => openActionModal("appointment")}
               >

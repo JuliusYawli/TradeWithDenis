@@ -163,11 +163,14 @@ export async function sendAppointmentNotifications({
   if (!tasks.length) return;
 
   const results = await Promise.allSettled(tasks);
+  const failures: unknown[] = [];
   for (const result of results) {
     if (result.status === "rejected") {
       console.error(result.reason);
+      failures.push(result.reason);
     }
   }
+  if (failures.length) throw new AggregateError(failures, "One or more appointment notifications failed.");
 }
 
 export async function sendAppointmentUpdateNotification({

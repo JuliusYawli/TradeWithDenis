@@ -5,6 +5,9 @@ import { getPublicSiteSettings } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createAdminSupabaseClient } from "@/lib/supabase-admin";
 import { submitTestimonial } from "./actions";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Submit Customer Review", description: "Submit a private review for moderation after your TradeWithDennis visit.", robots: { index: false, follow: false } };
 
 type ReviewRequest = {
   customer_name: string;

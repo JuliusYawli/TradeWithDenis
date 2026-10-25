@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
 import { LoginForm } from "./login-form";
 
-export const metadata: Metadata = { title: "Admin Login" };
+export const metadata: Metadata = { title: "Admin Login", description: "Secure TradeWithDennis administration sign-in.", robots: { index: false, follow: false } };
 
 export default async function AdminLoginPage({
   searchParams

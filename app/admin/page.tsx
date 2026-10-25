@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { BarChart3, CalendarDays, Database, Download, ExternalLink, KeyRound, LogOut, Package, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
 import { AdminAppointmentSearch, AdminLeadSearch } from "@/components/admin-customer-search";
 import { AdminToast } from "@/components/admin-toast";
@@ -12,10 +13,12 @@ import { AdminInactivityLogout } from "@/components/admin-inactivity-logout";
 import { AppointmentStatusModal } from "@/components/appointment-status-modal";
 import { OverviewStatsModal } from "@/components/overview-stats-modal";
 import { isAllowedAdminEmail } from "@/lib/admin";
-import { getAdminTestimonials, getAppointments, getLeads, getProducts, getSiteSettings, isLeadFromToday } from "@/lib/data";
+import { getAdminTestimonials, getAnalyticsSummary, getAppointments, getLeads, getProducts, getSiteSettings, isLeadFromToday } from "@/lib/data";
 import { hasSupabaseEnv } from "@/lib/supabase-env";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { deleteProduct, logoutAdmin, saveProduct, saveSettings, updateTestimonialStatus } from "./actions";
+
+export const metadata: Metadata = { title: "Admin Dashboard", robots: { index: false, follow: false } };
 
 const appointmentStatuses = [
   ["pending", "Pending"],
@@ -77,12 +80,13 @@ export default async function AdminPage({
     if (!isAllowedAdminEmail(data.user.email)) redirect("/admin/login?error=unauthorized");
   }
 
-  const [products, settings, testimonials, leads, appointments] = await Promise.all([
+  const [products, settings, testimonials, leads, appointments, analytics] = await Promise.all([
     getProducts(),
     getSiteSettings(),
     getAdminTestimonials(),
     getLeads(),
-    getAppointments()
+    getAppointments(),
+    getAnalyticsSummary()
   ]);
   const inStock = products.filter((product) => product.stock_status === "in_stock").length;
   const todaysLeads = leads.filter((lead) => isLeadFromToday(lead.created_at));
@@ -99,7 +103,10 @@ export default async function AdminPage({
     ["Total products", products.length, Package],
     ["In stock", inStock, BarChart3],
     ["New leads", todaysLeads.filter((lead) => lead.status === "new").length, Users],
-    ["Appointment queue", activeAppointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status)).length, CalendarDays]
+    ["Appointment queue", activeAppointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status)).length, CalendarDays],
+    ["30-day product views", analytics.productViews, BarChart3],
+    ["30-day booking starts", analytics.bookingStarts, CalendarDays],
+    ["30-day bookings", analytics.bookings, Users]
   ];
   const adminNavItems: Array<[string, string, LucideIcon, string | number | null]> = [
     ["Overview", "#overview", BarChart3, null],
@@ -440,6 +447,14 @@ export default async function AdminPage({
                     <label className="text-xs font-medium uppercase text-neutral-500">Opening hours<input className="field mt-1" name="opening_hours" defaultValue={settings.opening_hours ?? ""} placeholder="8:00 AM - 7:00 PM" /></label>
                     <label className="text-xs font-medium uppercase text-neutral-500 md:col-span-2">Shop address<textarea className="field mt-1 min-h-24" name="address" defaultValue={settings.address ?? ""} placeholder="Circle Mall, Block C, Shop 27" /></label>
                     <label className="text-xs font-medium uppercase text-neutral-500 md:col-span-2">Google Maps link<input className="field mt-1" name="google_maps_url" defaultValue={settings.google_maps_url ?? ""} placeholder="https://maps.app.goo.gl/..." /></label>
+                  </div>
+                </div>
+                <div className="rounded-lg border border-line bg-snow p-4">
+                  <h3 className="font-semibold text-ink">Appointment availability</h3>
+                  <p className="mt-1 text-sm leading-6 text-neutral-600">Use weekday numbers from 0 to 6, where Sunday is 0. The default 1,2,3,4,5,6 allows Monday through Saturday.</p>
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    <label className="text-xs font-medium uppercase text-neutral-500">Open booking days<input className="field mt-1" name="booking_days" defaultValue={(settings.booking_days ?? [1,2,3,4,5,6]).join(",")} /></label>
+                    <label className="text-xs font-medium uppercase text-neutral-500">How far ahead (days)<input className="field mt-1" name="booking_max_days" type="number" min="7" max="180" defaultValue={settings.booking_max_days ?? 90} /></label>
                   </div>
                 </div>
                 <div className="rounded-lg border border-line bg-snow p-4">

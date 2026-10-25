@@ -361,6 +361,8 @@ export async function saveSettings(formData: FormData) {
     google_maps_url: String(formData.get("google_maps_url") || "") || null,
     homepage_hero_image_url: String(formData.get("homepage_hero_image_url") || "") || null,
     homepage_hero_video_url: String(formData.get("homepage_hero_video_url") || "") || null,
+    booking_days: String(formData.get("booking_days") || "1,2,3,4,5,6").split(",").map(Number).filter((day) => Number.isInteger(day) && day >= 0 && day <= 6),
+    booking_max_days: Math.min(180, Math.max(7, Number(formData.get("booking_max_days") || 90))),
     business_registration: String(formData.get("business_registration") || "") || null
   };
 

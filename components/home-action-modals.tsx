@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { createPortal } from "react-dom";
 import { CalendarCheck, Calculator, Smartphone, X } from "lucide-react";
 import { useLockBodyScroll } from "@/components/use-lock-body-scroll";
+import { useDialogFocus } from "@/components/use-dialog-focus";
 
 type ModalName = "calculator" | "appointment" | null;
 
@@ -18,7 +19,7 @@ export function HomeActionModals({
   appointment: ReactNode;
   variant?: "hero";
 }) {
-  const primaryClass = variant === "hero" ? "btn-hero-ghost w-full sm:w-auto" : "btn-secondary w-full sm:w-auto";
+  const primaryClass = variant === "hero" ? "btn-hero-primary w-full sm:w-auto" : "btn-primary w-full sm:w-auto";
   const ghostClass = variant === "hero" ? "btn-hero-ghost w-full sm:w-auto" : "btn-secondary w-full sm:w-auto";
   const searchParams = useSearchParams();
   const [open, setOpen] = useState<ModalName>(null);
@@ -36,15 +37,16 @@ export function HomeActionModals({
   }, [searchParams]);
 
   useLockBodyScroll(Boolean(open));
+  const dialogRef = useDialogFocus(Boolean(open), () => setOpen(null));
 
   const modal = open ? (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-hidden bg-ink/75 px-3 py-3 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6" role="dialog" aria-modal="true">
+    <div ref={dialogRef} className="fixed inset-0 z-[100] flex items-start justify-center overflow-hidden bg-ink/75 px-3 py-3 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6" role="dialog" aria-modal="true" aria-labelledby="home-action-dialog-title">
       <button className="absolute inset-0 cursor-default" type="button" aria-label="Close modal" onClick={() => setOpen(null)} />
       <div className="modal-panel z-10 flex max-h-[calc(100svh-1.5rem)] max-w-3xl flex-col sm:max-h-[min(90vh,760px)]">
         <div className="shrink-0 border-b border-line bg-white px-4 py-4 sm:px-5">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
+              <h2 id="home-action-dialog-title" className="text-xl font-semibold tracking-tight sm:text-2xl">
                 {open === "calculator" ? "Calculate payments" : "Book appointment"}
               </h2>
               <p className="mt-1 text-sm leading-6 text-neutral-600">
@@ -65,10 +67,10 @@ export function HomeActionModals({
 
   return (
     <>
-      <div className="mt-7 grid w-full gap-3 sm:mt-9 sm:flex sm:flex-wrap sm:justify-center">
+      <div className={`mt-7 grid w-full gap-3 sm:mt-9 sm:flex sm:flex-wrap ${variant === "hero" ? "sm:justify-start" : "sm:justify-center"}`}>
         <Link className={primaryClass} href="/iphones"><Smartphone className="h-4 w-4" /> Browse iPhones</Link>
-        <button className={ghostClass} type="button" onClick={() => setOpen("calculator")}><Calculator className="h-4 w-4" /> Calculate payments</button>
         <button className={ghostClass} type="button" onClick={() => setOpen("appointment")}><CalendarCheck className="h-4 w-4" /> Book appointment</button>
+        {variant !== "hero" ? <button className={ghostClass} type="button" onClick={() => setOpen("calculator")}><Calculator className="h-4 w-4" /> Calculate payments</button> : null}
       </div>
 
       {mounted && modal ? createPortal(modal, document.body) : null}

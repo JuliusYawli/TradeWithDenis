@@ -48,9 +48,13 @@ ADMIN_EMAILS=your-admin-email@example.com
 RESEND_API_KEY=your-resend-api-key
 SHOP_NOTIFICATION_EMAIL=shop-notifications@example.com
 EMAIL_FROM=TradeWithDennis <onboarding@resend.dev>
+CRON_SECRET=generate-a-long-random-secret
+BOOKING_RATE_LIMIT_SECRET=generate-another-long-random-secret
 ```
 
 The public site renders from local seed data when Supabase variables are missing, which makes development easy before the database is connected.
+
+`CRON_SECRET` protects the notification retry endpoint used by the Vercel cron job. `BOOKING_RATE_LIMIT_SECRET` is optional but recommended; when omitted, the service-role key is used to hash rate-limit identifiers.
 
 For production email notifications, verify a sending domain in Resend and change `EMAIL_FROM` to an address on that verified domain.
 

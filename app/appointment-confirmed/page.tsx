@@ -7,7 +7,8 @@ import { getPublicSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Appointment Requested",
-  description: "Your TradeWithDennis shop appointment request has been received."
+  description: "Your TradeWithDennis shop appointment request has been received.",
+  robots: { index: false, follow: false }
 };
 
 export default async function AppointmentConfirmedPage({
@@ -18,9 +19,12 @@ export default async function AppointmentConfirmedPage({
   const settings = await getPublicSiteSettings();
   const params = await searchParams;
   const needsManualFollowUp = params?.status === "manual-follow-up";
+  const isInvalid = params?.status === "invalid";
   const whatsappUrl = `https://wa.me/${settings.whatsapp?.replace(/\D/g, "")}`;
-  const title = needsManualFollowUp ? "Please contact the shop to confirm" : "Appointment request received";
-  const message = needsManualFollowUp
+  const title = isInvalid ? "Please check your booking details" : needsManualFollowUp ? "Please contact the shop to confirm" : "Appointment request received";
+  const message = isInvalid
+    ? "Your request was not submitted because one or more details were invalid. Return to the form and check your name, phone, email, date, and appointment time."
+    : needsManualFollowUp
     ? "The online booking system could not save your request just now. Please call or WhatsApp TradeWithDennis so the team can confirm your visit directly."
     : "Thank you. TradeWithDennis has received your shop visit request. The team will contact you to confirm availability before you come in.";
 

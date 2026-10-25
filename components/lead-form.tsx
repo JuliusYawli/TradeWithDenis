@@ -2,8 +2,13 @@ import { CalendarCheck, LockKeyhole, Send } from "lucide-react";
 import { submitLead } from "@/app/actions";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
 import type { Product } from "@/lib/types";
+import Link from "next/link";
 
 export function LeadForm({ product, variant = "card" }: { product?: Product; variant?: "card" | "modal" }) {
+  const today = new Date();
+  const minDate = today.toISOString().slice(0, 10);
+  const maxDate = new Date(today.getTime() + 90 * 86400000).toISOString().slice(0, 10);
+  const unavailable = Boolean(product && product.stock_status !== "in_stock");
   return (
     <form action={submitLead} className={variant === "card" ? "grid gap-3 rounded-lg border border-line bg-white p-4 shadow-sm sm:p-5" : "grid gap-3"}>
       {variant === "card" ? (
@@ -22,6 +27,10 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
         <p className="mt-1">Your appointment helps the shop prepare. You inspect the phone and complete the order in person.</p>
       </div>
       <input type="hidden" name="product_id" value={product?.id ?? ""} />
+      <label className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+        Website
+        <input name="website" tabIndex={-1} autoComplete="off" />
+      </label>
       <div className="grid gap-3 sm:grid-cols-2">
         <input className="field" name="customer_name" placeholder="Full name" required />
         <input className="field" name="phone" placeholder="WhatsApp or phone" required />
@@ -40,7 +49,7 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
           <label className="text-sm font-semibold text-neutral-700">
             Payment preference
             <input type="hidden" name="desired_payment_option" value="cash" />
-            <p className="field mt-2 flex items-center bg-snow text-neutral-600">Cash — this phone is sold at cash price only</p>
+            <p className="field mt-2 flex items-center bg-snow text-neutral-600">Cash. This phone is sold at cash price only.</p>
           </label>
         ) : (
           <label className="text-sm font-semibold text-neutral-700">
@@ -79,14 +88,14 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
             {product.colors.map((color) => (
               <option key={color} value={color}>{color}</option>
             ))}
-            <option value="Not sure — discuss at shop">Not sure — discuss at shop</option>
+            <option value="Not sure. Discuss at shop">Not sure. Discuss at shop</option>
           </select>
         </label>
       ) : null}
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-semibold text-neutral-700">
           Preferred appointment date
-          <input className="field mt-2" name="appointment_date" type="date" />
+          <input className="field mt-2" name="appointment_date" type="date" min={minDate} max={maxDate} />
         </label>
         <label className="text-sm font-semibold text-neutral-700">
           Preferred appointment time
@@ -97,7 +106,12 @@ export function LeadForm({ product, variant = "card" }: { product?: Product; var
         </label>
       </div>
       <textarea className="field min-h-28" name="message" placeholder={product ? `I want to book a shop visit for ${product.model} ${product.storage}` : "Tell us what device you want to inspect at the shop"} />
-      <button className="btn-primary" type="submit">
+      <label className="flex items-start gap-3 rounded-lg border border-line bg-snow p-3 text-sm leading-6 text-neutral-700">
+        <input className="mt-1 h-4 w-4 shrink-0" name="privacy_acknowledged" type="checkbox" required />
+        <span>I understand that TradeWithDennis will use these details to handle my inquiry and appointment as explained in the <Link className="font-semibold text-red underline" href="/privacy">Privacy Policy</Link>.</span>
+      </label>
+      {unavailable ? <p className="rounded-lg bg-snow p-3 text-sm font-medium text-red">This device is currently {product?.stock_status.replace("_", " ")}. Choose another in-stock iPhone or contact the shop.</p> : null}
+      <button className="btn-primary disabled:cursor-not-allowed disabled:opacity-50" type="submit" disabled={unavailable}>
         <Send className="h-4 w-4" />
         Book appointment
       </button>

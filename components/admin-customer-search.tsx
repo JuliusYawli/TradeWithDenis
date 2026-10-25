@@ -24,6 +24,18 @@ const leadStatuses = [
   ["converted", "Converted"],
   ["lost", "Lost"]
 ] as const;
+const pageSize = 10;
+
+function Pagination({ page, pages, onChange }: { page: number; pages: number; onChange: (page: number) => void }) {
+  if (pages <= 1) return null;
+  return (
+    <div className="mt-4 flex items-center justify-between gap-3 border-t border-line pt-4 text-sm">
+      <button className="btn-secondary px-4 py-2 disabled:opacity-40" type="button" disabled={page === 1} onClick={() => onChange(page - 1)}>Previous</button>
+      <span className="font-medium text-neutral-600">Page {page} of {pages}</span>
+      <button className="btn-secondary px-4 py-2 disabled:opacity-40" type="button" disabled={page === pages} onClick={() => onChange(page + 1)}>Next</button>
+    </div>
+  );
+}
 
 function statusLabel<T extends readonly (readonly [string, string])[]>(options: T, value: string) {
   return options.find(([status]) => status === value)?.[1] ?? value;
@@ -103,6 +115,7 @@ function SearchBox({
 export function AdminAppointmentSearch({ appointments, children }: { appointments: Appointment[]; children?: ReactNode }) {
   const [query, setQuery] = useState("");
   const [showArchived, setShowArchived] = useState(false);
+  const [page, setPage] = useState(1);
   const normalizedQuery = query.trim().toLowerCase();
   const visibleAppointments = useMemo(
     () => appointments.filter((appointment) => (showArchived ? Boolean(appointment.archived) : !appointment.archived)),
@@ -112,6 +125,8 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
     () => (normalizedQuery ? visibleAppointments.filter((appointment) => matchesAppointment(appointment, normalizedQuery)) : visibleAppointments),
     [visibleAppointments, normalizedQuery]
   );
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paginated = filtered.slice((Math.min(page, pages) - 1) * pageSize, Math.min(page, pages) * pageSize);
 
   return (
     <>
@@ -123,14 +138,14 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
             <button
               type="button"
               onClick={() => setShowArchived(false)}
-              className={`rounded-full px-3 py-1.5 transition ${!showArchived ? "bg-gold text-white" : "text-neutral-600 hover:text-red"}`}
+              className={`rounded-full px-3 py-1.5 transition ${!showArchived ? "bg-gold text-ink" : "text-neutral-600 hover:text-red"}`}
             >
               Active
             </button>
             <button
               type="button"
               onClick={() => setShowArchived(true)}
-              className={`rounded-full px-3 py-1.5 transition ${showArchived ? "bg-gold text-white" : "text-neutral-600 hover:text-red"}`}
+              className={`rounded-full px-3 py-1.5 transition ${showArchived ? "bg-gold text-ink" : "text-neutral-600 hover:text-red"}`}
             >
               Archived
             </button>
@@ -139,7 +154,7 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
       </div>
       {children}
       <div className="mt-4 min-h-[440px] max-h-[820px] space-y-3 overflow-y-scroll pr-2 [scrollbar-gutter:stable] sm:min-h-[620px]">
-        {filtered.length ? filtered.map((appointment) => (
+        {filtered.length ? paginated.map((appointment) => (
           <div key={appointment.id} className="rounded-md bg-snow p-4 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="font-medium">{appointment.leads?.customer_name ?? "Customer"} · {appointment.appointment_date ?? "Date not chosen"} · {appointment.appointment_time ?? "Time not chosen"}</p>
@@ -197,6 +212,7 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
           </div>
         )) : <p className="rounded-md bg-snow p-4 text-sm text-neutral-600">No appointments match that search.</p>}
       </div>
+      <Pagination page={Math.min(page, pages)} pages={pages} onChange={setPage} />
     </>
   );
 }
@@ -211,6 +227,7 @@ function leadIsFromToday(createdAt: string) {
 export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
   const [query, setQuery] = useState("");
   const [showAll, setShowAll] = useState(false);
+  const [page, setPage] = useState(1);
   const normalizedQuery = query.trim().toLowerCase();
   const visibleLeads = useMemo(
     () => (showAll ? leads : leads.filter((lead) => leadIsFromToday(lead.created_at))),
@@ -220,6 +237,8 @@ export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
     () => (normalizedQuery ? visibleLeads.filter((lead) => matchesLead(lead, normalizedQuery)) : visibleLeads),
     [visibleLeads, normalizedQuery]
   );
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paginated = filtered.slice((Math.min(page, pages) - 1) * pageSize, Math.min(page, pages) * pageSize);
 
   return (
     <>
@@ -231,14 +250,14 @@ export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
             <button
               type="button"
               onClick={() => setShowAll(false)}
-              className={`rounded-full px-3 py-1.5 transition ${!showAll ? "bg-gold text-white" : "text-neutral-600 hover:text-red"}`}
+              className={`rounded-full px-3 py-1.5 transition ${!showAll ? "bg-gold text-ink" : "text-neutral-600 hover:text-red"}`}
             >
               Today
             </button>
             <button
               type="button"
               onClick={() => setShowAll(true)}
-              className={`rounded-full px-3 py-1.5 transition ${showAll ? "bg-gold text-white" : "text-neutral-600 hover:text-red"}`}
+              className={`rounded-full px-3 py-1.5 transition ${showAll ? "bg-gold text-ink" : "text-neutral-600 hover:text-red"}`}
             >
               All leads
             </button>
@@ -246,7 +265,7 @@ export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
         </div>
       </div>
       <div className="mt-4 min-h-[440px] max-h-[820px] space-y-3 overflow-y-scroll pr-2 [scrollbar-gutter:stable] sm:min-h-[620px]">
-        {filtered.length ? filtered.map((lead) => (
+        {filtered.length ? paginated.map((lead) => (
           <div key={lead.id} className="rounded-md bg-snow p-4 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="font-medium">{lead.customer_name}</p>
@@ -271,6 +290,7 @@ export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
           </div>
         )) : <p className="rounded-md bg-snow p-4 text-sm text-neutral-600">No leads match that search.</p>}
       </div>
+      <Pagination page={Math.min(page, pages)} pages={pages} onChange={setPage} />
     </>
   );
 }

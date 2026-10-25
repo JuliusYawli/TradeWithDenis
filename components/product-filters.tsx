@@ -1,14 +1,22 @@
 "use client";
 
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { ProductCard } from "./product-card";
 import { useMemo, useState } from "react";
+import { financingFor, formatCedi } from "@/lib/finance";
 
 export function ProductFilters({ products }: { products: Product[] }) {
   const [query, setQuery] = useState("");
   const [condition, setCondition] = useState("all");
   const [sort, setSort] = useState("newest");
+  const [comparison, setComparison] = useState<Product[]>([]);
+
+  function toggleComparison(product: Product) {
+    setComparison((current) => current.some((item) => item.id === product.id)
+      ? current.filter((item) => item.id !== product.id)
+      : current.length < 3 ? [...current, product] : [...current.slice(1), product]);
+  }
 
   const filtered = useMemo(() => {
     const normalized = query.toLowerCase();
@@ -25,16 +33,6 @@ export function ProductFilters({ products }: { products: Product[] }) {
 
   return (
     <div>
-      <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-        <div className="min-w-0">
-          <p className="section-eyebrow">Catalog</p>
-          <p className="mt-2 text-sm font-medium text-neutral-600">{filtered.length} of {products.length} iPhones showing</p>
-        </div>
-        <div className="hidden items-center gap-2 rounded-full border border-line bg-white px-3 py-2 text-xs font-medium text-neutral-600 shadow-sm sm:inline-flex">
-          <SlidersHorizontal className="h-4 w-4 text-red" />
-          Compare price, deposit, and weekly plan
-        </div>
-      </div>
       <div className="mb-6 grid gap-3 rounded-2xl border border-line bg-white p-3 shadow-sm sm:p-4 md:mb-8 md:grid-cols-[minmax(0,1fr)_160px_190px]">
         <label className="relative flex min-h-12 items-center md:col-span-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
@@ -57,9 +55,23 @@ export function ProductFilters({ products }: { products: Product[] }) {
           <option value="weekly">Weekly payment</option>
         </select>
       </div>
+      {comparison.length ? (
+        <div className="mb-8 overflow-x-auto rounded-2xl border border-gold/40 bg-white p-4 shadow-sm" data-testid="comparison-table">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold">Compare iPhones ({comparison.length}/3)</h2>
+            <button className="text-sm font-medium text-red" type="button" onClick={() => setComparison([])}>Clear</button>
+          </div>
+          <table className="w-full min-w-[640px] text-left text-sm">
+            <thead><tr className="border-b border-line"><th className="py-2">Model</th><th>Condition</th><th>Cash price</th><th>Deposit</th><th>Weekly</th><th>Term</th><th>Warranty</th></tr></thead>
+            <tbody>{comparison.map((product) => { const finance = financingFor(product); return (
+              <tr key={product.id} className="border-b border-line/60 last:border-0"><td className="py-3 font-semibold">{product.model} {product.storage}</td><td>{product.condition}</td><td>{formatCedi(product.price)}</td><td>{formatCedi(finance.downPayment)}</td><td>{product.weekly_payment > 0 ? formatCedi(product.weekly_payment) : "Cash only"}</td><td>{product.installment_weeks} weeks</td><td>{product.warranty_months} weeks</td></tr>
+            ); })}</tbody>
+          </table>
+        </div>
+      ) : null}
       {filtered.length ? (
         <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((product) => <ProductCard key={product.id} product={product} />)}
+          {filtered.map((product) => <ProductCard key={product.id} product={product} comparing={comparison.some((item) => item.id === product.id)} onCompare={toggleComparison} />)}
         </div>
       ) : (
         <div className="rounded-2xl border border-line bg-white p-8 text-center shadow-sm">

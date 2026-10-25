@@ -54,6 +54,15 @@ const sections = [
       "You may contact TradeWithDennis to request access to your information, correct inaccurate details, update your contact preferences, or ask for deletion where deletion is legally and operationally possible.",
       "If you believe information has been submitted incorrectly or without permission, contact the shop so the team can review and correct the record."
     ]
+  },
+  {
+    title: "Cookies and analytics",
+    id: "cookies",
+    body: [
+      "The website stores your analytics preference in your browser. This essential preference storage prevents the consent question from appearing on every visit.",
+      "If you accept analytics, the website records limited events such as page views, product views, booking-form starts, and completed booking submissions. It stores a one-way visitor identifier derived from connection information; it does not use this identifier for advertising. You may reject analytics without losing access to the catalog or booking form.",
+      "Supabase provides database and authentication services, Resend may deliver transactional email, Vercel hosts the website and provides performance infrastructure, and externally hosted images or video may receive ordinary connection information when loaded. Their processing is governed by their own terms and privacy practices."
+    ]
   }
 ];
 
@@ -72,7 +81,7 @@ export default async function PrivacyPage() {
         </section>
         <div className="mt-10 max-w-3xl space-y-8">
           {sections.map((section) => (
-            <section key={section.title} className="rounded-lg border border-line bg-white p-5 shadow-sm">
+            <section key={section.title} id={"id" in section ? section.id : undefined} className="scroll-mt-24 rounded-lg border border-line bg-white p-5 shadow-sm">
               <h2 className="text-xl font-semibold text-ink">{section.title}</h2>
               <div className="mt-3 space-y-3 leading-7 text-neutral-700">
                 {section.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
@@ -81,7 +90,7 @@ export default async function PrivacyPage() {
           ))}
           <section className="rounded-lg border border-line bg-snow p-5">
             <h2 className="text-xl font-semibold text-ink">Contact</h2>
-            <p className="mt-3 leading-7 text-neutral-700">Privacy questions or data requests can be sent to {settings.email ?? "the shop"} or discussed directly at {settings.address ?? "the TradeWithDennis shop"}.</p>
+            <p className="mt-3 leading-7 text-neutral-700">Privacy questions or data requests can be sent to {settings.email ? <a className="font-semibold text-red underline" href={`mailto:${settings.email}`}>{settings.email}</a> : "the shop"} or discussed directly at {settings.address ?? "the TradeWithDennis shop"}.</p>
           </section>
         </div>
       </main>
