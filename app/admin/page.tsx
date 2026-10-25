@@ -91,6 +91,9 @@ export default async function AdminPage({
   const inStock = products.filter((product) => product.stock_status === "in_stock").length;
   const todaysLeads = leads.filter((lead) => isLeadFromToday(lead.created_at));
   const activeAppointments = appointments.filter((appointment) => !appointment.archived);
+  const appointmentQueue = activeAppointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status));
+  const newLeadCount = todaysLeads.filter((lead) => lead.status === "new").length;
+  const pendingTestimonialCount = testimonials.filter((testimonial) => (testimonial.status ?? "approved") === "pending").length;
   const appointmentStatusCounts = appointmentStatuses.map(([status, label]) => [
     label,
     activeAppointments.filter((appointment) => appointment.status === status).length
@@ -102,22 +105,22 @@ export default async function AdminPage({
   const stats: Array<[string, string | number, LucideIcon]> = [
     ["Total products", products.length, Package],
     ["In stock", inStock, BarChart3],
-    ["New leads", todaysLeads.filter((lead) => lead.status === "new").length, Users],
-    ["Appointment queue", activeAppointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status)).length, CalendarDays],
+    ["New leads", newLeadCount, Users],
+    ["Appointment queue", appointmentQueue.length, CalendarDays],
     ["30-day product views", analytics.productViews, BarChart3],
     ["30-day booking starts", analytics.bookingStarts, CalendarDays],
     ["30-day bookings", analytics.bookings, Users]
   ];
   const adminNavItems: Array<[string, string, LucideIcon, string | number | null]> = [
     ["Overview", "#overview", BarChart3, null],
-    ["Appointments", "#appointments", CalendarDays, activeAppointments.length],
-    ["Leads", "#leads", Users, todaysLeads.length],
+    ["Appointments", "#appointments", CalendarDays, appointmentQueue.length],
+    ["Leads", "#leads", Users, newLeadCount],
     ["Add product", "#add-product", Plus, null],
     ["Products", "#products", Package, products.length],
     ["Backups", "#backups", Database, null],
     ["Settings", "#settings", Settings, null],
     ["Password", "#password", KeyRound, null],
-    ["Testimonials", "#testimonials", Star, testimonials.length]
+    ["Testimonials", "#testimonials", Star, pendingTestimonialCount]
   ];
   const backupExports: Array<[string, string, string, number | string]> = [
     ["Appointments", "Customer visit bookings with status, dates, notes, and contact details.", "/admin/exports/appointments", "Full CSV"],
@@ -136,18 +139,16 @@ export default async function AdminPage({
       <div className="container-page py-10">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-semibold tracking-tight">Admin dashboard</h1>
+            <div className="mb-2 flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
+              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">Store operations</span>
+            </div>
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Admin dashboard</h1>
             <p className="mt-2 text-neutral-600">Manage products, leads, appointments, testimonials, and site settings.</p>
           </div>
           <div className="flex flex-wrap gap-2 lg:hidden">
-            <form action={logoutAdmin}>
-              <input type="hidden" name="next" value="/iphones" />
-              <AdminSubmitButton className={adminActionButtonClass} pendingLabel="Opening..."><ExternalLink className="h-4 w-4" /> Catalog</AdminSubmitButton>
-            </form>
-            <form action={logoutAdmin}>
-              <input type="hidden" name="next" value="/" />
-              <AdminSubmitButton className={adminActionButtonClass} pendingLabel="Opening..."><ExternalLink className="h-4 w-4" /> View site</AdminSubmitButton>
-            </form>
+            <a className={adminActionButtonClass} href="/iphones" target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> Catalog</a>
+            <a className={adminActionButtonClass} href="/" target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> View site</a>
             <form action={logoutAdmin}>
               <input type="hidden" name="next" value="/admin/login" />
               <AdminSubmitButton className={adminDangerButtonClass} pendingLabel="Logging out..."><LogOut className="h-4 w-4" /> Logout</AdminSubmitButton>
@@ -173,14 +174,8 @@ export default async function AdminPage({
               ))}
             </nav>
             <div className="mt-4 space-y-2 border-t border-line pt-4">
-              <form action={logoutAdmin}>
-                <input type="hidden" name="next" value="/iphones" />
-                <AdminSubmitButton className={`${adminActionButtonClass} w-full`} pendingLabel="Opening..."><ExternalLink className="h-4 w-4" /> Catalog</AdminSubmitButton>
-              </form>
-              <form action={logoutAdmin}>
-                <input type="hidden" name="next" value="/" />
-                <AdminSubmitButton className={`${adminActionButtonClass} w-full`} pendingLabel="Opening..."><ExternalLink className="h-4 w-4" /> View site</AdminSubmitButton>
-              </form>
+              <a className={`${adminActionButtonClass} w-full`} href="/iphones" target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> Catalog</a>
+              <a className={`${adminActionButtonClass} w-full`} href="/" target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> View site</a>
               <form action={logoutAdmin}>
                 <input type="hidden" name="next" value="/admin/login" />
                 <AdminSubmitButton className={`${adminDangerButtonClass} w-full`} pendingLabel="Logging out..."><LogOut className="h-4 w-4" /> Logout</AdminSubmitButton>
@@ -189,14 +184,14 @@ export default async function AdminPage({
           </aside>
 
           <div className="min-w-0">
-            <section className="mt-6 rounded-lg border border-line bg-white p-4 lg:hidden">
-              <h2 className="text-lg font-semibold">Admin sections</h2>
-              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <details className="mt-6 rounded-lg border border-line bg-white p-4 lg:hidden">
+              <summary className="cursor-pointer font-semibold text-ink">Admin sections</summary>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
                 {adminNavItems.map(([label, href, Icon]) => (
                   <a key={label} className="admin-nav-link btn-secondary justify-start px-4 py-2" href={href}><Icon className="h-4 w-4" /> {label}</a>
                 ))}
               </div>
-            </section>
+            </details>
 
             <div className="admin-workspace mt-8">
           <section id="overview" className="admin-panel admin-panel-overview scroll-mt-8 rounded-lg border border-line bg-white p-5">
@@ -210,6 +205,19 @@ export default async function AdminPage({
               appointments={activeAppointments}
               stats={stats.map(([label, value]) => [String(label), Number(value)])}
             />
+            <div className="mt-5 rounded-lg border border-line bg-snow p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Needs attention</p>
+                  <p className="mt-1 text-sm text-neutral-700">
+                    <span className="font-semibold text-ink">{appointmentQueue.length}</span> appointment{appointmentQueue.length === 1 ? "" : "s"} in queue, <span className="font-semibold text-ink">{newLeadCount}</span> new lead{newLeadCount === 1 ? "" : "s"}, and <span className="font-semibold text-ink">{pendingTestimonialCount}</span> review{pendingTestimonialCount === 1 ? "" : "s"} awaiting moderation.
+                  </p>
+                </div>
+                <a className="btn-primary px-4 py-2" href={appointmentQueue.length ? "#appointments" : newLeadCount ? "#leads" : pendingTestimonialCount ? "#testimonials" : "#products"}>
+                  {appointmentQueue.length || newLeadCount || pendingTestimonialCount ? "Review next task" : "Review inventory"}
+                </a>
+              </div>
+            </div>
             <div className="mt-5 grid gap-4 lg:grid-cols-4">
               <a className="admin-clickable rounded-lg border border-line bg-white p-4 transition hover:border-gold hover:shadow-soft" href="#appointments">
                 <CalendarDays className="h-5 w-5 text-gold" />
@@ -291,10 +299,7 @@ export default async function AdminPage({
                 <h2 className="text-xl font-semibold">Products</h2>
                 <p className="mt-1 text-sm text-neutral-600">Edit prices, update photos, and change stock status.</p>
               </div>
-              <form action={logoutAdmin}>
-                <input type="hidden" name="next" value="/iphones" />
-                <button className="btn-secondary px-4 py-2" type="submit">View catalog</button>
-              </form>
+              <a className="btn-secondary px-4 py-2" href="/iphones" target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> View catalog</a>
             </div>
             <div className="mt-5 space-y-3">
               {products.map((product) => (

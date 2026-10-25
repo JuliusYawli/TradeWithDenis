@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { X } from "lucide-react";
+import { useDialogFocus } from "@/components/use-dialog-focus";
 import type { Appointment, Lead, Product } from "@/lib/types";
 
 type StatType = "products" | "in_stock" | "new_leads" | "appointment_queue";
@@ -18,6 +19,7 @@ export function OverviewStatsModal({
   stats: Array<[string, number]>;
 }) {
   const [selectedStat, setSelectedStat] = useState<StatType | null>(null);
+  const dialogRef = useDialogFocus(Boolean(selectedStat), () => setSelectedStat(null));
 
   const handleItemClick = (id: string, type: "product" | "lead" | "appointment") => {
     setSelectedStat(null);
@@ -51,37 +53,50 @@ export function OverviewStatsModal({
     }
   }, [selectedStat, products, leads, appointments]);
 
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelectedStat(null);
-    };
-    if (selectedStat) document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, [selectedStat]);
-
   const statLabels: Record<string, StatType> = {
     "Total products": "products",
     "In stock": "in_stock",
     "New leads": "new_leads",
     "Appointment queue": "appointment_queue"
   };
+  const operationalStats = stats.filter(([label]) => statLabels[label]);
+  const funnelStats = stats.filter(([label]) => !statLabels[label]);
 
   return (
     <>
-      <div className="mt-5 grid gap-4 md:grid-cols-4">
-        {stats.map(([label, value]) => {
+      <div className="mt-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-500">Today&apos;s operations</p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {operationalStats.map(([label, value]) => {
           const statType = statLabels[label];
           return (
             <button
               key={label}
+              type="button"
               onClick={() => setSelectedStat(statType)}
-              className="rounded-lg border border-line bg-snow p-5 text-left transition hover:border-gold hover:bg-white cursor-pointer"
+              className="admin-clickable rounded-lg border border-line bg-snow p-4 text-left transition hover:border-gold hover:bg-white hover:shadow-sm"
             >
-              <p className="mt-4 text-sm text-neutral-500">{label}</p>
-              <p className="text-2xl font-semibold">{value}</p>
+              <p className="text-sm font-medium text-neutral-600">{label}</p>
+              <div className="mt-2 flex items-end justify-between gap-3">
+                <p className="text-3xl font-semibold tracking-tight text-ink">{value}</p>
+                <span className="text-xs font-semibold text-red">View details</span>
+              </div>
             </button>
           );
         })}
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-500">Last 30 days</p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          {funnelStats.map(([label, value]) => (
+            <div key={label} className="rounded-lg border border-line bg-white p-4">
+              <p className="text-2xl font-semibold tracking-tight text-ink">{value}</p>
+              <p className="mt-1 text-sm text-neutral-600">{label.replace("30-day ", "")}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {selectedStat && data && (
@@ -89,15 +104,17 @@ export function OverviewStatsModal({
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           onClick={(e) => e.target === e.currentTarget && setSelectedStat(null)}
         >
-          <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-lg">
+          <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="overview-detail-title" className="relative mx-4 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-lg">
             <button
+              type="button"
               onClick={() => setSelectedStat(null)}
-              className="absolute right-4 top-4 p-1 hover:bg-gray-100 rounded"
+              className="absolute right-4 top-4 rounded-md p-2 hover:bg-gray-100"
+              aria-label="Close details"
             >
               <X className="h-5 w-5" />
             </button>
 
-            <h3 className="text-lg font-semibold mb-4">{data.title}</h3>
+            <h3 id="overview-detail-title" className="mb-4 pr-10 text-lg font-semibold">{data.title}</h3>
 
             <div className="space-y-2">
               {data.items.length ? (
@@ -105,6 +122,7 @@ export function OverviewStatsModal({
                   (data.items as Product[]).map((product) => (
                     <button
                       key={product.id}
+                      type="button"
                       onClick={() => handleItemClick(product.id, "product")}
                       className="w-full rounded-md border border-line bg-snow p-3 text-left transition hover:border-gold hover:bg-white cursor-pointer"
                     >
@@ -116,6 +134,7 @@ export function OverviewStatsModal({
                   (data.items as Lead[]).map((lead) => (
                     <button
                       key={lead.id}
+                      type="button"
                       onClick={() => handleItemClick(lead.id, "lead")}
                       className="w-full rounded-md border border-line bg-snow p-3 text-left transition hover:border-gold hover:bg-white cursor-pointer"
                     >
@@ -128,6 +147,7 @@ export function OverviewStatsModal({
                   (data.items as Appointment[]).map((apt) => (
                     <button
                       key={apt.id}
+                      type="button"
                       onClick={() => handleItemClick(apt.id, "appointment")}
                       className="w-full rounded-md border border-line bg-snow p-3 text-left transition hover:border-gold hover:bg-white cursor-pointer"
                     >
