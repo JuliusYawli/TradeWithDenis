@@ -38,9 +38,9 @@ export function AdminStorageOptions({ defaultOptions = [] }: { defaultOptions?: 
       <p className="mt-1 text-xs leading-5 text-neutral-500">The main Storage and Price above are the first option. Add extra storages here, each with its own price (and weekly payment for installment products).</p>
       {rows.map((row, index) => (
         <div key={index} className="mt-2 flex flex-wrap items-center gap-2">
-          <input className="field w-28 flex-1 sm:flex-none" placeholder="512GB" value={row.storage} onChange={(e) => update(index, "storage", e.target.value)} />
-          <input className="field w-28 flex-1 sm:flex-none" type="number" placeholder="Price" value={row.price} onChange={(e) => update(index, "price", e.target.value)} />
-          <input className="field w-28 flex-1 sm:flex-none" type="number" placeholder="Weekly" value={row.weekly_payment} onChange={(e) => update(index, "weekly_payment", e.target.value)} />
+          <input name={`storage_option_${index}`} aria-label={`Storage option ${index + 1}`} className="field w-28 flex-1 sm:flex-none" placeholder="512GB" value={row.storage} onChange={(e) => update(index, "storage", e.target.value)} />
+          <input name={`storage_price_${index}`} aria-label={`Price for storage option ${index + 1}`} className="field w-28 flex-1 sm:flex-none" type="number" placeholder="Price" value={row.price} onChange={(e) => update(index, "price", e.target.value)} />
+          <input name={`storage_weekly_${index}`} aria-label={`Weekly payment for storage option ${index + 1}`} className="field w-28 flex-1 sm:flex-none" type="number" placeholder="Weekly" value={row.weekly_payment} onChange={(e) => update(index, "weekly_payment", e.target.value)} />
           <button
             type="button"
             aria-label="Remove storage option"

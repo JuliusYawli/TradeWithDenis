@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { Archive, Mail, MessageCircle, Phone, Search, Trash2 } from "lucide-react";
 import { appointmentTimeSlots } from "@/lib/appointment-times";
@@ -102,6 +102,7 @@ function SearchBox({
     <label className="field flex items-center gap-3 bg-white px-4 py-3">
       <Search className="h-4 w-4 shrink-0 text-neutral-400" />
       <input
+        name="admin_search"
         className="min-w-0 flex-1 bg-transparent p-0 text-sm outline-none placeholder:text-neutral-400"
         value={value}
         onChange={(event) => onChange(event.target.value)}
@@ -115,16 +116,36 @@ function SearchBox({
 export function AdminAppointmentSearch({ appointments, children }: { appointments: Appointment[]; children?: ReactNode }) {
   const [query, setQuery] = useState("");
   const [showArchived, setShowArchived] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("visit_asc");
   const [page, setPage] = useState(1);
   const normalizedQuery = query.trim().toLowerCase();
   const visibleAppointments = useMemo(
     () => appointments.filter((appointment) => (showArchived ? Boolean(appointment.archived) : !appointment.archived)),
     [appointments, showArchived]
   );
-  const filtered = useMemo(
-    () => (normalizedQuery ? visibleAppointments.filter((appointment) => matchesAppointment(appointment, normalizedQuery)) : visibleAppointments),
-    [visibleAppointments, normalizedQuery]
-  );
+  const filtered = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    return visibleAppointments
+      .filter((appointment) => !normalizedQuery || matchesAppointment(appointment, normalizedQuery))
+      .filter((appointment) => statusFilter === "all" || appointment.status === statusFilter)
+      .filter((appointment) => {
+        if (dateFilter === "today") return appointment.appointment_date === today;
+        if (dateFilter === "upcoming") return Boolean(appointment.appointment_date && appointment.appointment_date >= today);
+        if (dateFilter === "overdue") return Boolean(appointment.appointment_date && appointment.appointment_date < today && !["completed", "cancelled", "no_show"].includes(appointment.status));
+        if (dateFilter === "unscheduled") return !appointment.appointment_date;
+        return true;
+      })
+      .sort((a, b) => {
+        if (sortOrder === "newest") return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        if (sortOrder === "oldest") return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        const aVisit = `${a.appointment_date ?? "9999-12-31"} ${a.appointment_time ?? ""}`;
+        const bVisit = `${b.appointment_date ?? "9999-12-31"} ${b.appointment_time ?? ""}`;
+        return sortOrder === "visit_desc" ? bVisit.localeCompare(aVisit) : aVisit.localeCompare(bVisit);
+      });
+  }, [visibleAppointments, normalizedQuery, statusFilter, dateFilter, sortOrder]);
+  useEffect(() => setPage(1), [normalizedQuery, showArchived, statusFilter, dateFilter, sortOrder]);
   const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paginated = filtered.slice((Math.min(page, pages) - 1) * pageSize, Math.min(page, pages) * pageSize);
 
@@ -132,6 +153,24 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
     <>
       <div className="mt-4">
         <SearchBox value={query} onChange={setQuery} placeholder="Search appointments by name, phone, email, or note" />
+        <div className="mt-3 grid gap-2 sm:grid-cols-3">
+          <label className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Status
+            <select name="appointment_status_filter" className="field mt-1 bg-white text-sm" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+              <option value="all">All statuses</option>
+              {appointmentStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+          </label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Visit date
+            <select name="appointment_date_filter" className="field mt-1 bg-white text-sm" value={dateFilter} onChange={(event) => setDateFilter(event.target.value)}>
+              <option value="all">Any date</option><option value="today">Today</option><option value="upcoming">Upcoming</option><option value="overdue">Overdue</option><option value="unscheduled">Unscheduled</option>
+            </select>
+          </label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Sort
+            <select name="appointment_sort" className="field mt-1 bg-white text-sm" value={sortOrder} onChange={(event) => setSortOrder(event.target.value)}>
+              <option value="visit_asc">Visit date: soonest</option><option value="visit_desc">Visit date: latest</option><option value="newest">Newest booking</option><option value="oldest">Oldest booking</option>
+            </select>
+          </label>
+        </div>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-medium text-neutral-500">{filtered.length} of {visibleAppointments.length} appointments showing{showArchived ? " (archived)" : ""}</p>
           <div className="inline-flex rounded-full border border-line bg-white p-0.5 text-xs font-medium">
@@ -153,7 +192,7 @@ export function AdminAppointmentSearch({ appointments, children }: { appointment
         </div>
       </div>
       {children}
-      <div className="mt-4 min-h-[440px] max-h-[820px] space-y-3 overflow-y-scroll pr-2 [scrollbar-gutter:stable] sm:min-h-[620px]">
+      <div className="mt-4 space-y-3">
         {filtered.length ? paginated.map((appointment) => (
           <div key={appointment.id} className="rounded-md bg-snow p-4 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -227,16 +266,22 @@ function leadIsFromToday(createdAt: string) {
 export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
   const [query, setQuery] = useState("");
   const [showAll, setShowAll] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("newest");
   const [page, setPage] = useState(1);
   const normalizedQuery = query.trim().toLowerCase();
   const visibleLeads = useMemo(
     () => (showAll ? leads : leads.filter((lead) => leadIsFromToday(lead.created_at))),
     [leads, showAll]
   );
-  const filtered = useMemo(
-    () => (normalizedQuery ? visibleLeads.filter((lead) => matchesLead(lead, normalizedQuery)) : visibleLeads),
-    [visibleLeads, normalizedQuery]
-  );
+  const filtered = useMemo(() => visibleLeads
+    .filter((lead) => !normalizedQuery || matchesLead(lead, normalizedQuery))
+    .filter((lead) => statusFilter === "all" || lead.status === statusFilter)
+    .sort((a, b) => sortOrder === "oldest"
+      ? new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      : new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
+  [visibleLeads, normalizedQuery, statusFilter, sortOrder]);
+  useEffect(() => setPage(1), [normalizedQuery, showAll, statusFilter, sortOrder]);
   const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paginated = filtered.slice((Math.min(page, pages) - 1) * pageSize, Math.min(page, pages) * pageSize);
 
@@ -244,6 +289,19 @@ export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
     <>
       <div className="mt-4">
         <SearchBox value={query} onChange={setQuery} placeholder="Search leads by name, phone, email, or message" />
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <label className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Status
+            <select name="lead_status_filter" className="field mt-1 bg-white text-sm" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+              <option value="all">All statuses</option>
+              {leadStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+          </label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Sort
+            <select name="lead_sort" className="field mt-1 bg-white text-sm" value={sortOrder} onChange={(event) => setSortOrder(event.target.value)}>
+              <option value="newest">Newest first</option><option value="oldest">Oldest first</option>
+            </select>
+          </label>
+        </div>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-medium text-neutral-500">{filtered.length} of {visibleLeads.length} leads showing{showAll ? " (all time)" : " (today)"}</p>
           <div className="inline-flex rounded-full border border-line bg-white p-0.5 text-xs font-medium">
@@ -264,7 +322,7 @@ export function AdminLeadSearch({ leads }: { leads: Lead[] }) {
           </div>
         </div>
       </div>
-      <div className="mt-4 min-h-[440px] max-h-[820px] space-y-3 overflow-y-scroll pr-2 [scrollbar-gutter:stable] sm:min-h-[620px]">
+      <div className="mt-4 space-y-3">
         {filtered.length ? paginated.map((lead) => (
           <div key={lead.id} className="rounded-md bg-snow p-4 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">

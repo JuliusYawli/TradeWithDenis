@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const consentStorageKey = "twd-cookie-consent";
 
 export function CookieConsent() {
+  const pathname = usePathname();
   const [choice, setChoice] = useState<string | null>(null);
   useEffect(() => setChoice(localStorage.getItem(consentStorageKey)), []);
 
@@ -15,7 +17,7 @@ export function CookieConsent() {
     setChoice(value);
   }
 
-  if (choice) return null;
+  if (choice || pathname.startsWith("/admin")) return null;
   return (
     <aside className="fixed inset-x-3 bottom-3 z-[120] mx-auto max-w-4xl rounded-[1.25rem] border border-white/10 bg-ink p-4 text-white shadow-2xl sm:p-5" role="dialog" aria-label="Cookie preferences" aria-live="polite">
       <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">

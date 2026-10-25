@@ -16,6 +16,7 @@ export function FunnelAnalytics() {
   const opened = useRef(false);
 
   useEffect(() => {
+    if (pathname.startsWith("/admin")) return;
     const event = pathname.startsWith("/iphones/") ? "product_view" : pathname === "/iphones" ? "catalog_view" : "page_view";
     record(event, pathname);
     const onConsent = (consentEvent: Event) => {
@@ -27,6 +28,7 @@ export function FunnelAnalytics() {
   }, [pathname]);
 
   useEffect(() => {
+    if (pathname.startsWith("/admin")) return;
     const onFocus = (event: FocusEvent) => {
       const form = (event.target as HTMLElement | null)?.closest("form");
       if (!opened.current && form?.querySelector('[name="customer_name"]')) {

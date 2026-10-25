@@ -17,6 +17,7 @@ export function AdminProductTemplateSelect() {
     <label className="block rounded-lg border border-line bg-white p-4 text-xs font-medium uppercase text-neutral-500">
       Pricing template
       <select
+        name="pricing_template"
         className="field mt-2 bg-white"
         defaultValue=""
         onChange={(event) => {

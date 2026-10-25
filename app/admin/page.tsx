@@ -1,10 +1,12 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { BarChart3, CalendarDays, Database, Download, ExternalLink, KeyRound, LogOut, Package, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
+import { Activity, AlertTriangle, BarChart3, Bell, CalendarDays, Database, Download, ExternalLink, KeyRound, LogOut, Package, Plus, Settings, Star, Users, type LucideIcon } from "lucide-react";
 import { AdminAppointmentSearch, AdminLeadSearch } from "@/components/admin-customer-search";
 import { AdminToast } from "@/components/admin-toast";
 import { AdminPasswordForm } from "@/components/admin-password-form";
 import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
+import { AdminImageUrlManager } from "@/components/admin-image-url-manager";
+import { AdminUnsavedChanges, ConfirmDeleteButton } from "@/components/admin-form-safety";
 import { AdminPaymentFields } from "@/components/admin-payment-fields";
 import { AdminProductTemplateSelect } from "@/components/admin-product-template-select";
 import { AdminStorageOptions } from "@/components/admin-storage-options";
@@ -94,6 +96,21 @@ export default async function AdminPage({
   const appointmentQueue = activeAppointments.filter((appointment) => !["completed", "cancelled", "no_show"].includes(appointment.status));
   const newLeadCount = todaysLeads.filter((lead) => lead.status === "new").length;
   const pendingTestimonialCount = testimonials.filter((testimonial) => (testimonial.status ?? "approved") === "pending").length;
+  const productsMissingImages = products.filter((product) => !product.image_urls.length);
+  const productsMissingDetails = products.filter((product) => !product.description?.trim() || !product.warranty_months);
+  const stockConflicts = products.filter((product) => product.stock_status === "in_stock" && product.quantity <= 0);
+  const notifications = [
+    appointmentQueue.length ? { label: `${appointmentQueue.length} appointment${appointmentQueue.length === 1 ? "" : "s"} need action`, href: "#appointments", tone: "urgent" } : null,
+    newLeadCount ? { label: `${newLeadCount} new lead${newLeadCount === 1 ? "" : "s"} today`, href: "#leads", tone: "urgent" } : null,
+    pendingTestimonialCount ? { label: `${pendingTestimonialCount} review${pendingTestimonialCount === 1 ? "" : "s"} awaiting approval`, href: "#testimonials", tone: "normal" } : null,
+    productsMissingImages.length ? { label: `${productsMissingImages.length} product${productsMissingImages.length === 1 ? "" : "s"} missing photos`, href: "#products", tone: "normal" } : null,
+    stockConflicts.length ? { label: `${stockConflicts.length} in-stock listing${stockConflicts.length === 1 ? " has" : "s have"} zero quantity`, href: "#products", tone: "urgent" } : null
+  ].filter((item): item is { label: string; href: string; tone: string } => Boolean(item));
+  const recentActivity = [
+    ...products.map((product) => ({ label: `${product.model} · ${product.storage}`, detail: "Product record", at: product.updated_at ?? product.created_at, href: "#products" })),
+    ...leads.map((lead) => ({ label: lead.customer_name, detail: `Lead · ${statusLabel([["new", "New"], ["contacted", "Contacted"], ["follow_up", "Follow up"], ["qualified", "Qualified"], ["converted", "Converted"], ["lost", "Lost"]] as const, lead.status)}`, at: lead.created_at, href: "#leads" })),
+    ...testimonials.map((testimonial) => ({ label: testimonial.customer_name, detail: "Customer review", at: testimonial.updated_at ?? testimonial.created_at, href: "#testimonials" }))
+  ].sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime()).slice(0, 5);
   const appointmentStatusCounts = appointmentStatuses.map(([status, label]) => [
     label,
     activeAppointments.filter((appointment) => appointment.status === status).length
@@ -135,16 +152,18 @@ export default async function AdminPage({
   return (
     <main className="min-h-screen bg-snow">
       <AdminInactivityLogout />
+      <AdminUnsavedChanges />
       <AdminToast message={toast?.toast} title={toast?.toastTitle} type={toast?.type} />
-      <div className="container-page py-10">
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <div className="border-b border-white/10 bg-ink text-white">
+      <div className="container-page py-8 sm:py-10">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="mb-2 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
-              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">Store operations</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[#e6c675]">Store operations</span>
             </div>
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Admin dashboard</h1>
-            <p className="mt-2 text-neutral-600">Manage products, leads, appointments, testimonials, and site settings.</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Admin dashboard</h1>
+            <p className="mt-2 text-white/65">Manage today&apos;s work and keep the storefront accurate.</p>
           </div>
           <div className="flex flex-wrap gap-2 lg:hidden">
             <a className={adminActionButtonClass} href="/iphones" target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> Catalog</a>
@@ -155,25 +174,28 @@ export default async function AdminPage({
             </form>
           </div>
         </div>
+      </div>
+      </div>
 
+      <div className="container-page py-6 sm:py-8">
         <div className="admin-shell grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
-          <aside className="hidden rounded-xl border border-line bg-white p-3 shadow-sm lg:sticky lg:top-6 lg:block">
-            <div className="border-b border-line px-3 pb-4 pt-2">
-              <p className="text-xs font-semibold uppercase tracking-wide text-gold">Admin menu</p>
-              <h2 className="mt-1 text-lg font-semibold text-ink">Workspace</h2>
+          <aside className="hidden overflow-hidden rounded-2xl bg-ink p-3 text-white shadow-lg lg:sticky lg:top-6 lg:block">
+            <div className="border-b border-white/10 px-3 pb-4 pt-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#e6c675]">Admin menu</p>
+              <h2 className="mt-1 text-lg font-semibold text-white">Workspace</h2>
             </div>
             <nav className="mt-3 space-y-1">
               {adminNavItems.map(([label, href, Icon, count]) => (
-                <a key={label} className="admin-nav-link admin-clickable flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 text-sm font-medium text-neutral-700 transition hover:bg-snow hover:text-red" href={href}>
+                <a key={label} className="admin-nav-link admin-clickable flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 text-sm font-medium text-white/75 transition hover:bg-white/10 hover:text-white" href={href}>
                   <span className="inline-flex items-center gap-3">
                     <Icon className="h-4 w-4 text-gold" />
                     {label}
                   </span>
-                  {count !== null ? <span className="rounded-full bg-snow px-2 py-0.5 text-xs text-neutral-500">{count}</span> : null}
+                  {count !== null ? <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-white/70">{count}</span> : null}
                 </a>
               ))}
             </nav>
-            <div className="mt-4 space-y-2 border-t border-line pt-4">
+            <div className="mt-4 space-y-2 border-t border-white/10 pt-4">
               <a className={`${adminActionButtonClass} w-full`} href="/iphones" target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> Catalog</a>
               <a className={`${adminActionButtonClass} w-full`} href="/" target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> View site</a>
               <form action={logoutAdmin}>
@@ -193,8 +215,8 @@ export default async function AdminPage({
               </div>
             </details>
 
-            <div className="admin-workspace mt-8">
-          <section id="overview" className="admin-panel admin-panel-overview scroll-mt-8 rounded-lg border border-line bg-white p-5">
+            <div className="admin-workspace mt-6">
+          <section id="overview" className="admin-panel admin-panel-overview scroll-mt-8 rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-6">
             <div>
               <h2 className="text-xl font-semibold">Overview</h2>
               <p className="mt-1 text-sm text-neutral-600">Click any stat to view details. Your daily snapshot for stock, inquiries, and appointment activity.</p>
@@ -239,6 +261,33 @@ export default async function AdminPage({
                 <p className="mt-3 font-semibold">Back up records</p>
                 <p className="mt-1 text-sm leading-6 text-neutral-600">Open Supabase backup settings and export business records as CSV files.</p>
               </a>
+            </div>
+            <div className="mt-5 grid gap-4 xl:grid-cols-2">
+              <div className="rounded-xl border border-line bg-ink p-5 text-white">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2"><Bell className="h-5 w-5 text-[#e6c675]" /><h3 className="font-semibold text-white">Notifications</h3></div>
+                  <span className="rounded-full bg-white/10 px-2.5 py-1 text-xs text-white/70">{notifications.length}</span>
+                </div>
+                <div className="mt-4 space-y-2">
+                  {notifications.length ? notifications.map((item) => (
+                    <a key={item.label} className="flex items-center justify-between gap-3 rounded-lg border border-white/10 px-3 py-3 text-sm text-white/80 transition hover:bg-white/10 hover:text-white" href={item.href}>
+                      <span className="flex items-center gap-2">{item.tone === "urgent" ? <AlertTriangle className="h-4 w-4 shrink-0 text-[#e6c675]" /> : <span className="h-2 w-2 shrink-0 rounded-full bg-[#e6c675]" />}{item.label}</span>
+                      <span aria-hidden="true">→</span>
+                    </a>
+                  )) : <p className="rounded-lg border border-white/10 p-4 text-sm text-white/60">You&apos;re caught up. No operational alerts.</p>}
+                </div>
+              </div>
+              <div className="rounded-xl border border-line bg-snow p-5">
+                <div className="flex items-center gap-2"><Activity className="h-5 w-5 text-gold" /><h3 className="font-semibold text-ink">Recent record activity</h3></div>
+                <div className="mt-4 divide-y divide-line">
+                  {recentActivity.map((item) => (
+                    <a key={`${item.detail}-${item.label}-${item.at}`} className="flex items-center justify-between gap-3 py-3 text-sm hover:text-red" href={item.href}>
+                      <span><span className="block font-medium text-ink">{item.label}</span><span className="text-xs text-neutral-500">{item.detail}</span></span>
+                      <time className="shrink-0 text-xs text-neutral-500" dateTime={item.at}>{formatDateTime(item.at)}</time>
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
 
@@ -285,7 +334,7 @@ export default async function AdminPage({
               <AdminStorageOptions />
               <div className="grid gap-2">
                 <AdminProductImageUpload />
-                <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" placeholder="Uploaded photo URLs will appear here. You can also paste image URLs, one per line." /></label>
+                <AdminImageUrlManager />
               </div>
               <label className="text-xs font-medium uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" placeholder="Description" /></label>
               <label className="flex items-center gap-2 text-sm font-semibold"><input name="is_featured" type="checkbox" /> Featured</label>
@@ -301,6 +350,13 @@ export default async function AdminPage({
               </div>
               <a className="btn-secondary px-4 py-2" href="/iphones" target="_blank" rel="noreferrer"><ExternalLink className="h-4 w-4" /> View catalog</a>
             </div>
+            {(productsMissingImages.length || productsMissingDetails.length || stockConflicts.length) ? (
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4"><p className="text-2xl font-semibold text-ink">{productsMissingImages.length}</p><p className="text-sm text-neutral-700">Missing product photos</p></div>
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4"><p className="text-2xl font-semibold text-ink">{productsMissingDetails.length}</p><p className="text-sm text-neutral-700">Incomplete descriptions or warranty</p></div>
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4"><p className="text-2xl font-semibold text-ink">{stockConflicts.length}</p><p className="text-sm text-neutral-700">Stock status conflicts</p></div>
+              </div>
+            ) : null}
             <div className="mt-5 space-y-3">
               {products.map((product) => (
                 <details key={product.id} data-product-id={product.id} className="rounded-md border border-line bg-snow p-4">
@@ -333,7 +389,7 @@ export default async function AdminPage({
                     <AdminStorageOptions defaultOptions={product.storage_options ?? []} />
                     <div className="grid gap-2">
                       <AdminProductImageUpload />
-                      <label className="text-xs font-medium uppercase text-neutral-500">Image URLs<textarea className="field mt-1 min-h-20" name="image_urls" defaultValue={product.image_urls.join("\n")} /></label>
+                      <AdminImageUrlManager defaultUrls={product.image_urls} />
                     </div>
                     <label className="text-xs font-medium uppercase text-neutral-500">Description<textarea className="field mt-1 min-h-20" name="description" defaultValue={product.description ?? ""} /></label>
                     <div className="flex flex-wrap items-center justify-between gap-3">
@@ -345,7 +401,7 @@ export default async function AdminPage({
                   </form>
                   <form action={deleteProduct} className="mt-3">
                     <input type="hidden" name="id" value={product.id} />
-                    <button className="admin-clickable rounded-md px-2 py-1 text-sm font-medium text-danger transition hover:bg-danger/5" type="submit">Delete product</button>
+                    <ConfirmDeleteButton itemName={`${product.model} ${product.storage}`} />
                   </form>
                 </details>
               ))}
@@ -538,6 +594,12 @@ export default async function AdminPage({
         </div>
           </div>
         </div>
+        <nav className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-4 gap-1 rounded-2xl border border-white/10 bg-ink/95 p-2 text-white shadow-2xl backdrop-blur lg:hidden" aria-label="Quick admin navigation">
+          {[['Overview', '#overview', BarChart3], ['Appointments', '#appointments', CalendarDays], ['Leads', '#leads', Users], ['Products', '#products', Package]].map(([label, href, Icon]) => {
+            const NavIcon = Icon as LucideIcon;
+            return <a key={String(label)} className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-xl text-[11px] font-medium text-white/70 hover:bg-white/10 hover:text-white" href={String(href)}><NavIcon className="h-4 w-4 text-[#e6c675]" />{String(label)}</a>;
+          })}
+        </nav>
       </div>
     </main>
   );

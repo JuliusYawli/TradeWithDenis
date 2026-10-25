@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { X } from "lucide-react";
+import { useDialogFocus } from "@/components/use-dialog-focus";
 import type { Appointment } from "@/lib/types";
 
 const appointmentStatuses = [
@@ -32,6 +33,7 @@ export function AppointmentStatusModal({
   statusCounts: Array<readonly [string, number]>;
 }) {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const dialogRef = useDialogFocus(Boolean(selectedStatus), () => setSelectedStatus(null));
 
   const filtered = useMemo(
     () => selectedStatus
@@ -39,14 +41,6 @@ export function AppointmentStatusModal({
       : [],
     [selectedStatus, appointments]
   );
-
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelectedStatus(null);
-    };
-    if (selectedStatus) document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, [selectedStatus]);
 
   return (
     <>
@@ -56,6 +50,7 @@ export function AppointmentStatusModal({
           return (
             <button
               key={label}
+              type="button"
               onClick={() => setSelectedStatus(status ?? null)}
               className="rounded-md border border-line bg-snow px-3 py-2 text-left transition hover:border-gold hover:bg-white cursor-pointer"
             >
@@ -71,15 +66,17 @@ export function AppointmentStatusModal({
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           onClick={(e) => e.target === e.currentTarget && setSelectedStatus(null)}
         >
-          <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-lg">
+          <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="appointment-status-title" className="relative mx-4 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-lg">
             <button
+              type="button"
               onClick={() => setSelectedStatus(null)}
               className="absolute right-4 top-4 p-1 hover:bg-gray-100 rounded"
+              aria-label="Close appointment details"
             >
               <X className="h-5 w-5" />
             </button>
 
-            <h3 className="text-lg font-semibold mb-4">
+            <h3 id="appointment-status-title" className="mb-4 pr-10 text-lg font-semibold">
               {statusLabel(selectedStatus)} Appointments ({filtered.length})
             </h3>
 
