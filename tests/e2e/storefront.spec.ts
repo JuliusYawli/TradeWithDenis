@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
 
 test("customer can browse, compare, and open product details", async ({ page }) => {
   await page.goto("/iphones");
-  await expect(page.getByRole("heading", { name: /choose an iphone/i })).toBeVisible();
+  await expect(page.getByPlaceholder("Search model or storage")).toBeVisible();
   const compareButtons = page.getByRole("button", { name: /compare this iphone/i });
   await compareButtons.nth(0).click();
   await compareButtons.nth(1).click();
@@ -32,6 +32,43 @@ test("admin workspace and login screen render", async ({ page }) => {
   await page.goto("/admin#products");
   await expect(page.getByRole("heading", { name: "Admin dashboard" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Products", exact: true })).toBeVisible();
+});
+
+test("admin navigation and safe controls work", async ({ page }) => {
+  await page.goto("/admin#overview");
+
+  for (const section of ["appointments", "leads", "add-product", "products", "backups", "settings", "password", "testimonials"]) {
+    if ((page.viewportSize()?.width ?? 0) >= 1024) await page.locator(`aside a[href="#${section}"]`).click();
+    else {
+      const mobileMenu = page.getByText("Admin sections", { exact: true });
+      if ((await page.locator("details").first().getAttribute("open")) === null) await mobileMenu.click();
+      await page.locator(`details a[href="#${section}"]`).click();
+    }
+    await expect(page.locator(`#${section}`)).toBeVisible();
+  }
+
+  await page.goto("/admin#overview");
+  await page.getByRole("button", { name: /total products/i }).click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.getByRole("button", { name: /close details/i }).click();
+
+  await page.goto("/admin#add-product");
+  const form = page.locator("#add-product form");
+  await form.getByLabel("Pricing template").selectOption("iphone-11-pro-64gb-used");
+  await expect(form.getByLabel("Model", { exact: true })).toHaveValue("iPhone 11 Pro");
+  await expect(form.getByLabel("Price", { exact: true })).toHaveValue("2900");
+  await form.getByLabel("Payment type").selectOption("cash");
+  await expect(form.locator('input[name="weekly_payment"]')).toHaveCount(0);
+  await form.getByRole("button", { name: /add another storage/i }).click();
+  await expect(form.getByLabel("Storage option 1", { exact: true })).toBeVisible();
+  await form.getByRole("button", { name: /remove storage option/i }).click();
+  await expect(form.getByLabel("Storage option 1", { exact: true })).toHaveCount(0);
+
+  await page.goto("/admin#products");
+  await page.locator("#products details").first().locator("summary").click();
+  page.once("dialog", (dialog) => dialog.dismiss());
+  await page.getByRole("button", { name: /delete product/i }).first().click();
+  await expect(page.locator("#products details")).toHaveCount(6);
 });
 
 test("invalid review link fails closed", async ({ page }) => {

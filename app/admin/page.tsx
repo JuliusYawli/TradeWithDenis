@@ -230,7 +230,7 @@ export default async function AdminPage({
             <div className="mt-5 rounded-lg border border-line bg-snow p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Needs attention</p>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-neutral-600">Needs attention</p>
                   <p className="mt-1 text-sm text-neutral-700">
                     <span className="font-semibold text-ink">{appointmentQueue.length}</span> appointment{appointmentQueue.length === 1 ? "" : "s"} in queue, <span className="font-semibold text-ink">{newLeadCount}</span> new lead{newLeadCount === 1 ? "" : "s"}, and <span className="font-semibold text-ink">{pendingTestimonialCount}</span> review{pendingTestimonialCount === 1 ? "" : "s"} awaiting moderation.
                   </p>
@@ -282,8 +282,8 @@ export default async function AdminPage({
                 <div className="mt-4 divide-y divide-line">
                   {recentActivity.map((item) => (
                     <a key={`${item.detail}-${item.label}-${item.at}`} className="flex items-center justify-between gap-3 py-3 text-sm hover:text-red" href={item.href}>
-                      <span><span className="block font-medium text-ink">{item.label}</span><span className="text-xs text-neutral-500">{item.detail}</span></span>
-                      <time className="shrink-0 text-xs text-neutral-500" dateTime={item.at}>{formatDateTime(item.at)}</time>
+                      <span><span className="block font-medium text-ink">{item.label}</span><span className="text-xs text-neutral-600">{item.detail}</span></span>
+                      <time className="shrink-0 text-xs text-neutral-600" dateTime={item.at}>{formatDateTime(item.at)}</time>
                     </a>
                   ))}
                 </div>
